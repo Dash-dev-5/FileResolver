@@ -1,0 +1,36 @@
+.sidebar {
+    background-color: #0ba9f3;
+    width: 250px;
+    height: 100vh;
+    color: #fff;
+    padding: 20px;
+  }
+  
+  .profile {
+    text-align: center;
+  }
+  
+  .profile-image {
+    border-radius: 50%;
+    margin-bottom: 10px;
+  }
+  
+  .sidebar-nav ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .sidebar-nav ul li {
+    margin: 20px 0;
+  }
+  
+  .sidebar-nav ul li a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 18px;
+  }
+  
+  .sidebar-nav ul li a:hover {
+    text-decoration: underline;
+  }
+  
