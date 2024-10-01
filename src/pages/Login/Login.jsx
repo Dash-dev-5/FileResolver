@@ -2,8 +2,15 @@ import React from "react";
 import imgLogin from '../../assets/login.png'
 import imgLogo from '../../assets/logo.svg'
 import "./Login.css";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigation = useNavigate()
+  const  handeleLogin = (e)=>{
+    e.preventDefault()
+    navigation('/home')
+
+  }
   return (
     <div className="login-container">
       <div className="login-left">
@@ -24,7 +31,7 @@ const Login = () => {
           />
           <h2>Bienvenu sur FileResolver</h2>
           <p>S'il vous plaît entrez vos informations</p>
-          <form>
+          <form onSubmit={handeleLogin}>
             <div className="input-group">
               <label>Email</label>
               <input type="email" placeholder="eg. kollectifnumrique@gmail.com" />

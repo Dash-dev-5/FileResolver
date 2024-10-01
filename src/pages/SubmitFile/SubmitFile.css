@@ -1,33 +1,19 @@
 .main-content {
     display: flex;
     justify-content: space-between;
-    padding: 20px;
-  }
-  
-  .table-area {
-    flex: 2;
-    margin-right: 20px;
-  }
-  
-  table {
+    padding: 8px;
     width: 100%;
-    border-collapse: collapse;
   }
   
-  table th, table td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: left;
-  }
-  
-  table th {
-    background-color: #f0f4f8;
-  }
-  
+
   .form-area {
     flex: 1;
     display: flex;
     flex-direction: column;
+    background-color: white;
+    padding: 12px;
+    border-radius: 12px;
+    
   }
   
   .form-area input, .form-area textarea {
@@ -44,7 +30,7 @@
   
   .upload-area {
     text-align: center;
-    margin-top: 20px;
+    margin-top: 8px;
   }
   
   .btn-upload {
@@ -59,4 +45,50 @@
   .btn-upload:hover {
     background-color: #0891c5;
   }
+  .invoice-container {
+    width: 100%;
+    /* max-width: 600px; */
+    margin: auto;
+    font-family: Arial, sans-serif;
+    background-color: #fff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 12px;
+      
+
+  }
   
+  .invoice-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    font-weight: bold;
+    background-color: #f0f0f0;
+  }
+  
+  .invoice-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #0ba9f3;
+    color: white;
+    margin-top: 5px;
+    border-radius: 5px;
+  }
+  
+  .invoice-row span {
+    flex: 1;
+    text-align: center;
+  }
+  .firtBlock{
+    width: 60%;
+    margin-right: 8px;
+
+  }
+  .btn-padding{
+    margin-bottom: 12px;
+  }
+  .Note{
+    flex: 1;
+  }

@@ -1,0 +1,122 @@
+.dashboard {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+  
+  .summary {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  
+  .card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+    flex: 1;
+  }
+  
+  .card h3 {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+  }
+  
+  .card p {
+    font-size: 1.5em;
+    color: #007bff;
+  }
+  
+  .card span {
+    font-size: 0.8em;
+    color: gray;
+  }
+  
+  .lists-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  
+  .list {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    padding: 10px;
+  }
+  
+  .list h4 {
+    font-size: 1.1em;
+    margin-bottom: 15px;
+  }
+  .list h3 {
+   width: 100%;
+   text-align: center;
+   margin: 12px 0;
+  }
+  
+  .list-content {
+    display: flex;
+    flex-direction: column;
+    /* gap: 10px; */
+  }
+  
+  .list-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #0ba9f3;
+    margin-top: 2px;
+    border-radius: 5px;
+    align-items: center;
+}
+
+.list-item p {
+      color: white;
+    margin: 0;
+    padding: 0;
+    padding-right: 5%;
+    text-align: center;
+    font-size: 13px;
+}
+
+.list-item .divState {
+    
+    border: none;
+    border-radius: 6px;
+    padding: 5px 10px;
+    color: white;
+    font-size: 0.9em;
+    /* width: 8%; */
+    margin-right: 5px;
+}
+
+.view-btn {
+      cursor: pointer;
+    background-color: #fff;
+    padding: 5px 10px;
+    align-self: flex-end;
+    border-radius: 6px;
+    color: #0ba9f3;
+    
+    
+}
+.conetntButton{
+    display: flex;
+    /* justify-self: flex-end; */
+}
+.blue-color{
+    cursor: pointer;
+    background-color: #fff;
+    padding: 5px 10px;
+    align-self: flex-end;
+    border-radius: 6px;
+      color: #0ba9f3;
+      margin-right: 5px;
+
+  }

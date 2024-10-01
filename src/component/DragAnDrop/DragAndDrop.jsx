@@ -1,29 +1,28 @@
 import React, { useState } from 'react';
 import './DragAndDrop.css';
-import pdf from '../../assets/Untitled.pdf'
-import PDFViewer from '../PDF/PDFViewer';
+import { saveAs } from 'file-saver';
 
-const DragAndDrop = () => {
+const DragAndDrop = ({ setFiles, files }) => {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [error, setError] = useState('');
+  // const [newFileName, setNewFileName] = useState(''); // Pour stocker le nouveau nom
 
-  // Liste des extensions de fichiers acceptées
   const acceptedFileTypes = ['image/jpeg', 'image/png', 'application/pdf'];
 
   const handleDragOver = (event) => {
-    event.preventDefault(); // Empêche le comportement par défaut
+    event.preventDefault();
   };
 
   const handleDrop = (event) => {
     event.preventDefault();
-    setError(''); // Réinitialise les erreurs
-    const droppedFile = event.dataTransfer.files[0]; // On prend le premier fichier déposé
+    setError('');
+    const droppedFile = event.dataTransfer.files[0];
     processFile(droppedFile);
   };
 
   const handleFileInput = (event) => {
-    const selectedFile = event.target.files[0]; // On prend le premier fichier sélectionné
+    const selectedFile = event.target.files[0];
     processFile(selectedFile);
   };
 
@@ -32,22 +31,34 @@ const DragAndDrop = () => {
       setFile(file);
 
       if (file.type.startsWith('image/')) {
-        // Si c'est une image, on crée une prévisualisation
         const reader = new FileReader();
         reader.onload = (e) => {
           setPreview(e.target.result);
         };
         reader.readAsDataURL(file);
       } else if (file.type === 'application/pdf') {
-        // Si c'est un PDF, on affiche juste un lien de téléchargement
         setPreview(URL.createObjectURL(file));
       }
     } else {
-      // Si l'extension n'est pas acceptée, on affiche une erreur
       setError('Type de fichier non pris en charge. Veuillez déposer une image ou un PDF.');
       setFile(null);
       setPreview(null);
     }
+  };
+
+  const handleFileRename = (newFileName) => {
+    if (!newFileName) {
+      alert("Veuillez entrer un nouveau nom de fichier.");
+      return;
+    }
+
+    const extension = file.name.split('.').pop(); // Récupère l'extension du fichier original
+    const renamedFile = new File([file], `${newFileName}.${extension}`, { type: file.type });
+    
+    // Sauvegarder le fichier avec le nouveau nom (si nécessaire)
+    saveAs(renamedFile);
+
+    setFile(renamedFile); // Mettre à jour l'état avec le fichier renommé
   };
 
   return (
@@ -75,21 +86,18 @@ const DragAndDrop = () => {
         <div className="file-preview">
           <h4>Fichier chargé: {file.name}</h4>
 
-          {file.type.startsWith('image/') && (
-            <img src={preview} alt="Preview" className="file-image" />
-          )}
-
-<PDFViewer fileUrl={'../../assets/Untitled.pdf'} />
-          {file.type === 'application/pdf' && (
-            <div className="file-pdf">
-              {/* <embed src={preview} width="600" height="400" type="application/pdf" /> */}
-              {/* <p>
-                <a href={preview} download={file.name}>
-                  Télécharger le PDF
-                </a>
-              </p> */}
-            </div>
-          )}
+        
+         
+          {/* Entrée pour changer le nom du fichier */}
+          
+            {/* <input
+              type="text"
+              placeholder="Nouveau nom du fichier"
+              value={newFileName}
+              onChange={(e) => setNewFileName(e.target.value)}
+            /> */}
+            {/* <button onClick={handleFileRename}>Changer le nom du fichier</button> */}
+          
         </div>
       )}
     </div>

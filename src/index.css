@@ -1,5 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300');
+body{
+
+  font-family: "Comfortaa",Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -66,7 +70,14 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+.pdf-div{
+  padding: 50px;
+  background-color: #dedede;
+  /* margin-top: 50px; */
+  width: 695px;
 
-.react-pdf__Page__canvas{
-  margin-bottom: 50px;
+}
+canvas.react-pdf__Page__canvas {
+  margin-bottom: 20px;
+  border-radius: 12px;
 }
