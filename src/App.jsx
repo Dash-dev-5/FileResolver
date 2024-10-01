@@ -11,6 +11,7 @@ import pdf from "./assets/document.pdf";
 import SubmitFile from './pages/SubmitFile/SubmitFile'
 import Classeur from './pages/Classeur/Classeur'
 import Dashboard from './pages/Dashboard/Dashboard'
+import UserManagement from './pages/UserManagement/userManagement'
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.mjs',
   import.meta.url,
@@ -27,6 +28,7 @@ function App() {
         <Route path="MyPDFViewer" element={<MyPDFViewer file={pdf} />} />
         <Route path="Classeur" element={<Classeur/>} />
         <Route path="Dashboard" element={<Dashboard/>} />
+        <Route path="UserManagement" element={<UserManagement/>} />
       </Route>
     </Routes>
   </BrowserRouter>

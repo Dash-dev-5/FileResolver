@@ -31,14 +31,17 @@ const Sidebar = () => {
   }  to="/home/Classeur">Classeur</NavLink>
 
             {/* <NavLink to="/Parametre">Parametre</NavLink>  */}
-
+{/* 
             <NavLink className={({ isActive, isPending }) =>
     isActive ? "selectNav" : "NavLink"
-  }  to="/home/MyPDFViewer">pdf</NavLink>
+  }  to="/home/MyPDFViewer">pdf</NavLink> */}
 
             <NavLink className={({ isActive, isPending }) =>
     isActive ? "selectNav" : "NavLink"
   }  to="/home/Dashboard">Dashboard</NavLink>
+            <NavLink className={({ isActive, isPending }) =>
+    isActive ? "selectNav" : "NavLink"
+  }  to="/home/UserManagement">UserManagement</NavLink>
 
       </nav>
     </div>
