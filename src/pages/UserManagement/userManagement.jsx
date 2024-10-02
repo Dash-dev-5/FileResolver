@@ -1,18 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './UserManagement.css';
 
 const UserManagement = () => {
   // Initial state for the users list
-  const [users, setUsers] = useState([
-    { name: 'Aristote Makuala', email: 'aristote@gmail.com', service: 'Technique', jobFunction: 'Chef de service', password: '', confirmPass: '' },
-    { name: 'John Doe', email: 'johndoe@gmail.com', service: 'Commercial', jobFunction: 'Secretaire', password: '', confirmPass: '' }
-  ]);
+  const [users, setUsers] = useState(() => {
+    const storedUsers = localStorage.getItem('users');
+    return storedUsers ? JSON.parse(storedUsers) : [
+      { name: 'Aristote Makuala', email: 'aristote@gmail.com', service: 'Technique', jobFunction: 'Chef de service', password: '', confirmPass: '', role: "" },
+      { name: 'John Doe', email: 'johndoe@gmail.com', service: 'Commercial', jobFunction: 'Secretaire', password: '', confirmPass: '', role: "" }
+    ];
+  });
 
   // State for the form data (used for both adding and editing)
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     service: '',
+    role: "",
     jobFunction: '',  // Changed from function to jobFunction
     password: '',
     confirmPass: ''
@@ -21,6 +25,11 @@ const UserManagement = () => {
   // State to track if we are editing or adding
   const [editMode, setEditMode] = useState(false);
   const [selectedUserIndex, setSelectedUserIndex] = useState(null);
+
+  // Effect to store users in local storage whenever they change
+  useEffect(() => {
+    localStorage.setItem('users', JSON.stringify(users));
+  }, [users]);
 
   // Function to handle form input changes
   const handleInputChange = (e) => {
@@ -40,7 +49,8 @@ const UserManagement = () => {
       // Add a new user
       setUsers([...users, formData]);
     }
-
+    console.log(users);
+    
     // Reset the form
     setFormData({
       name: '',
@@ -48,7 +58,8 @@ const UserManagement = () => {
       service: '',
       jobFunction: '',  // Changed from function to jobFunction
       password: '',
-      confirmPass: ''
+      confirmPass: '',
+      role: ""
     });
   };
 
@@ -73,7 +84,8 @@ const UserManagement = () => {
       service: '',
       jobFunction: '',  // Changed from function to jobFunction
       password: '',
-      confirmPass: ''
+      confirmPass: '',
+      role: ""
     });
     setEditMode(false);
   };
@@ -111,6 +123,17 @@ const UserManagement = () => {
           value={formData.jobFunction}
           onChange={handleInputChange}
         />
+        <select
+          name="role"
+          value={formData.role}
+          onChange={handleInputChange}
+          className="role-select"
+        >
+          <option value="Administrateur">Administrateur</option>
+          <option value="Directeur">Directeur</option>
+          <option value="Secretaire">Secrétaire</option>
+          <option value="Service">Service</option>
+        </select>
         <input
           type="password"
           name="password"

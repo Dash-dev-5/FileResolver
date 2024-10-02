@@ -12,6 +12,8 @@ import SubmitFile from './pages/SubmitFile/SubmitFile'
 import Classeur from './pages/Classeur/Classeur'
 import Dashboard from './pages/Dashboard/Dashboard'
 import UserManagement from './pages/UserManagement/userManagement'
+import ProfileEdit from './pages/ProfilEdit/ProfilEdit'
+import OrderHome from './pages/OrderHome/OrderHome'
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.mjs',
   import.meta.url,
@@ -29,6 +31,8 @@ function App() {
         <Route path="Classeur" element={<Classeur/>} />
         <Route path="Dashboard" element={<Dashboard/>} />
         <Route path="UserManagement" element={<UserManagement/>} />
+        <Route path="ProfileEdit" element={<ProfileEdit/>} />
+        <Route path="OrderHome" element={<OrderHome/>} />
       </Route>
     </Routes>
   </BrowserRouter>

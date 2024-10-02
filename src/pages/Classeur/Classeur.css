@@ -1,47 +1,101 @@
-@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300');
-body{
-
-  font-family: "Comfortaa",Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-}
 .main-content-classeur {
-    padding: 20px;
-    /* background-color: #f5f5f5; */
-    font-family: Arial, sans-serif;
-    width: 100%;
-  }
-  
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  width: 100%;
+}
 
-  
- 
+.document-list {
+  display: flex;
+  flex-direction: column;
+}
 
-  
-  .document-list {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .document-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: white;
-    padding: 15px;
-    margin-bottom: 10px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    font-family: "Comfortaa";
-  }
-  
-  .document-item span {
-    color: #0099ff;
-    font-size: 14px;
-  }
-  
-  .doc-name {
-    font-weight: bold;
-  }
-  
-  .doc-date, .doc-count {
-    margin-left: 20px;
-  }
-  
+.document-item {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.document-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.document-item span {
+  color: #0099ff;
+  font-size: 14px;
+}
+
+.doc-name {
+  font-weight: bold;
+}
+
+.doc-date, .doc-count {
+  margin-left: 20px;
+}
+
+.extend-btn {
+  background-color: #2196F3;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  border: none;
+}
+
+.extend-btn:hover {
+  background-color: #1976d2;
+}
+
+.document-contents {
+  margin-top: 10px;
+}
+
+.search-bar {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.document-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.document-detail {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  background-color: #f0f4f8;
+  margin-bottom: 5px;
+  border-radius: 5px;
+}
+
+.document-detail .doc-title {
+  font-weight: bold;
+  color: #333;
+}
+
+.no-documents {
+  color: #666;
+  font-size: 14px;
+  text-align: center;
+}
+.viewBtn{
+  cursor: pointer;
+    background-color: #0ba9f3;
+    padding: 5px 10px;
+    align-self: flex-end;
+    border-radius: 6px;
+      color: #fff;
+      margin-right: 5px;
+}

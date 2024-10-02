@@ -1,81 +1,116 @@
-import React,{useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import './Sidebar.css';
-import avatar from '../../assets/avatar.svg'
-import { NavLink, useNavigate,useLocation } from 'react-router-dom';
-import logo from '../../assets/logo.svg'
+import avatar from '../../assets/avatar.svg';
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
+import logo from '../../assets/logo.svg';
 
 const Sidebar = () => {
-  const user = {
-    avatar : avatar,
-    name:'Aristote Makuala',
-    function : 'Directeur provinciale'
-  }
-  const navigation = useNavigate()
-  const [isAuthenticated,setIsAuthenticated] = useState(true)
+  const [formData, setFormData] = useState({
+    avatar: '/default-avatar.svg',
+    name: '',
+    jobFunction: '',
+    // role : ''
+  });
+
+  // alert(JSON.stringify(formData));
+  
+  const navigate = useNavigate();
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
   const location = useLocation();
 
+  // Load user data from local storage on component mount
   useEffect(() => {
-    // Exemple : si l'utilisateur est déconnecté, on les renvoie vers la page d'accueil
-    if (!isAuthenticated) { // Ajoutez votre logique d'authentification ici
+    const storedData = JSON.parse(localStorage.getItem('loggedInUser'));
+    if (storedData) {
+      setFormData(storedData);
+    }
+  }, []);
+  
+
+  useEffect(() => {
+    // If the user is not authenticated, redirect to login
+    if (!isAuthenticated) {
       navigate("/", { replace: true });
     }
-  }, [location, navigation]);
-  const handeleDeconnect = ()=>{
-    setIsAuthenticated(false)
-    // window.history.pushState(null, "", "/");
-    navigation("/", { replace: true });
-  }
+  }, [isAuthenticated, navigate]);
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    navigate("/", { replace: true });
+  };
+
   return (
     <div className="sidebar">
       <div className="topSidebar">
-          <div className="logoContenaire">
+        <div className="logoContenaire">
           <img
-              src={logo}
-              alt="Profile"
-              className="logo-imageSide"
-            />
-            <div className="textLogo">
-              FileResolver
-            </div>
+            src={logo}
+            alt="Logo"
+            className="logo-imageSide"
+          />
+          <div className="textLogo">
+            FileResolver
           </div>
-          <div className="profile">
-            <img
-              src={user.avatar}
-              alt="Profile"
-              className="profile-image"
-            />
-            <h3>{user.name}</h3>
-            <p>{user.function} </p>
-          </div>
-          <nav className="sidebar-nav">
-      
-                <NavLink  className={({ isActive, isPending }) =>
-        isActive ? "selectNav" : "NavLink"
-      } about='Acceuil' to="/home">Acceuil</NavLink>
-
-                <NavLink className={({ isActive, isPending }) =>
-        isActive ? "selectNav" : "NavLink"
-      }  to="/home/Classeur">Classeur</NavLink>
-
-                {/* <NavLink to="/Parametre">Parametre</NavLink>  */}
-    {/* 
-                <NavLink className={({ isActive, isPending }) =>
-        isActive ? "selectNav" : "NavLink"
-      }  to="/home/MyPDFViewer">pdf</NavLink> */}
-
-                <NavLink className={({ isActive, isPending }) =>
-        isActive ? "selectNav" : "NavLink"
-      }  to="/home/Dashboard">Dashboard</NavLink>
-                <NavLink className={({ isActive, isPending }) =>
-        isActive ? "selectNav" : "NavLink"
-      }  to="/home/UserManagement">UserManagement</NavLink>
-
-          </nav>
-      </div>
-        <div className="NavLink" onClick={handeleDeconnect}>
-          Se déconnecter
         </div>
-
+        <div className="profile">
+          <img
+            src={formData.avatar}
+            alt="Profile"
+            className="profile-image"
+          />
+          <h3>{formData.name}</h3>
+          <p>{formData.jobFunction}</p>
+        </div>
+        <nav className="sidebar-nav">
+        {
+            formData?.role === 'Service' || formData?.role === 'Administrateur' ?
+          <NavLink className={({ isActive }) => (isActive ? "selectNav" : "NavLink")} to="/home/OrderHome">
+            Acceui 
+          </NavLink>
+          :
+          <></>
+}
+          {
+            formData?.role === 'Secretaire' || formData?.role === 'Administrateur' ?
+          <NavLink className={({ isActive }) => (isActive ? "selectNav" : "NavLink")} to="/home">
+            Acceuil
+          </NavLink>
+          :
+          <></>
+          }
+           {
+            formData?.role === 'Secretaire' || formData?.role === 'Administrateur' || formData?.role === 'Directeur' ?
+          <NavLink className={({ isActive }) => (isActive ? "selectNav" : "NavLink")} to="/home/Classeur">
+            Classeur
+          </NavLink>
+          :
+          <></>
+          }
+          <NavLink className={({ isActive }) => (isActive ? "selectNav" : "NavLink")} to="/home/ProfileEdit">
+            Modifier profile
+          </NavLink>
+          {
+            formData?.role === 'Directeur' || formData?.role === 'Administrateur' ?
+          <NavLink className={({ isActive }) => (isActive ? "selectNav" : "NavLink")} to="/home/Dashboard">
+            Dashboard
+          </NavLink>
+          :
+          <></>
+          }
+           {
+            formData?.role === 'Administrateur' ?
+          <NavLink className={({ isActive }) => (isActive ? "selectNav" : "NavLink")} to="/home/UserManagement">
+            User Management
+          </NavLink>
+          :
+          <></>
+          }
+          
+        </nav>
+      </div>
+      <div className="NavLink" onClick={handleLogout}>
+        Se déconnecter
+      </div>
     </div>
   );
 };

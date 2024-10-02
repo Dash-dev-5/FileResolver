@@ -16,6 +16,7 @@
   .profile-image {
     border-radius: 50%;
     margin-bottom: 10px;
+    width: 40%;
   }
   
   .sidebar-nav ul {
