@@ -29,8 +29,8 @@ const navigation = useNavigate()
       {/* Top summary cards */}
       <div className="summary">
         <div className="card-service">
-          <h4>Nombre de document</h4>
-          <p>20 <span>Aujourd'hui</span></p>
+          <h2>Service</h2>
+          <p> <span>Technique</span></p>
         </div>
         <div className="card">
           <h4>Nombre de document traité</h4>

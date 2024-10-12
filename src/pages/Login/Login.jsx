@@ -23,7 +23,18 @@ const Login = () => {
       localStorage.setItem('loggedInUser', JSON.stringify(user));
 
       // If credentials are valid, navigate to home (or profile page)
-      navigation('/home');
+      if(user.role === 'Secretaire'){
+        navigation('/home');
+
+      }else if(user.role === 'Directeur'){
+        navigation('/home/Dashboard');
+
+      }else if(user.role === 'Service'){
+        navigation('/home/OrderHome');
+
+      }else{
+        navigation('/home');
+      }
     } else {
       // Show error if credentials are invalid
       alert('Invalid email or password!');

@@ -39,4 +39,8 @@
   .btn-send:hover {
     background-color: #0891c5;
   }
+  .selectOderServicve{
+    width: 30%;
+    align-self: flex-end;
+  }
   

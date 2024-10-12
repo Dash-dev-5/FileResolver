@@ -47,11 +47,12 @@ const UserManagement = () => {
       setEditMode(false);
     } else {
       // Add a new user
-      setUsers([...users, formData]);
+      setUsers([...users, {...formData,service : selectedService }]);
     }
     console.log(users);
     
     // Reset the form
+    setSelectedService('')
     setFormData({
       name: '',
       email: '',
@@ -77,6 +78,15 @@ const UserManagement = () => {
     console.log(formData);
     
   };
+  const [service, setService] = useState([]);
+  const [selectedService, setSelectedService] = useState('');
+   // Récupérer les classeurs dans le local storage
+   useEffect(() => {
+    const storedFolders = localStorage.getItem('service');
+    if (storedFolders) {
+      setService(JSON.parse(storedFolders));
+    }
+  }, []);
 
   // Function to clear the form (for adding new user)
   const clearForm = () => {
@@ -111,13 +121,25 @@ const UserManagement = () => {
           value={formData.email}
           onChange={handleInputChange}
         />
-        <input
+         <select
+          name="service"
+          value={formData.service}
+          onChange={handleInputChange}
+        >
+          <option value="">Sélectionnez un classeur</option>
+          {service.map((folder, index) => (
+            <option key={index} value={folder.service}>
+              {folder.service} - {folder.comment}
+            </option>
+          ))}
+        </select>
+        {/* <input
           type="text"
           name="service"
           placeholder="Service"
           value={formData.service}
           onChange={handleInputChange}
-        />
+        /> */}
         <input
           type="text"
           name="jobFunction"  // Changed from function to jobFunction

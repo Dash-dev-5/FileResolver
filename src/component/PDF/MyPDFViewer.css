@@ -1,0 +1,55 @@
+.contenaire-pdf-comment {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.contenaire-comment {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 0 12px;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: auto; /* Modifier pour s'adapter à la hauteur du contenu */
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    z-index: 999;
+    font-size: 0.8em;
+}
+.contenaire-button{
+    
+}
+.contenaire-viewComment {
+    margin: 10px 0;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 5px;
+}
+
+.contenaire-author {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.contenaire-text {
+    margin-bottom: 5px;
+}
+
+.show-all-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.show-all-button:hover {
+    background-color: #0056b3;
+}
