@@ -26,6 +26,7 @@ const Sidebar = () => {
     }
   }, []);
   
+console.log(formData);
 
   useEffect(() => {
     // If the user is not authenticated, redirect to login
@@ -62,24 +63,32 @@ const Sidebar = () => {
           <p>{formData.jobFunction}</p>
         </div>
         <nav className="sidebar-nav">
+          {
+            formData?.role === 'Directeur' || formData?.role === 'Admin' ?
+          <NavLink className={({ isActive }) => (isActive ? "selectNav" : "NavLink")} to="/home/Dashboard">
+            {formData?.role === 'Admin' ? 'Tableau de bord DP':'Acceuil'}
+          </NavLink>
+          :
+          <></>
+          }
         {
-            formData?.role === 'Service' || formData?.role === 'Administrateur' ?
+            formData?.role === 'Service' || formData?.role === 'Admin' ?
           <NavLink className={({ isActive }) => (isActive ? "selectNav" : "NavLink")} to="/home/OrderHome">
-            Acceui 
+            {formData?.role === 'Admin' ? 'Les services':'Acceuil'}
           </NavLink>
           :
           <></>
 }
           {
-            formData?.role === 'Secretaire' || formData?.role === 'Administrateur' ?
+            formData?.role === 'Secretaire'  || formData?.role === 'Admin' ?
           <NavLink className={({ isActive }) => (isActive ? "selectNav" : "NavLink")} to="/home">
-            Acceuil
+            {formData?.role === 'Admin' ? 'Ajouter File':'Acceuil'}
           </NavLink>
           :
           <></>
           }
            {
-            formData?.role === 'Secretaire' || formData?.role === 'Administrateur' || formData?.role === 'Directeur' ?
+            formData?.role === 'Secretaire' || formData?.role === 'Admin' || formData?.role === 'Directeur' ?
           <NavLink className={({ isActive }) => (isActive ? "selectNav" : "NavLink")} to="/home/Classeur">
             Classeur
           </NavLink>
@@ -89,18 +98,18 @@ const Sidebar = () => {
           <NavLink className={({ isActive }) => (isActive ? "selectNav" : "NavLink")} to="/home/ProfileEdit">
             Modifier profile
           </NavLink>
-          {
-            formData?.role === 'Directeur' || formData?.role === 'Administrateur' ?
-          <NavLink className={({ isActive }) => (isActive ? "selectNav" : "NavLink")} to="/home/Dashboard">
-            Dashboard
+           {
+            formData?.role === 'Admin' ?
+          <NavLink className={({ isActive }) => (isActive ? "selectNav" : "NavLink")} to="/home/UserManagement">
+            Les utilisateurs
           </NavLink>
           :
           <></>
           }
            {
-            formData?.role === 'Administrateur' ?
-          <NavLink className={({ isActive }) => (isActive ? "selectNav" : "NavLink")} to="/home/UserManagement">
-            User Management
+            formData?.role === 'Admin' ?
+          <NavLink className={({ isActive }) => (isActive ? "selectNav" : "NavLink")} to="/home/FolderManagement">
+            Gerer classeur
           </NavLink>
           :
           <></>

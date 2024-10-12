@@ -14,6 +14,7 @@ import Dashboard from './pages/Dashboard/Dashboard'
 import UserManagement from './pages/UserManagement/userManagement'
 import ProfileEdit from './pages/ProfilEdit/ProfilEdit'
 import OrderHome from './pages/OrderHome/OrderHome'
+import FolderManagement from './pages/FolderManagement/FolderManagement'
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.mjs',
   import.meta.url,
@@ -33,6 +34,7 @@ function App() {
         <Route path="UserManagement" element={<UserManagement/>} />
         <Route path="ProfileEdit" element={<ProfileEdit/>} />
         <Route path="OrderHome" element={<OrderHome/>} />
+        <Route path="FolderManagement" element={<FolderManagement />} />
       </Route>
     </Routes>
   </BrowserRouter>

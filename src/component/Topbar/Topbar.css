@@ -1,8 +1,8 @@
 .topbar {
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
-    padding: 20px;
+    padding: 10px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     background-color: #ffffff;
     /* border-bottom: 1px solid #ccc; */
@@ -11,13 +11,19 @@
     color:#0ba9f3 ;
     padding: 0px 12px;
   }
+  .searchBlock{
+    display: flex;
+    width: 50%;
+    align-items: center;
+  }
   
-  .search-bar {
-    width: 30%;
+  .search-bar-top-bar {
+    flex: 1;
     padding: 10px;
+    margin-right: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    margin-right: 10px;
+    font-size: 14px;
   }
   
   .btn-send {
@@ -27,6 +33,7 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    margin-right: 12px;
   }
   
   .btn-send:hover {

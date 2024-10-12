@@ -74,6 +74,8 @@ const UserManagement = () => {
     setFormData(users[index]);
     setSelectedUserIndex(index);
     setEditMode(true);
+    console.log(formData);
+    
   };
 
   // Function to clear the form (for adding new user)
@@ -129,10 +131,11 @@ const UserManagement = () => {
           onChange={handleInputChange}
           className="role-select"
         >
-          <option value="Administrateur">Administrateur</option>
+          <option value="">Selectioner pouvoir</option>
           <option value="Directeur">Directeur</option>
-          <option value="Secretaire">Secrétaire</option>
           <option value="Service">Service</option>
+          <option value="Secretaire">Secrétaire</option>
+          <option value="Admin">Administrateur</option>
         </select>
         <input
           type="password"

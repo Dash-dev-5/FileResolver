@@ -8,6 +8,7 @@ import { Outlet } from 'react-router-dom';
 import PopUp from '../component/Popup/Popup';
 function Layourt() {
   const [showPopUp, setShowPopUp] = useState(false);
+  const [detail, setDetail] = useState();
 
   const togglePopUp = () => {
     setShowPopUp(!showPopUp);
@@ -17,10 +18,10 @@ function Layourt() {
       <Sidebar/>
       <div className="main-section">
         <div className="top">
-          <Topbar showPopUp={togglePopUp}/>
+          <Topbar showPopUp={togglePopUp} documentDetail={detail}/>
         </div>
         <div className="page">
-          <Outlet/>
+          <Outlet setDetail={setDetail}/>
           {showPopUp && <PopUp onClose={togglePopUp} />}
         </div>
       </div>

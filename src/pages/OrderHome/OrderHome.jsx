@@ -20,8 +20,9 @@ const OrderHome = () => {
     { name: 'Regideso', pdf: '/23.pdf', object: 'Facturation eau', ref: '0152526/GJ61537', status: 'Orienter', color: 'white' },
 ];
 const navigation = useNavigate()
-  const handeleView = (pdf)=>{
-    navigation('/home/MyPDFViewer',{ state: { pdf } })
+  const handeleView = (item)=>{
+   
+      navigation('/home/MyPDFViewer',{ state: { item } })
   }
   return (
     <div className="dashboard">
@@ -54,7 +55,7 @@ const navigation = useNavigate()
                 <p>{item.ref}</p>
                 <div className="conetntButton">
                     <div style={{ backgroundColor: item.color }} className='divState'>{item.status}</div>
-                    <div className="view-btn" onClick={()=>handeleView(item.pdf)}>Voir</div>
+                    <div className="view-btn" onClick={()=>handeleView(item)}>Voir</div>
                 </div>
               </div>
             ))}
@@ -71,7 +72,7 @@ const navigation = useNavigate()
                 <p>{item.object}</p>
                 <p>{item.ref}</p>
                 <div className="conetntButton">
-                    <div className="view-btn" onClick={()=>handeleView(item.pdf)}>Voir</div>
+                    <div className="view-btn" onClick={()=>handeleView(item)}>Voir</div>
                 </div>
               </div>
             ))}
