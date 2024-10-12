@@ -75,6 +75,11 @@
 margin: 0;
 padding: 0;
   }
+
+  .paragraphe{
+   max-width: 20%;
+   overflow:hidden;
+      }
   .user-actions button {
     background-color: white;
     color: #0ba9f3;

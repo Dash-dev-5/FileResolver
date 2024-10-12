@@ -11,12 +11,16 @@
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    
   }
   
   .folder-form {
     width: 30%;
   }
-  
+  .folder-list {
+    overflow-y: scroll;
+    max-height: 40vh;
+  }
   .folder-form h3 {
     font-size: 1rem;
     margin-bottom: 10px;
@@ -92,4 +96,5 @@
   .rowManager{
     display: flex;
     gap: 20px;
+    flex: 1;
   }
