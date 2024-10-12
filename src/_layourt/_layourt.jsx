@@ -21,7 +21,7 @@ function Layourt() {
           <Topbar showPopUp={togglePopUp} documentDetail={detail}/>
         </div>
         <div className="page">
-          <Outlet setDetail={setDetail}/>
+          <Outlet />
           {showPopUp && <PopUp onClose={togglePopUp} />}
         </div>
       </div>
