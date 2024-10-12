@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useRef,useEffect} from 'react';
 import './Dashboard.css';
+import { gsap } from 'gsap';
 import { useNavigate } from 'react-router-dom';
 // import '../../assets/'
 const Dashboard = () => {
@@ -38,23 +39,54 @@ const navigation = useNavigate()
   const handeleView = (item)=>{
     navigation('/home/MyPDFViewer',{ state: { item } })
   }
+
+  const summaryRef = useRef(null);
+  const listRef = useRef(null);
+  const listRef1 = useRef(null);
+
+  useEffect(() => {
+    gsap.to(summaryRef.current.children, {
+      duration: 1,
+      opacity: 1,
+      y: 30,
+      stagger: 0.2,
+      ease: 'power3.out',
+    });
+
+    gsap.to(listRef1.current.children, {
+      duration: 0.2,
+      opacity: 1,
+      x: 30,
+      stagger: 0.1,
+      ease: 'power3.out',
+    });
+
+    gsap.to(listRef.current.children, {
+      duration: 1,
+      opacity: 1,
+      x: 30,
+      stagger: 0.1,
+      ease: 'power3.out',
+    });
+  }, []);
+
   return (
     <div className="dashboard">
       {/* Top summary cards */}
-      <div className="summary">
-        <div className="card">
+      <div className="summary" style={{marginBottom:"30px"}} ref={summaryRef}>
+        <div className="card" style={{marginTop:"-30px"}}>
           <h4>Nombre de document</h4>
           <p>20 <span>Aujourd'hui</span></p>
         </div>
-        <div className="card">
+        <div className="card" style={{marginTop:"-30px"}}>
           <h4>Nombre de document en cours</h4>
           <p>12 <span>Aujourd'hui</span></p>
         </div>
-        <div className="card">
+        <div className="card" style={{marginTop:"-30px"}}>
           <h4>Nombre de document traité</h4>
           <p>8 <span>Aujourd'hui</span></p>
         </div>
-        <div className="card">
+        <div className="card" style={{marginTop:"-30px"}}>
           <h4>Nombre de document reçu</h4>
           <p>8 <span>Aujourd'hui</span></p>
         </div>
@@ -63,11 +95,11 @@ const navigation = useNavigate()
       {/* Lists */}
       <div className="lists-container">
         {/* Oriented Documents */}
-        <div className="list">
+        <div className="list" >
           <h3>Liste de courriels et document déjà orientés</h3>
-          <div className="list-content">
+          <div className="list-content"style={{marginRight:"30px"}} ref={listRef1}>
             {dataOriented.map((item, index) => (
-              <div className="list-item" key={index}>
+              <div className="list-item" key={index} style={{marginLeft:"-30px"}}>
                 <p>{item.name}</p>
                 <p>{item.object}</p>
                 <p>{item.ref}</p>
@@ -81,11 +113,11 @@ const navigation = useNavigate()
         </div>
 
         {/* Received Documents */}
-        <div className="list">
+        <div className="list" >
           <h3>Liste de courriels et document reçus</h3>
-          <div className="list-content">
+          <div className="list-content" style={{marginRight:"30px"}} ref={listRef}>
             {dataReceived.map((item, index) => (
-              <div className="list-item" key={index}>
+              <div className="list-item" key={index} style={{marginLeft:"-30px"}}>
                 <p>{item.name}</p>
                 <p>{item.object}</p>
                 <p>{item.ref}</p>

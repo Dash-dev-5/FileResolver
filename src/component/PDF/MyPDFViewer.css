@@ -12,7 +12,7 @@
     align-items: flex-start;
     justify-content: space-between;
     padding: 0 12px;
-    position: absolute;
+    position: sticky;
     top: 0;
     width: 100%;
     height: auto; /* Modifier pour s'adapter à la hauteur du contenu */
@@ -21,9 +21,9 @@
     z-index: 999;
     font-size: 0.8em;
 }
-.contenaire-button{
+/* .contenaire-button{
     
-}
+} */
 .contenaire-viewComment {
     margin: 10px 0;
     padding: 10px;
