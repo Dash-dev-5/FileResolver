@@ -6,6 +6,7 @@ import './MyPDFViewer.css';
 function MyPDFViewer({}) {
   const [numPages, setNumPages] = useState();
   const [pageNumber, setPageNumber] = useState(1);
+  const [scalPage, setScalPage] = useState(1);
   const [showAllComments, setShowAllComments] = useState(false); // État pour gérer l'affichage des commentaires
   const location = useLocation();
   const { item } = location.state || {};  // Access the state
@@ -18,6 +19,16 @@ function MyPDFViewer({}) {
 
   function onDocumentLoadSuccess({ numPages }) {
     setNumPages(numPages);
+  }
+  const addZoom = ()=>{
+    if(scalPage < 1.6){
+      setScalPage(s=>s+0.1)
+    }
+  }
+  const sousZoom = ()=>{
+    if(scalPage > 0.3){
+      setScalPage(s=>s-0.1)
+    }
   }
 
   return (
@@ -62,7 +73,7 @@ function MyPDFViewer({}) {
       </div>
         <p></p>
       <div className="pdf-div">
-        <Document file={item.pdf} onLoadSuccess={onDocumentLoadSuccess}>
+        <Document file={item.pdf} onLoadSuccess={onDocumentLoadSuccess} >
           {Array.apply(null, Array(numPages))
             .map((x, i) => i + 1)
             .map((page) => {
@@ -72,10 +83,20 @@ function MyPDFViewer({}) {
                   pageNumber={page}
                   renderTextLayer={false}
                   renderAnnotationLayer={false}
+                  scale={scalPage}
+                  
                 />
               );
             })}
         </Document>
+      </div>
+      <div className="button-zoomInOute" >
+        <div className="button-zoomOut" onClick={addZoom}>
+          +
+        </div>
+        <div className="button-zoomIn" onClick={sousZoom}>
+          -
+        </div>
       </div>
     </div>
   );

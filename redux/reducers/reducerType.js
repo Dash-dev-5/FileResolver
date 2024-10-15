@@ -6,8 +6,7 @@ const reducerType = ( state = initialstate, action ) =>{
         case TOGGLE_TYPE:
             return action.playload
         default:
-            return state
-            
+            return state            
     }
 }
 export default reducerType

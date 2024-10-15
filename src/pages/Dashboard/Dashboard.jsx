@@ -1,9 +1,11 @@
 import React, {useRef,useEffect} from 'react';
 import './Dashboard.css';
 import { gsap } from 'gsap';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 // import '../../assets/'
 const Dashboard = () => {
+  const { orientView } = useOutletContext();
+  
   // Example data for the dashboard lists
   const dataOriented = [
     { name: 'Regideso', pdf: '/1.pdf', object: 'Facturation eau', ref: '0152526/GJ61537', status: 'OK', color: 'green' },
@@ -39,7 +41,9 @@ const navigation = useNavigate()
   const handeleView = (item)=>{
     navigation('/home/MyPDFViewer',{ state: { item } })
   }
-
+const handeleOrient = (item)=>{
+  orientView(item)
+}
   const summaryRef = useRef(null);
   const listRef = useRef(null);
   const listRef1 = useRef(null);
@@ -122,7 +126,7 @@ const navigation = useNavigate()
                 <p>{item.object}</p>
                 <p>{item.ref}</p>
                 <div className="conetntButton">
-                    <div style={{ backgroundColor: item.color }} className=' blue-color'>{item.status}</div>
+                    <div style={{ backgroundColor: item.color }} onClick={()=>handeleOrient(item)} className=' blue-color'>{item.status}</div>
                     <div className="view-btn" onClick={()=>handeleView(item)}>Voir</div>
                 </div>
               </div>

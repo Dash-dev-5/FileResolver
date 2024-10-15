@@ -7,12 +7,15 @@ import { Outlet } from 'react-router-dom';
 import PopUp from '../component/Popup/PopUp.jsx'
 import Modal from '../component/Modal/Modal.jsx';
 import GoBackButton from '../component/GoBackButton/GoBackButton.jsx';
+import OrientationView from '../component/OrientationView/OrientationView.jsx';
 
 function Layourt() {
   const [showPopUp, setShowPopUp] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showModalFinal, setShowModalFinal] = useState(false);
   const [confirmMessage, setConfirmMessage] = useState('');
+  const [itemOrient, setItemOrient] = useState({});
+  const [isOrient, setIsOrient] = useState(false);
   const [affirmOp, setAffirmOp] = useState(null);
   const [isSecondStep, setIsSecondStep] = useState(false);
   const [onConfirmCallback, setOnConfirmCallback] = useState(null);
@@ -32,6 +35,9 @@ function Layourt() {
   const toggleModalFinal = () => {
     setShowModalFinal((prev) => !prev);
   };
+  const toggleOrienteSubmit = () => {
+    setIsOrient((prev) => !prev);
+  };
 
 
   const ModalView = (message, callback) => {
@@ -43,6 +49,12 @@ function Layourt() {
         resolve();
       });
     });
+  };
+
+  const orientView = (item) => {
+    setItemOrient(item)
+    toggleOrienteSubmit()
+
   };
 
   const handleFinalConfirmation = () => {
@@ -60,8 +72,9 @@ function Layourt() {
           <Topbar showPopUp={togglePopUp} documentDetail={confirmMessage} />
         </div>
         <div className="page">
-          <Outlet context={{ ModalView }} />
+          <Outlet context={{ ModalView , orientView }} />
           {showPopUp && <PopUp onClose={togglePopUp} />}
+          {isOrient && <OrientationView onClose={()=>toggleOrienteSubmit()} data={itemOrient}/>}
           {showModal && (
             <Modal onClose={toggleModal} onAcc={onConfirmCallback}>
               {confirmMessage || 'Voulez-vous vraiment effectuer cette opération ?'}

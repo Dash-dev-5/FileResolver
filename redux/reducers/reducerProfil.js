@@ -1,5 +1,5 @@
 // reducerProfile.js
-import { EDIT_PROFILE_ALL, EDIT_PROFILE_AVATAR, LOGIN_ACCOUNT,LOAD_USER_DETAILS } from '../constantes';
+import {  LOGIN_ACCOUNT } from '../constantes';
 
 const initialState = {};
 

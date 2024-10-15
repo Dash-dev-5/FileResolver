@@ -74,7 +74,7 @@ button:focus-visible {
   padding: 50px;
   background-color: #dedede;
   /* margin-top: 50px; */
-  width: 695px;
+  width: auto;
 
 }
 canvas.react-pdf__Page__canvas {

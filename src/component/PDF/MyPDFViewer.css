@@ -53,3 +53,23 @@
 .show-all-button:hover {
     background-color: #0056b3;
 }
+.button-zoomInOute{
+    position: fixed;
+    bottom: 85px;
+    right: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 1px 20px rgba(0, 0, 0, 0.2);
+}
+.button-zoomOut{
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: #0056b3 1px solid;
+
+}
+.button-zoomIn{
+    padding: 10px;
+    cursor: pointer;
+
+
+}
