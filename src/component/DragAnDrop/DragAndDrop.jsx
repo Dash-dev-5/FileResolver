@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
 import './DragAndDrop.css';
 import { saveAs } from 'file-saver';
+import { useNavigate } from 'react-router-dom';
 
 const DragAndDrop = ({ setFiles, files }) => {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [error, setError] = useState('');
+  const navigation = useNavigate()
   // const [newFileName, setNewFileName] = useState(''); // Pour stocker le nouveau nom
 
   const acceptedFileTypes = ['image/jpeg', 'image/png', 'application/pdf'];
 
+  const handeleView = (item)=>{
+    navigation('/home/MyPDFViewer',{ state: { item } })
+  }
   const handleDragOver = (event) => {
     event.preventDefault();
   };
@@ -59,6 +64,7 @@ const DragAndDrop = ({ setFiles, files }) => {
     saveAs(renamedFile);
 
     setFile(renamedFile); // Mettre à jour l'état avec le fichier renommé
+
   };
 
   return (
@@ -85,19 +91,10 @@ const DragAndDrop = ({ setFiles, files }) => {
       {file && (
         <div className="file-preview">
           <h4>Fichier chargé: {file.name}</h4>
-
-        
-         
-          {/* Entrée pour changer le nom du fichier */}
-          
-            {/* <input
-              type="text"
-              placeholder="Nouveau nom du fichier"
-              value={newFileName}
-              onChange={(e) => setNewFileName(e.target.value)}
-            /> */}
-            {/* <button onClick={handleFileRename}>Changer le nom du fichier</button> */}
-          
+          <button className="upload-button" onClick={() => handeleView({name: file.name, pdf: preview ,})
+          }>
+            Voir
+          </button>
         </div>
       )}
     </div>

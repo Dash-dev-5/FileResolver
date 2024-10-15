@@ -1,0 +1,19 @@
+.checkbox-container {
+    display: flex;
+    flex-direction: row;  /* Alignement horizontal */
+    align-items: center;  /* Aligne les items verticalement au centre */
+    gap: 20px;            /* Espacement entre les éléments */
+  }
+  
+  .checkbox-container label {
+    display: flex;
+    align-items: center;  /* Aligner le texte et la case à cocher verticalement */
+    cursor: pointer;      /* Change le curseur en pointer pour plus d'interactivité */
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+  }
+  
+  .checkbox-container input[type="checkbox"] {
+    margin-right: 8px;  /* Espace entre la checkbox et le texte */
+  }
+  

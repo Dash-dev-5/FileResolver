@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './SubmitFile.css';
 import DragAndDrop from '../../component/DragAnDrop/DragAndDrop';
+import { useSelector } from 'react-redux';
 
 const SubmitFile = () => {
+  const typeSubmit = useSelector(state => state.typeOfSubmit)
+  console.log(typeSubmit);
+  
   // Factures fictives
   const invoices = [
     { nom: "Facture Regideso", objet: "Facturation eau", reference: "0152526/GJ61537" },
@@ -16,6 +20,16 @@ const SubmitFile = () => {
   // État pour la liste des classeurs et le classeur sélectionné
   const [folders, setFolders] = useState([]);
   const [selectedFolder, setSelectedFolder] = useState('');
+
+  const [service, setService] = useState([]);
+  const [selectedService, setSelectedService] = useState('');
+   // Récupérer les classeurs dans le local storage
+   useEffect(() => {
+    const storedFolders = localStorage.getItem('service');
+    if (storedFolders) {
+      setService(JSON.parse(storedFolders));
+    }
+  }, []);
 
   // Récupérer les classeurs dans le local storage
   useEffect(() => {
@@ -51,7 +65,10 @@ const SubmitFile = () => {
   return (
     <div className="main-content">
       <div className="firtBlock">
+        { typeSubmit  === 'receive' 
+          &&
         <div className="invoice-container">
+          <h4 style={{marginBottom:10}}>Fichiers dans les classeurs</h4>
           <div className="invoice-header">
             <span>Nom</span>
             <span>Objet</span>
@@ -59,22 +76,39 @@ const SubmitFile = () => {
           </div>
           {invoices.map((invoice, index) => (
             <div key={index} className="invoice-row">
-              <input type="checkbox" />
+              <input type="checkbox" className='chekbox' />
               <span>{invoice.nom}</span>
               <span>{invoice.objet}</span>
               <span>{invoice.reference}</span>
             </div>
           ))}
-        </div>
+        </div>}
         <div className="upload-area">
           <DragAndDrop />
         </div>
       </div>
 
       <div className="form-area">
+       {typeSubmit  !== 'receive' ?
+        <button className="btn-send btn-padding" onClick={handleFileRename}>Enregistrer</button>
+        :
         <button className="btn-send btn-padding" onClick={handleFileRename}>Envoyer</button>
-        
+        }
         {/* Sélection du classeur dans un select */}
+
+       { 
+        typeSubmit  !== 'receive' &&
+        <select
+          value={selectedFolder}
+          onChange={(e) => setSelectedFolder(e.target.value)}
+        >
+          <option value="">Choisir le service</option>
+          {service.map((folder, index) => (
+            <option key={index} value={folder.service}>
+              {folder.service} - {folder.comment}
+            </option>
+          ))}
+        </select>}
         <select
           value={selectedFolder}
           onChange={(e) => setSelectedFolder(e.target.value)}
@@ -86,7 +120,6 @@ const SubmitFile = () => {
             </option>
           ))}
         </select>
-
         <input type="text" placeholder="Objet" />
         <input type="text" placeholder="N° de référence" />
         <textarea placeholder="Note" className="Note"></textarea>

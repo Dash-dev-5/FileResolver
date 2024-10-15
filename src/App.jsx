@@ -16,6 +16,7 @@ import ProfileEdit from './pages/ProfilEdit/ProfilEdit'
 import OrderHome from './pages/OrderHome/OrderHome'
 import FolderManagement from './pages/FolderManagement/FolderManagement'
 import SplashScreen from './pages/SplashScreen/SplashScreen'
+import NotFound from './pages/NoFound/NoFound'
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.mjs',
   import.meta.url,
@@ -28,6 +29,7 @@ function App() {
     <Routes>
       <Route path="/" element={<SplashScreen />}/>
       <Route path="/login" element={<Login />}/>
+      <Route path='*' element={<NotFound />}/>
       <Route path="/home" element={<Layourt />}>
         <Route index element={<SubmitFile />} />
         <Route path="MyPDFViewer" element={<MyPDFViewer file={pdf} />} />
@@ -38,6 +40,7 @@ function App() {
         <Route path="OrderHome" element={<OrderHome/>} />
         <Route path="FolderManagement" element={<FolderManagement />} />
       </Route>
+      
     </Routes>
   </BrowserRouter>
   )

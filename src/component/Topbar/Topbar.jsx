@@ -1,15 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import './Topbar.css';
 import { useLocation } from 'react-router-dom';
+import Switch from '../Switch/Switch';
+import { useDispatch } from 'react-redux';
+import { actionChangeType } from '../../../redux/actions/actionChangeTheme';
 
 const Topbar = ({showPopUp,documentDetail}) => {
   const [isPDFView, setIsPDFView] = useState(false)
   const location = useLocation().pathname
   const [formData, setFormData] = useState({});
-  // Load user data from local storage on component mount
   const [service, setService] = useState([]);
   const [selectedService, setSelectedService] = useState('');
-   // Récupérer les classeurs dans le local storage
+
+  const dispash = useDispatch()
+
+  const handeleChangeType = (type) =>{
+    console.log(type);
+    
+    dispash(actionChangeType(type))
+  }
    useEffect(() => {
     const storedFolders = localStorage.getItem('service');
     if (storedFolders) {
@@ -62,12 +71,19 @@ const Topbar = ({showPopUp,documentDetail}) => {
             ))}
         </select>
         :
-      <div className="searchBlock">
-        <div className="currentPage">Acceuil</div>
-        <input type="text" className="search-bar-top-bar" placeholder="Recherche ..." />
-        <button className="btn-send">Envoyer</button>
+        <div className="searchBlock">
+          <div className="currentPage">Acceuil</div>
+          <div className="search-input-container">
+            <input type="text" className="search-bar-top-bar" placeholder="Recherche ..." />
+            <button className="btn-filter-inside">Filtrer</button>
+          </div>
+          <button className="btn-send">Envoyer</button>
       </div>
-
+      
+      }
+      {
+        location === '/home' &&
+        <Switch onActionChange={handeleChangeType}/>
       }
     </div>
   );
