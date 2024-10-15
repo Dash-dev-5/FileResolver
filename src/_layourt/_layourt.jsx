@@ -4,9 +4,9 @@ import SubmitFile from '../pages/SubmitFile/SubmitFile';
 import Sidebar from '../component/sideBar/sideBar';
 import Topbar from '../component/Topbar/Topbar';
 import { Outlet } from 'react-router-dom';
-import PopUp from '../component/Popup/Popup';
-import Modal from '../component/Modal/Modal';
-import GoBackButton from '../component/GoBackButton/GoBackButton';
+import PopUp from '../component/Popup/PopUp.jsx'
+import Modal from '../component/Modal/Modal.jsx';
+import GoBackButton from '../component/GoBackButton/GoBackButton.jsx';
 
 function Layourt() {
   const [showPopUp, setShowPopUp] = useState(false);

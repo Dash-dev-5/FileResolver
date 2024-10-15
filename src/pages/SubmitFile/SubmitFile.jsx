@@ -59,6 +59,7 @@ const SubmitFile = () => {
           </div>
           {invoices.map((invoice, index) => (
             <div key={index} className="invoice-row">
+              <input type="checkbox" />
               <span>{invoice.nom}</span>
               <span>{invoice.objet}</span>
               <span>{invoice.reference}</span>
