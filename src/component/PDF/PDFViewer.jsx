@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Document, Page } from "react-pdf";
 import { useLocation } from "react-router-dom";
 import './MyPDFViewer.css';
+import zoomIcone from '/zoom.png'
+import dezoomIcone from '/dezoomer.png'
 
 function MyPDFViewer({}) {
   const [numPages, setNumPages] = useState();
@@ -92,10 +94,10 @@ function MyPDFViewer({}) {
       </div>
       <div className="button-zoomInOute" >
         <div className="button-zoomOut" onClick={addZoom}>
-          +
+          <img src={zoomIcone} alt="" className="imgZomm" />
         </div>
         <div className="button-zoomIn" onClick={sousZoom}>
-          -
+          <img src={dezoomIcone} alt="" className="imgZomm"/>
         </div>
       </div>
     </div>

@@ -6,7 +6,7 @@
     width: 250px;
     height: 100vh;
     color: #fff;
-    padding: 20px;
+    padding: 10px;
   }
   
   .profile {
@@ -15,9 +15,9 @@
   
   .profile-image {
     border-radius: 50%;
-    margin-bottom: 10px;
-    width: 80px;
-    height: 80px;
+    /* margin-bottom: 10px; */
+    width: 60px;
+    height: 60px;
   }
   
   .sidebar-nav ul {
@@ -36,7 +36,7 @@
     width: 100%;
   }
   .logo-imageSide {
-    width: 30%;
+    width: 22%;
   }
   .logoContenaire{
     display: flex;
