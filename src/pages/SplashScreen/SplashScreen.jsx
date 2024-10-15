@@ -32,7 +32,12 @@ const SplashScreen = () => {
       opacity: 0,
       duration: 1,
       onComplete: () => {
-        navigate('/login'); // Redirige vers la page d'accueil après 2 secondes
+        const storedUsers = JSON.parse(localStorage.getItem('loggedInUser')) || null
+        if (storedUsers === null ){
+          navigate('/login'); // Redirige vers la page d'accueil après 2 secondes
+        }else{
+          navigate('/home');
+        }
       }
     }, "+=1.5"); // Délai avant de commencer cette animation
   }, [navigate]);
