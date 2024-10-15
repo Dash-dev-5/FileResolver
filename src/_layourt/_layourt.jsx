@@ -17,23 +17,23 @@ function Layourt() {
   const [isSecondStep, setIsSecondStep] = useState(false);
   const [onConfirmCallback, setOnConfirmCallback] = useState(null);
 
-  // Toggle popup
+
   const togglePopUp = () => {
     setShowPopUp(!showPopUp);
   };
 
-  // Toggle initial modal with a custom confirmation message
+
   const toggleModal = (message = '') => {
     setConfirmMessage(message);
     setShowModal((prev) => !prev);
   };
 
-  // Toggle final modal for a dangerous operation
+
   const toggleModalFinal = () => {
     setShowModalFinal((prev) => !prev);
   };
 
-  // Function to handle the two-step modal process
+
   const ModalView = (message, callback) => {
     return new Promise((resolve) => {
       toggleModal(message); // Show the first modal
@@ -46,7 +46,7 @@ function Layourt() {
   };
 
   const handleFinalConfirmation = () => {
-    // Perform the dangerous operation
+
    
     toggleModalFinal(); // Close the final modal after confirming
     toggleModal(); // Reset for future operations
