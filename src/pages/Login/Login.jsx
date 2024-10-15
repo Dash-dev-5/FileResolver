@@ -13,7 +13,7 @@ const Login = () => {
     e.preventDefault();
 
     // Retrieve users from local storage
-    const storedUsers = JSON.parse(localStorage.getItem('users')) || [{email : 'admin@gmail.com',password : 'admin'}];
+    const storedUsers = JSON.parse(localStorage.getItem('users')) || [{email : 'admin@gmail.com',password : 'admin',role :'Admin'}];
 
     // Validate user credentials
     const user = storedUsers.find(user => user.email === email && user.password === password);
