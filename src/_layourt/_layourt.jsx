@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect, useRef } from 'react';
 import './_layourt.css';
 import SubmitFile from '../pages/SubmitFile/SubmitFile';
 import Sidebar from '../component/sideBar/sideBar';
@@ -8,6 +8,7 @@ import PopUp from '../component/Popup/PopUp.jsx'
 import Modal from '../component/Modal/Modal.jsx';
 import GoBackButton from '../component/GoBackButton/GoBackButton.jsx';
 import OrientationView from '../component/OrientationView/OrientationView.jsx';
+import { gsap } from 'gsap';
 
 function Layourt() {
   const [showPopUp, setShowPopUp] = useState(false);
@@ -19,7 +20,16 @@ function Layourt() {
   const [affirmOp, setAffirmOp] = useState(null);
   const [isSecondStep, setIsSecondStep] = useState(false);
   const [onConfirmCallback, setOnConfirmCallback] = useState(null);
+  const windowRef = useRef(null);
 
+  useEffect(() => {
+    // Animation GSAP pour l'effet d'ouverture de fenêtre
+    
+    gsap.fromTo(windowRef.current, 
+      { opacity: 0 }, // Point de départ
+      { opacity: 1, duration: 0.5, ease: "power1.out" } // Animation vers le point final
+    );
+  }, []);
 
   const togglePopUp = () => {
     setShowPopUp(!showPopUp);
@@ -65,13 +75,13 @@ function Layourt() {
   };
 
   return (
-    <div className="app">
+    <div className="app" >
       <Sidebar />
       <div className="main-section">
         <div className="top">
           <Topbar showPopUp={togglePopUp} documentDetail={confirmMessage} />
         </div>
-        <div className="page">
+        <div className="page" ref={windowRef}>
           <Outlet context={{ ModalView , orientView }} />
           {showPopUp && <PopUp onClose={togglePopUp} />}
           {isOrient && <OrientationView onClose={()=>toggleOrienteSubmit()} data={itemOrient}/>}

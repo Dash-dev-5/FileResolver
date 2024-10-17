@@ -1,17 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState,useRef,useEffect } from 'react';
 import './OrientationView.css'; // Styles du composant
 import { Document, Page } from "react-pdf"; 
+import { gsap } from 'gsap';
 
 const OrientationView = ({ onClose,data }) => {
     const [numPages, setNumPages] = useState();
     const [pageNumber, setPageNumber] = useState(1);
+    const windowRef = useRef(null);
 
+    useEffect(() => {
+      // Animation GSAP pour l'effet d'ouverture de fenêtre
+      gsap.fromTo(windowRef.current, 
+        { scale: 0.5, opacity: 0 }, // Point de départ
+        { scale: 1, opacity: 1, duration: 0.2, ease: "power1.out" } // Animation vers le point final
+      );
+    }, []);
     
     function onDocumentLoadSuccess({ numPages }) {
         setNumPages(numPages);
       }
   return (
-    <div className="overlay">
+    <div className="overlay" ref={windowRef} >
       <div className="document-container">
         {/* Partie gauche : Aperçu du document */}
         <div className="document-view">

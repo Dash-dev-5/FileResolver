@@ -34,6 +34,7 @@
     flex-direction: column;
     padding: 0;
     width: 100%;
+    justify-content: flex-start;
   }
   .logo-imageSide {
     width: 22%;
@@ -41,11 +42,14 @@
   .logoContenaire{
     display: flex;
     align-items: center;
+    width: 100%;
   }
   .sidebar-nav ul li a:hover {
     text-decoration: underline;
   }
 .NavLink{
+  align-items: center;
+  justify-content: flex-start;
   color: #0ba9f3;
   width: 100%;
   background-color: white;
