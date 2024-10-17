@@ -180,12 +180,13 @@ function MyPDFViewer({  }) {
        <div className="topbar topbar-pdf">
    
           <>
-            <div className="documentDetail">Document de </div>
+            <div className="documentDetail">Document de {item.name} pour {item.object}</div>
             <div className="blockAction">
               <button className="btn-send" >Commanter</button>
               <button className="btn-send" onClick={() => setShowOverlay(o => !o)}>{showOverlay ? "Retirer le cachet" : "Ajouter le cachet"}</button>
               <button className="btn-send" onClick={() => setShowOverlay2(o => !o)}>{showOverlay2 ? "Retirer la signature" : "Ajouter la signature"}</button>
-              <button className="btn-send" onClick={savePDFWithCachet}>Eregistrer et Telecharger</button>
+              <button className="btn-send" >Eregistrer</button>
+              <button className="btn-send" onClick={savePDFWithCachet}>Telecharger</button>
             </div>
           </>
      
