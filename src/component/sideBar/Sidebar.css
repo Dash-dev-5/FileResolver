@@ -57,6 +57,7 @@
     text-decoration: underline;
   }
 .NavLink{
+  display: flex;
   align-items: center;
   justify-content: flex-start;
   color: #0ba9f3;
@@ -68,8 +69,25 @@
   border-right:#fff solid 5px;
   cursor: pointer;
 }
+.NavLink p{
+  margin: 0;
+  font-size: 0.8em;
+}
+.selectNav p{
+  margin: 0;
+  font-size: 0.8em;
+}
+.NavLink img{
+  margin-right: 10PX;
+}
+.selectNav img{
+  margin-right: 10PX;
+}
 
 .selectNav{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
   color: #0ba9f3;
   width: 100%;
   background-color: white;

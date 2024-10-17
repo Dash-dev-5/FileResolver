@@ -91,7 +91,10 @@ const Sidebar = () => {
               to="/home/Dashboard"
             >
               <img src="/dashboard.png" width={20} alt="" />
+              <p>
+
               {viewText && (formData?.role === 'Admin' ? 'Tableau de bord DP' : 'Accueil')}
+              </p>
             </NavLink>
           )}
           {(formData?.role === 'Service' || formData?.role === 'Admin') && (
@@ -100,7 +103,10 @@ const Sidebar = () => {
               to="/home/OrderHome"
             >
               <img src="/dashboard.png" width={20} alt="" />
+              <p>
+                 
               {viewText && (formData?.role === 'Admin' ? 'Les services' : 'Accueil')}
+              </p>
             </NavLink>
           )}
           {(formData?.role === 'Secretaire' || formData?.role === 'Admin') && (
@@ -109,7 +115,10 @@ const Sidebar = () => {
               to="/home"
             >
               <img src="/add-file.png" width={20} alt="" />
+              <p>
+
               {viewText && (formData?.role === 'Admin' ? 'Ajouter File' : 'Accueil')}
+              </p>
             </NavLink>
           )}
           {(formData?.role === 'Secretaire' ||
@@ -120,7 +129,10 @@ const Sidebar = () => {
               to="/home/Classeur"
             >
               <img src="/classeurs.png" width={20} alt="" />
+              <p>
+
               {viewText && 'Classeur'}
+              </p>
             </NavLink>
           )}
           <NavLink
@@ -128,7 +140,10 @@ const Sidebar = () => {
             to="/home/ProfileEdit"
           >
             <img src="/people.png" width={20} alt="" />
+            <p>
+
             {viewText && 'Modifier profile'}
+            </p>
           </NavLink>
           {formData?.role === 'Admin' && (
             <>
@@ -137,14 +152,20 @@ const Sidebar = () => {
                 to="/home/UserManagement"
               >
                 <img src="/group.png" width={20} alt="" />
+                <p>
+
                 {viewText && 'Les utilisateurs'}
+                </p>
               </NavLink>
               <NavLink
                 className={({ isActive }) => (isActive ? "selectNav" : "NavLink")}
                 to="/home/FolderManagement"
               >
                 <img src="/classeur.png" width={20} alt="" />
+                <p>
+
                 {viewText && 'Gerer classeur'}
+                </p>
               </NavLink>
             </>
           )}
@@ -152,7 +173,10 @@ const Sidebar = () => {
       </div>
       <div className="NavLink" onClick={handleLogout}>
       <img src="/log-out.png" width={20} alt="" />
+      <p>
+
       {viewText &&  'Se déconnecter'}
+      </p>
       </div>
     </div>
   );
