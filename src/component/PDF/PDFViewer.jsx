@@ -15,7 +15,9 @@ function MyPDFViewer({  }) {
   const [scalPage, setScalPage] = useState(1);
   const [showAllComments, setShowAllComments] = useState(false); 
   const [showOverlay, setShowOverlay] = useState(false); // État pour le cachet
+  const [showOverlay2, setShowOverlay2] = useState(false); // État pour le cachet
   const [cachetPosition, setCachetPosition] = useState({ x: 0, y: 0 }); // Position du cachet
+  const [cachetPosition2, setCachetPosition2] = useState({ x: 0, y: 0 }); // Position du cachet
   const location = useLocation();
   const { item } = location.state || {};  // Access the state
   const windowPDFRef = useRef(null);
@@ -71,38 +73,50 @@ function MyPDFViewer({  }) {
 
         // Charger l'image du cachet
         const cachetImageBytes = await fetch('/cachet.png').then(res => res.arrayBuffer());
+        const cachetImageBytes2 = await fetch('/signature.png').then(res => res.arrayBuffer());
 
         // Charger le document PDF
         const pdfDoc = await PDFDocument.load(existingPdfBytes);
 
         // Embedding the cachet image
         const cachetImage = await pdfDoc.embedPng(cachetImageBytes);
+        const cachetImage2 = await pdfDoc.embedPng(cachetImageBytes2);
         const pages = pdfDoc.getPages();
 
         // Taille du cachet
         const cachetWidth = 100;
         const cachetHeight = 100;
+        const cachetWidth2 = 100;
+        const cachetHeight2 = 100;
 
         // Positionner le cachet selon les coordonnées actuelles et l'échelle
         const cachetX = cachetPosition.x / scalPage; // Ajuster pour l'échelle
         const cachetY = cachetPosition.y / scalPage; // Ajuster pour l'échelle
+        const cachetX2 = cachetPosition2.x / scalPage; // Ajuster pour l'échelle
+        const cachetY2 = cachetPosition2.y / scalPage; // Ajuster pour l'échelle
 
         // Ajouter le cachet sur la première et dernière page
         const firstPage = pages[0];
         const lastPage = pages[pages.length - 1];
 
-        firstPage.drawImage(cachetImage, {
-            x: cachetX,
-            y: firstPage.getHeight() - cachetY - cachetHeight, // Ajuster pour que le Y soit en bas
-            width: cachetWidth,
-            height: cachetHeight,
-        });
+        // firstPage.drawImage(cachetImage, {
+        //     x: cachetX,
+        //     y: firstPage.getHeight() - cachetY - cachetHeight, // Ajuster pour que le Y soit en bas
+        //     width: cachetWidth,
+        //     height: cachetHeight,
+        // });
 
         lastPage.drawImage(cachetImage, {
             x: cachetX,
             y: lastPage.getHeight() - cachetY - cachetHeight, // Ajuster pour que le Y soit en bas
             width: cachetWidth,
             height: cachetHeight,
+        });
+        lastPage.drawImage(cachetImage2, {
+            x: cachetX2,
+            y: lastPage.getHeight() - cachetY2 - cachetHeight2, // Ajuster pour que le Y soit en bas
+            width: cachetWidth2,
+            height: cachetHeight2,
         });
 
         // Sauvegarder le nouveau PDF avec le cachet
@@ -137,6 +151,29 @@ function MyPDFViewer({  }) {
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseup', handleMouseUp);
   };
+  const handleMouseDown2 = (e) => {
+    // Obtenir la position de la page PDF
+    const pdfContainerRect = windowPDFRef.current.getBoundingClientRect();
+    
+    // Calculer l'offset par rapport à la position du cachet
+    const offsetX = e.clientX - (cachetPosition2.x + pdfContainerRect.left);
+    const offsetY = e.clientY - (cachetPosition2.y + pdfContainerRect.top);
+  
+    const handleMouseMove = (e) => {
+      setCachetPosition2({
+        x: e.clientX - pdfContainerRect.left - offsetX,
+        y: e.clientY - pdfContainerRect.top - offsetY,
+      });
+    };
+  
+    const handleMouseUp = () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+  };
   
   return (
     <div className="contenaire-pdf-comment">
@@ -146,8 +183,8 @@ function MyPDFViewer({  }) {
             <div className="documentDetail">Document de </div>
             <div className="blockAction">
               <button className="btn-send" >Commanter</button>
-              <button className="btn-send" onClick={() => setShowOverlay(o => !o)}>{showOverlay ? "Retirer le cachet" : "Ajouter un cachet"}</button>
-              <button className="btn-send">Ajouter signature</button>
+              <button className="btn-send" onClick={() => setShowOverlay(o => !o)}>{showOverlay ? "Retirer le cachet" : "Ajouter le cachet"}</button>
+              <button className="btn-send" onClick={() => setShowOverlay2(o => !o)}>{showOverlay2 ? "Retirer la signature" : "Ajouter la signature"}</button>
               <button className="btn-send" onClick={savePDFWithCachet}>Eregistrer et Telecharger</button>
             </div>
           </>
@@ -211,6 +248,21 @@ function MyPDFViewer({  }) {
                         transform: `translate(${cachetPosition.x}px, ${cachetPosition.y}px)`,
                       }}
                       onMouseDown={handleMouseDown}
+                    />
+                  )}
+                  {(page === numPages) && showOverlay2 && (
+                    <img
+                      src="/signature.png"
+                      alt="SIGNATURE"
+                      className="cachet"
+                      style={{
+                        position: "absolute",
+                        top: "0px",
+                        left: "0px",
+                        cursor: "move",
+                        transform: `translate(${cachetPosition2.x}px, ${cachetPosition2.y}px)`,
+                      }}
+                      onMouseDown={handleMouseDown2}
                     />
                   )}
                 </div>
