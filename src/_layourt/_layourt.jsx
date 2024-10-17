@@ -81,7 +81,7 @@ function Layourt() {
     <div className="app" >
       <Sidebar />
       <div className="main-section">
-        {!location === '/home/MyPDFViewer' && <div className="top">
+        {location !== '/home/MyPDFViewer' && <div className="top">
           <Topbar showPopUp={togglePopUp} documentDetail={confirmMessage}  />
         </div>}
         <div className="page" ref={windowRef}>
