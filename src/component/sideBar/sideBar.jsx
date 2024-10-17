@@ -13,9 +13,15 @@ const Sidebar = () => {
   });
   const [viewText, setViewText] = useState(true);
   const sidebarRef = useRef(null);
-  // setTimeout(() => {
-  //   handleMouseLeave()
-  // }, 3000);
+  useEffect(()=>{
+    if (viewText){
+
+      setTimeout(() => {
+        handleMouseLeave()
+      }, 3000);
+    }
+  },[] )
+
   // Fonction pour agrandir la sidebar au survol
   const handleMouseEnter = () => {
     gsap.to(sidebarRef.current, { width: '250px', duration: 0.5, ease: 'power3.out' });
@@ -25,7 +31,7 @@ const Sidebar = () => {
 
   // Fonction pour réduire la sidebar lorsqu'on quitte le survol
   const handleMouseLeave = () => {
-    gsap.to(sidebarRef.current, { width: '80px', duration: 0.5, ease: 'power3.in' });
+    gsap.to(sidebarRef.current, { width: '60px', duration: 0.5, ease: 'power3.in' });
     // gsap.to('.profile', { opacity: 0, duration: 0.4, ease: 'power3.in' }); // Animation pour cacher le texte
     setViewText(false);
   };
@@ -57,18 +63,20 @@ const Sidebar = () => {
     <div
       className="sidebar"
       ref={sidebarRef}
-      
+      onMouseOver={handleMouseEnter}
+      onMouseOut={handleMouseLeave}
     >
       <div className="topSidebar">
         {viewText && (
           <div className="logoContenaire">
             <img src={logo} alt="Logo" className="logo-imageSide" />
             <div className="textLogo">FileResolver</div>
-            <img src="/menu.png" style={{margin:10,alignItems:'flex-end'}} onClick={handleMouseLeave} width={20} alt="" />
+            {/* <img src="/menu.png" style={{margin:10,alignItems:'flex-end'}} onClick={handleMouseLeave} width={20} alt="" /> */}
           </div>
         )}
         <div className="profile">
-        {viewText ? <img src={formData.avatar} alt="Profile" className="profile-image" /> : <img src="/menu.png" style={{margin:10}} onClick={handleMouseEnter} width={20} alt="" />}
+        {/* {viewText ? <img src={formData.avatar} alt="Profile" className="profile-image" /> : <img src="/menu.png" style={{margin:10}} onClick={handleMouseEnter} width={20} alt="" />} */}
+       <img src={formData.avatar} alt="Profile"  className={!viewText ? "profile-image":"profile-image2"} /> 
           {viewText && (
             <>
               <h3>{formData.name}</h3>

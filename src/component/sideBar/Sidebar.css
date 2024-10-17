@@ -16,6 +16,14 @@
   .profile-image {
     border-radius: 50%;
     /* margin-bottom: 10px; */
+    width: 30px;
+    height: 30px;
+    /* padding: 10px; */
+  }
+  
+  .profile-image2 {
+    border-radius: 50%;
+    /* margin-bottom: 10px; */
     width: 60px;
     height: 60px;
   }
@@ -34,7 +42,7 @@
     flex-direction: column;
     padding: 0;
     width: 100%;
-    justify-content: flex-start;
+  
   }
   .logo-imageSide {
     width: 22%;
@@ -43,6 +51,7 @@
     display: flex;
     align-items: center;
     width: 100%;
+    justify-content: space-between;
   }
   .sidebar-nav ul li a:hover {
     text-decoration: underline;
