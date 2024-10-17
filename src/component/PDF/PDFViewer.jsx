@@ -3,9 +3,10 @@ import { Document, Page } from "react-pdf";
 import { useLocation } from "react-router-dom";
 import './MyPDFViewer.css';
 import zoomIcone from '/zoom.png';
-import dezoomIcone from '/dezoomer.png';
-import cachetImage from '/cachet.png'; // Ajoute le chemin vers ton image
 import { gsap } from 'gsap';
+import dezoomIcone from '/dezoomer.png';
+import { PDFDocument, rgb } from 'pdf-lib';  // Importer pdf-lib pour modifier le PDF
+import { saveAs } from 'file-saver';  // Importer file-saver pour sauvegarder le PDF
 
 function MyPDFViewer({}) {
   const [numPages, setNumPages] = useState();
@@ -25,6 +26,7 @@ function MyPDFViewer({}) {
   ];
 
   useEffect(() => {
+    // Animation GSAP pour l'effet d'ouverture de fenêtre PDF
     gsap.fromTo(windowPDFRef.current, 
       { scale: 0.5, opacity: 0 },
       { scale: 1, opacity: 1, duration: 0.8, ease: "power1.out", delay: 0.3 }
@@ -33,10 +35,12 @@ function MyPDFViewer({}) {
 
   useEffect(() => {
     if (showAllComments) {
+      // Animation GSAP pour l'ouverture des commentaires (effet tiroir)
       gsap.to(commentRef.current, { height: "auto", opacity: 1, duration: 0.5, ease: "power1.out" });
       const fullHeight = commentRef.current.scrollHeight + "px";
       gsap.fromTo(commentRef.current, { height: 0 }, { height: fullHeight, opacity: 1, duration: 0.5, ease: "power1.out" });
     } else {
+      // Animation GSAP pour la fermeture des commentaires (effet tiroir inversé)
       gsap.fromTo(commentRef.current, 
         { height: commentRef.current.scrollHeight + "px", opacity: 1 }, 
         { height: 0, opacity: 0, duration: 0.5, ease: "power1.out" }
@@ -58,6 +62,53 @@ function MyPDFViewer({}) {
     if (scalPage > 0.3) {
       setScalPage(s => s - 0.1);
     }
+  };
+
+  const savePDFWithCachet = async () => {
+    // Charger le PDF original
+    const existingPdfBytes = await fetch(item.pdf).then(res => res.arrayBuffer());
+
+    // Charger l'image du cachet
+    const cachetImageBytes = await fetch('/cachet.png').then(res => res.arrayBuffer());
+
+    // Charger le document PDF
+    const pdfDoc = await PDFDocument.load(existingPdfBytes);
+
+    // Embedding the cachet image
+    const cachetImage = await pdfDoc.embedPng(cachetImageBytes);
+
+    const pages = pdfDoc.getPages();
+
+    // Ajouter le cachet sur la première et dernière page
+    const firstPage = pages[0];
+    const lastPage = pages[pages.length - 1];
+
+    // Taille du cachet
+    const cachetWidth = 100;
+    const cachetHeight = 100;
+
+    // Ajouter le cachet en bas à droite de la première page
+    firstPage.drawImage(cachetImage, {
+      x: firstPage.getWidth() - cachetWidth - 20,
+      y: 20,  // Position Y en bas
+      width: cachetWidth,
+      height: cachetHeight,
+    });
+
+    // Ajouter le cachet en bas à droite de la dernière page
+    lastPage.drawImage(cachetImage, {
+      x: lastPage.getWidth() - cachetWidth - 20,
+      y: 20,  // Position Y en bas
+      width: cachetWidth,
+      height: cachetHeight,
+    });
+
+    // Sauvegarder le nouveau PDF avec le cachet
+    const pdfBytes = await pdfDoc.save();
+
+    // Télécharger le PDF
+    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+    saveAs(blob, 'document_avec_cachet.pdf');
   };
 
   return (
@@ -108,7 +159,7 @@ function MyPDFViewer({}) {
                   />
                   {/* Ajout du cachet en bas à droite pour la première et dernière page */}
                   {(page === 1 || page === numPages) && showOverlay && (
-                    <img src={cachetImage} alt="Cachet" className="cachet" />
+                    <img src="/cachet.png" alt="Cachet" className="cachet" />
                   )}
                 </div>
               );
@@ -128,6 +179,11 @@ function MyPDFViewer({}) {
       {/* Bouton pour activer/désactiver le cachet */}
       <button onClick={() => setShowOverlay(o => !o)}>
         {showOverlay ? "Retirer le cachet" : "Ajouter un cachet"}
+      </button>
+
+      {/* Bouton pour enregistrer le PDF avec le cachet */}
+      <button onClick={savePDFWithCachet}>
+        Enregistrer le PDF avec cachet
       </button>
     </div>
   );
