@@ -9,7 +9,7 @@ import { saveAs } from 'file-saver';  // Importer file-saver pour sauvegarder le
 import { gsap } from 'gsap';
 
 
-function MyPDFViewer({}) {
+function MyPDFViewer({  }) {
   const [numPages, setNumPages] = useState();
   const [pageNumber, setPageNumber] = useState(1);
   const [scalPage, setScalPage] = useState(1);
@@ -140,6 +140,19 @@ function MyPDFViewer({}) {
   
   return (
     <div className="contenaire-pdf-comment">
+       <div className="topbar topbar-pdf">
+   
+          <>
+            <div className="documentDetail">Document de </div>
+            <div className="blockAction">
+              <button className="btn-send" >Commanter</button>
+              <button className="btn-send" onClick={() => setShowOverlay(o => !o)}>{showOverlay ? "Retirer le cachet" : "Ajouter un cachet"}</button>
+              <button className="btn-send">Ajouter signature</button>
+              <button className="btn-send" onClick={savePDFWithCachet}>Eregistrer et Telecharger</button>
+            </div>
+          </>
+     
+    </div>
       <div className="contenaire-comment">
         <div className="contenaire-button">
           <div ref={commentRef} style={{ overflow: "hidden" }}>
@@ -185,7 +198,7 @@ function MyPDFViewer({}) {
                     scale={scalPage}
                   />
                   {/* Ajout du cachet en bas à droite pour la première et dernière page */}
-                  {(page === 1 || page === numPages) && showOverlay && (
+                  {(page === numPages) && showOverlay && (
                     <img
                       src="/cachet.png"
                       alt="Cachet"
@@ -214,16 +227,6 @@ function MyPDFViewer({}) {
           <img src={dezoomIcone} alt="" className="imgZomm" />
         </div>
       </div>
-
-      {/* Bouton pour activer/désactiver le cachet */}
-      <button onClick={() => setShowOverlay(o => !o)}>
-        {showOverlay ? "Retirer le cachet" : "Ajouter un cachet"}
-      </button>
-
-      {/* Bouton pour enregistrer le PDF avec le cachet */}
-      <button onClick={savePDFWithCachet}>
-        Enregistrer le PDF avec cachet
-      </button>
     </div>
   );
 }

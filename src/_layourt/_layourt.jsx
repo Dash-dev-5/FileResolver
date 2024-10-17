@@ -3,7 +3,7 @@ import './_layourt.css';
 import SubmitFile from '../pages/SubmitFile/SubmitFile';
 import Sidebar from '../component/sideBar/sideBar';
 import Topbar from '../component/Topbar/Topbar';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import PopUp from '../component/Popup/PopUp.jsx'
 import Modal from '../component/Modal/Modal.jsx';
 import GoBackButton from '../component/GoBackButton/GoBackButton.jsx';
@@ -11,6 +11,7 @@ import OrientationView from '../component/OrientationView/OrientationView.jsx';
 import { gsap } from 'gsap';
 
 function Layourt() {
+  const location = useLocation().pathname
   const [showPopUp, setShowPopUp] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showModalFinal, setShowModalFinal] = useState(false);
@@ -74,13 +75,15 @@ function Layourt() {
     toggleModal(); // Reset for future operations
   };
 
+  
+
   return (
     <div className="app" >
       <Sidebar />
       <div className="main-section">
-        <div className="top">
-          <Topbar showPopUp={togglePopUp} documentDetail={confirmMessage} />
-        </div>
+        {!location === '/home/MyPDFViewer' && <div className="top">
+          <Topbar showPopUp={togglePopUp} documentDetail={confirmMessage}  />
+        </div>}
         <div className="page" ref={windowRef}>
           <Outlet context={{ ModalView , orientView }} />
           {showPopUp && <PopUp onClose={togglePopUp} />}
