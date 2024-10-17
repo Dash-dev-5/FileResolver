@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './Classeur.css';
 import { useNavigate } from 'react-router-dom';
+import { gsap } from 'gsap';
+
+
 
 const classeurs = [
   {
@@ -70,14 +73,17 @@ const classeurs = [
   }
 ];
 
-const Classeur = () => {
-  const [expandedIndex, setExpandedIndex] = useState(null);  // Track which class is expanded
-  const [searchQueries, setSearchQueries] = useState({});    // Track search queries for each class
-  const navigation = useNavigate()
-    const handeleView = (item)=>{
 
-      navigation('/home/MyPDFViewer',{ state: { item } })
-    }
+const Classeur = () => {
+  const [expandedIndex, setExpandedIndex] = useState(null);
+  const [searchQueries, setSearchQueries] = useState({});
+  const navigation = useNavigate();
+
+  const documentRefs = useRef([]); // Array to keep refs of document items
+
+  const handleView = (item) => {
+    navigation('/home/MyPDFViewer', { state: { item } });
+  };
 
   const toggleDocuments = (index) => {
     setExpandedIndex(expandedIndex === index ? null : index);
@@ -87,35 +93,54 @@ const Classeur = () => {
     const value = e.target.value;
     setSearchQueries({
       ...searchQueries,
-      [index]: value
+      [index]: value,
     });
   };
+
+  // GSAP BounceIn animation on load
+  useEffect(() => {
+    gsap.fromTo(
+      documentRefs.current,
+      { opacity: 0, scale: 0.5, y: -50 }, // Initial state
+      {
+        opacity: 1,
+        scale: 1,
+        y: 0,
+        duration: 0.2,
+        ease: 'bounce.out',
+        stagger: 0.2, // Stagger to create a cascading effect
+      }
+    );
+  }, []);
 
   return (
     <div className="main-content-classeur">
       <div className="document-list">
         {classeurs.map((classeur, index) => {
           const searchQuery = searchQueries[index] || '';
-          const filteredDocuments = classeur.documents.filter(doc =>
+          const filteredDocuments = classeur.documents.filter((doc) =>
             doc.title.toLowerCase().includes(searchQuery.toLowerCase())
           );
 
           return (
-            <div key={index} className="document-item">
+            <div
+              key={index}
+              className="document-item"
+              ref={(el) => (documentRefs.current[index] = el)} // Add ref for each item
+            >
               <div className="document-header">
                 <span className="doc-name">{classeur.name}</span>
                 <span className="doc-date">Créer le {classeur.createdAt}</span>
                 <span className="doc-date">Modifier le {classeur.updatedAt}</span>
                 <span className="doc-count">Documents {classeur.docCount}</span>
-                <button 
-                  onClick={() => toggleDocuments(index)} 
+                <button
+                  onClick={() => toggleDocuments(index)}
                   className="extend-btn"
                 >
                   {expandedIndex === index ? 'Réduire' : 'Étendre'}
                 </button>
               </div>
 
-              {/* Show search bar and document list when extended */}
               {expandedIndex === index && (
                 <div className="document-contents">
                   <input
@@ -132,7 +157,9 @@ const Classeur = () => {
                           <div className="doc-title">{doc.title}</div>
                           <div className="doc-date">N° Ref : {doc.referenceNumber}</div>
                           <div className="doc-date">Date : {doc.date}</div>
-                          <div className="viewBtn" onClick={()=>handeleView(doc)}>Voir</div>
+                          <div className="viewBtn" onClick={() => handleView(doc)}>
+                            Voir
+                          </div>
                         </li>
                       ))
                     ) : (

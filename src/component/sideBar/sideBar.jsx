@@ -23,14 +23,14 @@ const Sidebar = () => {
   },[] )
 
   // Fonction pour agrandir la sidebar au survol
-  const handleMouseEnter = () => {
-    gsap.to(sidebarRef.current, { width: '250px', duration: 0.5, ease: 'power3.out' });
+  const handleMouseEnter =  () => {
+  gsap.to(sidebarRef.current, { width: '250px', duration: 0.5, ease: 'power3.out' });
     gsap.to('.profile', { opacity: 1, delay: 0.2, duration: 0.4, ease: 'power3.out' }); // Animation du texte
     setViewText(true);
   };
 
   // Fonction pour réduire la sidebar lorsqu'on quitte le survol
-  const handleMouseLeave = () => {
+  const handleMouseLeave =  () => {
     gsap.to(sidebarRef.current, { width: '60px', duration: 0.5, ease: 'power3.in' });
     // gsap.to('.profile', { opacity: 0, duration: 0.4, ease: 'power3.in' }); // Animation pour cacher le texte
     setViewText(false);

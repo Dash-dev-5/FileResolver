@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState,useRef } from "react";
 import { Document, Page } from "react-pdf";
 import { useLocation } from "react-router-dom";
 import './MyPDFViewer.css';
 import zoomIcone from '/zoom.png'
 import dezoomIcone from '/dezoomer.png'
+import { gsap } from 'gsap';
 
 function MyPDFViewer({}) {
   const [numPages, setNumPages] = useState();
@@ -12,7 +13,15 @@ function MyPDFViewer({}) {
   const [showAllComments, setShowAllComments] = useState(false); // État pour gérer l'affichage des commentaires
   const location = useLocation();
   const { item } = location.state || {};  // Access the state
+  const windowPDFRef = useRef(null);
 
+    useEffect(() => {
+      // Animation GSAP pour l'effet d'ouverture de fenêtre
+      gsap.fromTo(windowPDFRef.current, 
+        { scale: 0.5, opacity: 0 }, // Point de départ
+        { scale: 1, opacity: 1, duration: 0.8, ease: "power1.out",delay:0.3 } // Animation vers le point final
+      );
+    }, []);
   const comments = [
     {id : 3, owner : 'nzita@gmail.com',comment : "Verifie bien le document c'est tres sensible", date : "12/10/2024 18:10:30"  },
     {id : 2, owner : 'makuala@gmail.com',comment : "Verifie bien le document c'est tres sensible", date : "12/10/2024 12:10:30"  },
@@ -74,7 +83,7 @@ function MyPDFViewer({}) {
         </div>
       </div>
         <p></p>
-      <div className="pdf-div">
+      <div className="pdf-div" ref={windowPDFRef}>
         <Document file={item.pdf} onLoadSuccess={onDocumentLoadSuccess} >
           {Array.apply(null, Array(numPages))
             .map((x, i) => i + 1)
