@@ -47,7 +47,7 @@
     padding: 10px;
     border-radius: 5px;
     cursor: pointer;
-    margin-top: 10px;
+    margin: 10px;
 }
 
 .show-all-button:hover {
@@ -76,3 +76,15 @@
 .imgZomm{
     width: 20px;
 }
+.pdf-page-container {
+    position: relative;
+  }
+  
+  .cachet {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 100px;  /* Ajuste la taille du cachet ici */
+    height: auto;
+  }
+  
