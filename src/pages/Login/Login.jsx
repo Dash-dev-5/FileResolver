@@ -3,42 +3,44 @@ import imgLogin from '../../assets/login.png';
 import imgLogo from '../../assets/logo.svg';
 import "./Login.css";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux'; // Pour dispatcher les actions
+import { actionLoginUser } from '../../../redux/actions/actionLoginUser'; // Assurez-vous que l'importation pointe vers le bon fichier
 
 const Login = () => {
-  const navigation = useNavigate();
+  const navigate = useNavigate();
+  const dispatch = useDispatch(); // Initialisation du dispatch pour Redux
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  // localStorage.clear()
+  
   const handleLogin = (e) => {
     e.preventDefault();
 
-    // Retrieve users from local storage
-    const storedUsers = JSON.parse(localStorage.getItem('users')) || [{email : 'admin@gmail.com',password : 'admin',role :'Admin'}];
-
-    // Validate user credentials
-    const user = storedUsers.find(user => user.email === email && user.password === password);
-    
-    if (user) {
-      // Store the logged-in user in local storage
-      localStorage.setItem('loggedInUser', JSON.stringify(user));
-
-      // If credentials are valid, navigate to home (or profile page)
-      if(user.role === 'Secretaire'){
-        navigation('/home');
-
-      }else if(user.role === 'Directeur'){
-        navigation('/home/Dashboard');
-
-      }else if(user.role === 'Service'){
-        navigation('/home/OrderHome');
-
-      }else{
-        navigation('/home');
+    // Appelle l'action pour se connecter via l'API
+    dispatch(actionLoginUser(email, password, (status, role, data) => {
+      if (status === '200') {
+        // Stocke les détails de l'utilisateur connecté dans le localStorage
+        localStorage.setItem('loggedInUser', JSON.stringify({ ...data, role }));
+        
+        // Redirection basée sur le rôle
+        switch (role) {
+          case 'Secretaire':
+            navigate('/home');
+            break;
+          case 'Directeur':
+            navigate('/home/Dashboard');
+            break;
+          case 'Service':
+            navigate('/home/OrderHome');
+            break;
+          default:
+            navigate('/home');
+        }
+      } else if (status === '400') {
+        alert('Invalid email or password!');
+      } else if (status === '300') {
+        alert('Network error, please try again later.');
       }
-    } else {
-      // Show error if credentials are invalid
-      alert('Invalid email or password!');
-    }
+    }));
   };
 
   return (
@@ -46,7 +48,7 @@ const Login = () => {
       <div className="login-left">
         <div className="login-illustration">
           <img
-            src={imgLogin}  
+            src={imgLogin}
             alt="Illustration"
             className="login-image"
           />
@@ -55,7 +57,7 @@ const Login = () => {
       <div className="login-right">
         <div className="login-box">
           <img
-            src={imgLogo} 
+            src={imgLogo}
             alt="Illustration"
             className="logo-image"
           />
@@ -68,7 +70,7 @@ const Login = () => {
                 type="email"
                 placeholder="eg. kollectifnumrique@gmail.com"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}  // Update email state
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div className="input-group">
@@ -77,7 +79,7 @@ const Login = () => {
                 type="password"
                 placeholder="********"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}  // Update password state
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
             <div className="remember-me">
