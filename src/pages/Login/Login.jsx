@@ -27,10 +27,10 @@ const Login = () => {
         switch (role) {
           case 'admin':
             navigate('/home');
-          case 'Secretaire':
+          case 'secretaire':
             navigate('/home');
             break;
-          case 'Directeur':
+          case 'chef-service':
             navigate('/home/Dashboard');
             break;
           case 'agent':

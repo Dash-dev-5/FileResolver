@@ -59,6 +59,7 @@ function MyPDFViewer({  }) {
         headers: {
           "Accept": "application/octet-stream",
           'Authorization': `Bearer ${token}` , // Ajoutez votre jeton ici si nécessaire
+          'X-Requested-With': 'XMLHttpRequest',
         },
       });
     };

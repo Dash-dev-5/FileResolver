@@ -202,10 +202,10 @@ const UserManagement = () => {
           className="role-select"
         >
           <option value="">Selectioner pouvoir</option>
-          <option value={1}>Directeur</option>
+          <option value={4}>Directeur</option>
           <option value={2}>Administrateur</option>
           <option value={3}>Service</option>
-          <option value={4}>Secrétaire</option>
+          <option value={6}>Secrétaire</option>
         </select>
         <input
           type="password"

@@ -21,8 +21,9 @@ export const actionLoginUser = (username, password, callback) => {
         maxBodyLength: Infinity,
         url: `${LINK_API}/oauth/token`,
         headers: {
-            'Accept': 'application/json',
-          'Content-Type': 'application/json',
+           'Accept': 'application/json',
+        "content-type": "application/json",
+        'X-Requested-With': 'XMLHttpRequest',
         },
         data: data,
       };

@@ -94,7 +94,7 @@ const Sidebar = () => {
           )}
         </div>
         <nav className="sidebar-nav">
-          {(roleName  === 'Directeur' || roleName  === 'admin') && (
+          {(roleName  === 'chef-service' || roleName  === 'admin') && (
             <NavLink
               className={({ isActive }) => (isActive ? "selectNav" : "NavLink")}
               to="/home/Dashboard"
@@ -118,7 +118,7 @@ const Sidebar = () => {
               </p>
             </NavLink>
           )}
-          {(roleName  === 'Secretaire' || roleName  === 'admin') && (
+          {(roleName  === 'secretaire' || roleName  === 'admin') && (
             <NavLink
               className={({ isActive }) => (isActive ? "selectNav" : "NavLink")}
               to="/home"
@@ -130,9 +130,9 @@ const Sidebar = () => {
               </p>
             </NavLink>
           )}
-          {(roleName === 'Secretaire' ||
+          {(roleName === 'secretaire' ||
             roleName === 'admin' ||
-            roleName === 'Directeur') && (
+            roleName === 'chef-service') && (
             <NavLink
               className={({ isActive }) => (isActive ? "selectNav" : "NavLink")}
               to="/home/Classeur"
