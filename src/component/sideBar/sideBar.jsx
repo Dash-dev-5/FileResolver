@@ -35,13 +35,13 @@ const Sidebar = () => {
     }
   }, []);
 
-  useEffect(() => {
-    if (viewText) {
-      setTimeout(() => {
-        handleMouseLeave();
-      }, 3000);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (viewText) {
+  //     setTimeout(() => {
+  //       handleMouseLeave();
+  //     }, 3000);
+  //   }
+  // }, []);
 
   const handleMouseEnter = () => {
     gsap.to(sidebarRef.current, { width: '250px', duration: 0.5, ease: 'power3.out' });
@@ -70,17 +70,20 @@ const Sidebar = () => {
     <div
       className="sidebar"
       ref={sidebarRef}
-      onMouseOver={handleMouseEnter}
-      onMouseOut={handleMouseLeave}
+      // onMouseOver={handleMouseEnter}
+      // onMouseOut={handleMouseLeave}
     >
       <div className="topSidebar">
         {viewText && (
           <div className="logoContenaire">
             <img src={logo} alt="Logo" className="logo-imageSide" />
             <div className="textLogo">FileResolver</div>
+            <div className="textLogo buttonBurger" onClick={handleMouseLeave}>✖</div>
+
           </div>
         )}
         <div className="profile">
+          {!viewText && <div className="textLogo buttonBurger" onClick={handleMouseEnter}>▶</div>}
           <img src={avatar} alt="Profile" className={!viewText ? "profile-image" : "profile-image2"} />
           {viewText && (
             <>

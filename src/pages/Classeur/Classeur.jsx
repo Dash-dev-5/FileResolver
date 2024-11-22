@@ -22,10 +22,13 @@ const Classeur = () => {
   const classeurs = useSelector((state) => state.classeurs) || [];
   const files = useSelector((state) => state.fileForBinder) || [];
   const [expandedIndex, setExpandedIndex] = useState(null);
+console.log(files);
 
   useEffect(() => {
-    dispatch(actionGetBinder());
-    dispatch(actionGetFileByBinder());
+
+      dispatch(actionGetBinder());
+      dispatch(actionGetFileByBinder());
+
   }, [dispatch]);
 
   useEffect(() => {
@@ -83,10 +86,10 @@ const Classeur = () => {
                     {filteredFiles.map((file) => (
                       <li key={file.id} className="document-detail">
                         <div className="doc-title">{file.name}</div>
-                        <div className="doc-date">
+                        <div className="doc-ref">
                           N° Ref : {file.num_ref}
                         </div>
-                        <div className="doc-date">
+                        <div className="doc-ref">
                           Date : {formatDate(file.created_at)}
                         </div>
                         <div className="viewBtn" onClick={() => handleView(file)}>

@@ -100,3 +100,11 @@
   border-radius: 5px;
   border-right:yellow solid 5px;
 }
+.buttonBurger{
+  padding: 6px 8px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+.buttonBurger:hover{
+  background-color: #0087c5;
+}

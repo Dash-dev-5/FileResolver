@@ -156,6 +156,18 @@ const FolderManagement = () => {
             onChange={handleInputChangeFolder}
           /> */}
            <select
+          name="service_id"
+          value={folderData.service_id}
+          onChange={handleInputChangeFolder}
+        >
+          <option value="">Sélectionnez le service</option>
+          {services.map((item, index) => (
+            <option key={index} value={item.id}>
+              {item.name}
+            </option>
+          ))}
+        </select>
+           <select
           name="binder_category_id"
           value={folderData.binder_category_id}
           onChange={handleInputChangeFolder}

@@ -15,7 +15,7 @@ const companyId = userDetailsObj.data.company[0].id
     const data = `{
       "name": "${folder.name}",
       "company_id": ${companyId},
-      "service_id": 1,
+      "service_id": ${folder.service_id},
       "binder_category_id": ${folder.binder_category_id}
     }`;
 

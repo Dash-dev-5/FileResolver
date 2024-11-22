@@ -10,6 +10,21 @@ import { gsap } from 'gsap';
 
 
 function MyPDFViewer({  }) {
+
+  const userDetailsStr = localStorage.getItem('userDetails');
+  const userDetailsObj = JSON.parse(userDetailsStr);
+
+  if (!userDetailsObj?.access_token) {
+    throw new Error('Token d\'authentification non trouvé.');
+  }
+
+  const token = userDetailsObj.access_token;
+  const companyId = userDetailsObj.data?.company?.[0]?.id;
+
+  if (!companyId) {
+    throw new Error('ID de l\'entreprise non trouvé.');
+  }
+
   const [numPages, setNumPages] = useState();
   const [pageNumber, setPageNumber] = useState(1);
   const [scalPage, setScalPage] = useState(1);
@@ -39,9 +54,11 @@ function MyPDFViewer({  }) {
   useEffect(() => {
     const preloadPDF = async () => {
       await fetch(item.path, {
+        mode: 'no-cors',
         method: 'GET',
         headers: {
-          'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIyI…MPC00CT0Jc9Y6FpK6FqR8oNdqPNjz6N_mXVZ-guzFg1gwy71o', // Ajoutez votre jeton ici si nécessaire
+          "Accept": "application/octet-stream",
+          'Authorization': `Bearer ${token}` , // Ajoutez votre jeton ici si nécessaire
         },
       });
     };
