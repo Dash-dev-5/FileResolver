@@ -157,4 +157,9 @@ padding: 40px;
       max-width: 100%;
     }
   }
+  .error-message {
+    color: red;
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
   

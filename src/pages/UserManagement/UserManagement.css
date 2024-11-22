@@ -4,7 +4,15 @@
     padding: 20px;
     width: 100%;
   }
-  
+  .contentName{
+    display: flex;
+  }
+  .contentName input{
+    margin-right: 5px;
+  }
+  .contentName :last-child{
+    margin-right: 0px;
+  }
   .user-form, .user-list {
     background-color: white;
     padding: 20px;

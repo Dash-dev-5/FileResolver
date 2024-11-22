@@ -4,60 +4,67 @@ import avatar from '../../assets/avatar.svg';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import logo from '../../assets/logo.svg';
 import { gsap } from 'gsap';
+import { useDispatch } from 'react-redux';
+import { actionLoadUser } from '../../../redux/actions/actionLoadUser';
+import { actionGetService } from '../../../redux/actions/actionGetService';
+import { actionGetBinder } from '../../../redux/actions/actionGetBinder';
+import { ationGetBinderCategory } from '../../../redux/actions/ationGetBinderCategory';
 
 const Sidebar = () => {
-  const [formData, setFormData] = useState({
-    avatar: '/default-avatar.svg',
-    name: '',
-    jobFunction: '',
-  });
+  const [userDetails, setUserDetails] = useState(null);
   const [viewText, setViewText] = useState(true);
   const sidebarRef = useRef(null);
-  useEffect(()=>{
-    if (viewText){
-
-      setTimeout(() => {
-        handleMouseLeave()
-      }, 3000);
-    }
-  },[] )
-
-  // Fonction pour agrandir la sidebar au survol
-  const handleMouseEnter =  () => {
-  gsap.to(sidebarRef.current, { width: '250px', duration: 0.5, ease: 'power3.out' });
-    gsap.to('.profile', { opacity: 1, delay: 0.2, duration: 0.4, ease: 'power3.out' }); // Animation du texte
-    setViewText(true);
-  };
-
-  // Fonction pour réduire la sidebar lorsqu'on quitte le survol
-  const handleMouseLeave =  () => {
-    gsap.to(sidebarRef.current, { width: '60px', duration: 0.5, ease: 'power3.in' });
-    // gsap.to('.profile', { opacity: 0, duration: 0.4, ease: 'power3.in' }); // Animation pour cacher le texte
-    setViewText(false);
-  };
-
   const navigate = useNavigate();
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
-  const location = useLocation();
-
-  // Load user data from local storage on component mount
+  const dispatch = useDispatch()
   useEffect(() => {
-    const storedData = JSON.parse(localStorage.getItem('loggedInUser'));
+    const storedData = JSON.parse(localStorage.getItem('userDetails'));
     if (storedData) {
-      setFormData(storedData);
+      setUserDetails(storedData.data);
+    }
+  }, []);
+  useEffect(() => {
+    const storedUsers = JSON.parse(localStorage.getItem('userDetails')) || null
+    if (storedUsers === null ){
+      navigate('/login'); // Redirige vers la page d'accueil après 2 secondes
+    }else{
+      dispatch(actionLoadUser(storedUsers))
+      dispatch(actionGetService())
+      dispatch(actionGetBinder())
+      dispatch(ationGetBinderCategory())
+
     }
   }, []);
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/", { replace: true });
+    if (viewText) {
+      setTimeout(() => {
+        handleMouseLeave();
+      }, 3000);
     }
-  }, [isAuthenticated, navigate]);
+  }, []);
+
+  const handleMouseEnter = () => {
+    gsap.to(sidebarRef.current, { width: '250px', duration: 0.5, ease: 'power3.out' });
+    gsap.to('.profile', { opacity: 1, delay: 0.2, duration: 0.4, ease: 'power3.out' });
+    setViewText(true);
+  };
+
+  const handleMouseLeave = () => {
+    gsap.to(sidebarRef.current, { width: '60px', duration: 0.5, ease: 'power3.in' });
+    setViewText(false);
+  };
 
   const handleLogout = () => {
-    setIsAuthenticated(false);
+    localStorage.removeItem('userDetails');
     navigate("/", { replace: true });
   };
+
+  if (!userDetails) {
+    return null; // Charge uniquement si les données existent
+  }
+
+  const { first_name, last_name, roles, company } = userDetails;
+  const roleName = roles[0]?.name || "agent";
 
   return (
     <div
@@ -71,21 +78,20 @@ const Sidebar = () => {
           <div className="logoContenaire">
             <img src={logo} alt="Logo" className="logo-imageSide" />
             <div className="textLogo">FileResolver</div>
-            {/* <img src="/menu.png" style={{margin:10,alignItems:'flex-end'}} onClick={handleMouseLeave} width={20} alt="" /> */}
           </div>
         )}
         <div className="profile">
-        {/* {viewText ? <img src={formData.avatar} alt="Profile" className="profile-image" /> : <img src="/menu.png" style={{margin:10}} onClick={handleMouseEnter} width={20} alt="" />} */}
-       <img src={formData.avatar} alt="Profile"  className={!viewText ? "profile-image":"profile-image2"} /> 
+          <img src={avatar} alt="Profile" className={!viewText ? "profile-image" : "profile-image2"} />
           {viewText && (
             <>
-              <h3>{formData.name}</h3>
-              <p>{formData.jobFunction}</p>
+              <h3>{`${first_name} ${last_name}`}</h3>
+              <p>{roleName}</p>
+              {company && <p>{company[0]?.name}</p>}
             </>
           )}
         </div>
         <nav className="sidebar-nav">
-          {(formData?.role === 'Directeur' || formData?.role === 'Admin') && (
+          {(roleName  === 'Directeur' || roleName  === 'admin') && (
             <NavLink
               className={({ isActive }) => (isActive ? "selectNav" : "NavLink")}
               to="/home/Dashboard"
@@ -93,11 +99,11 @@ const Sidebar = () => {
               <img src="/dashboard.png" width={20} alt="" />
               <p>
 
-              {viewText && (formData?.role === 'Admin' ? 'Tableau de bord DP' : 'Accueil')}
+              {viewText && (roleName  === 'admin' ? 'Tableau de bord DP' : 'Accueil')}
               </p>
             </NavLink>
           )}
-          {(formData?.role === 'Service' || formData?.role === 'Admin') && (
+          {(roleName  === 'agent' || roleName  === 'admin') && (
             <NavLink
               className={({ isActive }) => (isActive ? "selectNav" : "NavLink")}
               to="/home/OrderHome"
@@ -105,11 +111,11 @@ const Sidebar = () => {
               <img src="/dashboard.png" width={20} alt="" />
               <p>
                  
-              {viewText && (formData?.role === 'Admin' ? 'Les services' : 'Accueil')}
+              {viewText && (roleName  === 'admin' ? 'Les services' : 'Accueil')}
               </p>
             </NavLink>
           )}
-          {(formData?.role === 'Secretaire' || formData?.role === 'Admin') && (
+          {(roleName  === 'Secretaire' || roleName  === 'admin') && (
             <NavLink
               className={({ isActive }) => (isActive ? "selectNav" : "NavLink")}
               to="/home"
@@ -117,13 +123,13 @@ const Sidebar = () => {
               <img src="/add-file.png" width={20} alt="" />
               <p>
 
-              {viewText && (formData?.role === 'Admin' ? 'Ajouter File' : 'Accueil')}
+              {viewText && (roleName  === 'admin' ? 'Ajouter File' : 'Accueil')}
               </p>
             </NavLink>
           )}
-          {(formData?.role === 'Secretaire' ||
-            formData?.role === 'Admin' ||
-            formData?.role === 'Directeur') && (
+          {(roleName === 'Secretaire' ||
+            roleName === 'admin' ||
+            roleName === 'Directeur') && (
             <NavLink
               className={({ isActive }) => (isActive ? "selectNav" : "NavLink")}
               to="/home/Classeur"
@@ -145,7 +151,7 @@ const Sidebar = () => {
             {viewText && 'Modifier profile'}
             </p>
           </NavLink>
-          {formData?.role === 'Admin' && (
+          {roleName === 'admin' && (
             <>
               <NavLink
                 className={({ isActive }) => (isActive ? "selectNav" : "NavLink")}
@@ -172,11 +178,8 @@ const Sidebar = () => {
         </nav>
       </div>
       <div className="NavLink" onClick={handleLogout}>
-      <img src="/log-out.png" width={20} alt="" />
-      <p>
-
-      {viewText &&  'Se déconnecter'}
-      </p>
+        <img src="/log-out.png" width={20} alt="" />
+        <p>{viewText && 'Se déconnecter'}</p>
       </div>
     </div>
   );

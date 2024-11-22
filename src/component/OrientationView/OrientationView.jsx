@@ -2,12 +2,15 @@ import React, { useState,useRef,useEffect } from 'react';
 import './OrientationView.css'; // Styles du composant
 import { Document, Page } from "react-pdf"; 
 import { gsap } from 'gsap';
+import { useSelector } from 'react-redux';
 
 const OrientationView = ({ onClose,data }) => {
     const [numPages, setNumPages] = useState();
     const [pageNumber, setPageNumber] = useState(1);
     const windowRef = useRef(null);
-
+    const services = useSelector(state => state.services)
+    console.log(services);
+    
     useEffect(() => {
       // Animation GSAP pour l'effet d'ouverture de fenêtre
       gsap.fromTo(windowRef.current, 
@@ -64,8 +67,11 @@ const OrientationView = ({ onClose,data }) => {
             <label>Sélectionner un service à orienter</label>
             <select className="form-control">
               <option value="">Sélectionner un service</option>
-              <option value="service1">Service 1</option>
-              <option value="service2">Service 2</option>
+              {services.map((item, index) => (
+                <option key={index} value={item.name}>
+                  {item.name}
+                </option>
+              ))}
             </select>
           </div>
           <div className="form-group">

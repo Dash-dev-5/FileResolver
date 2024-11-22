@@ -1,164 +1,196 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import './FolderManagement.css';
 import { useOutletContext } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { addService, updateService, deleteService } from '../../../redux/actions/actionsServices';
+import { addFolder, updateFolder, deleteFolder } from '../../../redux/actions/actionsBinder'; // Actions Redux pour les classeurs
+import { ationGetBinderCategory } from '../../../redux/actions/ationGetBinderCategory';
+import { actionGetBinder } from '../../../redux/actions/actionGetBinder';
+import { actionGetService } from '../../../redux/actions/actionGetService';
+
+const formatDate = (isoDateString) => {
+ 
+
+// Créer un objet Date à partir de la chaîne ISO
+const date = new Date(isoDateString);
+
+// Options pour formater la date
+const options = {
+  weekday: 'long', // Jour de la semaine
+  year: 'numeric', // Année
+  month: 'long', // Mois en texte
+  day: 'numeric', // Jour du mois
+  hour: '2-digit', // Heure sur 2 chiffres
+  minute: '2-digit', // Minute sur 2 chiffres
+  second: '2-digit', // Seconde sur 2 chiffres
+  timeZoneName: 'short', // Nom du fuseau horaire (ex : UTC, GMT)
+};
+
+// Formater la date selon les options
+const formattedDate = date.toLocaleString('fr-FR', options);
+return formattedDate
+}
 
 const FolderManagement = () => {
-  const { ModalView } = useOutletContext();
+  const services = useSelector(state => state.services);
+  const folders = useSelector(state => state.classeurs);
+  console.log(services);
   
-  // Initial state for folder form
-  const [folderData, setFolderData] = useState({ folderName: '', company: '' });
-  const [folderDataService, setFolderDataService] = useState({ service: '', comment: '' });
+  const { ModalView } = useOutletContext();
+  const dispatch = useDispatch();
+  const categorieBinder = useSelector(state => state.classeursCategories)
+  useLayoutEffect(()=>{
+    dispatch(ationGetBinderCategory())
+    dispatch(actionGetService())
+    dispatch(actionGetBinder())
+  },[])
+  // Récupérer les services et classeurs depuis le store Redux
+ 
 
-  const [folders, setFolders] = useState(() => {
-    const storedFolders = localStorage.getItem('classeur');
-    return storedFolders ? JSON.parse(storedFolders) : [];
-  });
+  // États pour les formulaires
+  const [folderData, setFolderData] = useState({
+    "name":"",
+    "company_id":'',
+    "service_id":'',
+    "binder_category_id":""
+});
+  const [folderDataService, setFolderDataService] = useState({ name: '' });
 
-  const [services, setServices] = useState(() => {
-    const storedServices = localStorage.getItem('service');
-    return storedServices ? JSON.parse(storedServices) : [];
-  });
+  // États d'édition
+  const [editModeFolder, setEditModeFolder] = useState(false);
+  const [editModeService, setEditModeService] = useState(false);
 
-  const [editMode, setEditMode] = useState(false);
-  const [selectedFolderIndex, setSelectedFolderIndex] = useState(null);
-  const [editMode2, setEditMode2] = useState(false);
-  const [selectedServiceIndex, setSelectedServiceIndex] = useState(null);
-
-  useEffect(() => {
-    localStorage.setItem('classeur', JSON.stringify(folders));
-  }, [folders]);
-
-  useEffect(() => {
-    localStorage.setItem('service', JSON.stringify(services));
-  }, [services]);
-
-  const handleInputChange = (e) => {
+  // Gestion des inputs
+  const handleInputChangeFolder = (e) => {
     const { name, value } = e.target;
     setFolderData({ ...folderData, [name]: value });
   };
 
-  const handleInputChange2 = (e) => {
+  const handleInputChangeService = (e) => {
     const { name, value } = e.target;
     setFolderDataService({ ...folderDataService, [name]: value });
   };
 
-  const handleSubmit = () => {
-    if (editMode) {
-      const updatedFolders = [...folders];
-      updatedFolders[selectedFolderIndex] = folderData;
-      setFolders(updatedFolders);
-      setEditMode(false);
+  // Soumission des formulaires
+  const handleSubmitFolder = () => {
+    if (editModeFolder) {
+      dispatch(updateFolder(folderData));
+      setEditModeFolder(false);
     } else {
-      setFolders([...folders, folderData]);
+      dispatch(addFolder(folderData)); // ID unique temporaire
+      console.log('fol',folders);
+      
     }
-    setFolderData({ folderName: '', company: '' });
+    setFolderData({ id: null, name: '', binder_category_id: '' });
   };
 
-  const handleSubmit2 = () => {
-    if (editMode2) {
-      const updatedServices = [...services];
-      updatedServices[selectedServiceIndex] = folderDataService;
-      setServices(updatedServices);
-      setEditMode2(false);
+  const handleSubmitService = () => {
+    if (editModeService) {
+      dispatch(updateService(folderDataService));
+      setEditModeService(false);
     } else {
-      setServices([...services, folderDataService]);
+      dispatch(addService(folderDataService)); // ID unique temporaire
     }
-    setFolderDataService({ service: '', comment: '' });
+    setFolderDataService({ name: '' });
   };
 
-  const handleDelete = async (index) => {
+  // Gestion des suppressions
+  const handleDeleteFolder = async (id) => {
     const response = await ModalView("Voulez-vous vraiment supprimer ce classeur ?", async () => {
       const finalResponse = await ModalView("Cette action est irréversible. Confirmez-vous ?");
       if (finalResponse === 'OK') {
-        handleFinalConfirmation(index);
+        dispatch(deleteFolder(id));
       }
     });
   };
 
-  const handleFinalConfirmation = (index) => {
-    const updatedFolders = folders.filter((_, i) => i !== index);
-    setFolders(updatedFolders);
-  };
-
-  const handleDelete2 = async (index) => {
+  const handleDeleteService = async (id) => {
     const response = await ModalView("Voulez-vous vraiment supprimer ce service ?", async () => {
       const finalResponse = await ModalView("Cette action est irréversible. Confirmez-vous ?");
       if (finalResponse === 'OK') {
-        handleFinalConfirmation2(index);
+        dispatch(deleteService(id));
       }
     });
   };
 
-  const handleFinalConfirmation2 = (index) => {
-    const updatedServices = services.filter((_, i) => i !== index);
-    setServices(updatedServices);
+  // Gestion des éditions
+  const handleEditFolder = (folder) => {
+    setFolderData(folder);
+    setEditModeFolder(true);
   };
 
-  const handleEdit = (index) => {
-    setFolderData(folders[index]);
-    setSelectedFolderIndex(index);
-    setEditMode(true);
+  const handleEditService = (service) => {
+    setFolderDataService(service);
+    setEditModeService(true);
   };
 
-  const handleEdit2 = (index) => {
-    setFolderDataService(services[index]);
-    setSelectedServiceIndex(index);
-    setEditMode2(true);
+  // Réinitialisation des formulaires
+  const clearFormFolder = () => {
+    setFolderData({ id: null, name: '', binder_category_id: '' });
+    setEditModeFolder(false);
   };
 
-  const clearForm = () => {
-    setFolderData({ folderName: '', company: '' });
-    setEditMode(false);
-  };
-
-  const clearForm2 = () => {
-    setFolderDataService({ service: '', comment: '' });
-    setEditMode2(false);
+  const clearFormService = () => {
+    setFolderDataService({ name: ''});
+    setEditModeService(false);
   };
 
   return (
     <div className="folder-management-container">
       <div className="rowManager">
+        {/* Formulaire pour les classeurs */}
         <div className="folder-form">
-          <h3>{editMode ? 'Modifier un classeur' : 'Ajouter un classeur'}</h3>
-
+          <h3>{editModeFolder ? 'Modifier un classeur' : 'Ajouter un classeur'}</h3>
           <input
             type="text"
-            name="folderName"
+            name="name"
             placeholder="Nom du classeur"
-            value={folderData.folderName}
-            onChange={handleInputChange}
+            value={folderData.name}
+            onChange={handleInputChangeFolder}
           />
-          <input
+          {/* <input
             type="text"
             name="company"
             placeholder="Entreprise"
             value={folderData.company}
-            onChange={handleInputChange}
-          />
-
+            onChange={handleInputChangeFolder}
+          /> */}
+           <select
+          name="binder_category_id"
+          value={folderData.binder_category_id}
+          onChange={handleInputChangeFolder}
+        >
+          <option value="">Sélectionnez la categorie du doc</option>
+          {categorieBinder.map((item, index) => (
+            <option key={index} value={item.id}>
+              {item.name}
+            </option>
+          ))}
+        </select>
           <div className="buttons">
-            <button className="btn-delete" onClick={clearForm}>
+            <button className="btn-delete" onClick={clearFormFolder}>
               Effacer
             </button>
-            <button className="btn-save" onClick={handleSubmit}>
-              {editMode ? 'Mettre à jour' : 'Ajouter'}
+            <button className="btn-save" onClick={handleSubmitFolder}>
+              {editModeFolder ? 'Mettre à jour' : 'Ajouter'}
             </button>
           </div>
         </div>
 
+        {/* Liste des classeurs */}
         <div className="folder-list">
           <h3>Liste des classeurs</h3>
           {folders.length === 0 ? (
             <p>Aucun classeur</p>
           ) : (
-            folders.map((folder, index) => (
-              <div key={index} className="folder-item">
-                <div className="paragraphe">{folder.folderName}</div>
-                <div className="paragraphe">{folder.company}</div>
+            folders.map(folder => (
+              <div key={folder.id} className="folder-item">
+                <div className="paragraphe ">{folder.name}</div>
+                <div className="paragraphe sm">{formatDate(folder.created_at)}</div>
+                <div className="paragraphe sm">{formatDate(folder.updated_at)}</div>
                 <div className="folder-actions">
-                  <button className="btn-edit" onClick={() => handleEdit(index)}>✏️</button>
-                  <button className="btn-delete" onClick={() => handleDelete(index)}>🗑️</button>
+                  <button className="btn-edit" onClick={() => handleEditFolder(folder)}>✏️</button>
+                  <button className="btn-delete" onClick={() => handleDeleteFolder(folder.id)}>🗑️</button>
                 </div>
               </div>
             ))
@@ -167,46 +199,47 @@ const FolderManagement = () => {
       </div>
 
       <div className="rowManager">
+        {/* Formulaire pour les services */}
         <div className="folder-form">
-          <h3>{editMode2 ? 'Modifier un service' : 'Ajouter un service'}</h3>
-
+          <h3>{editModeService ? 'Modifier un service' : 'Ajouter un service'}</h3>
           <input
             type="text"
-            name="service"
+            name="name"
             placeholder="Nom du service"
-            value={folderDataService.service}
-            onChange={handleInputChange2}
+            value={folderDataService.name}
+            onChange={handleInputChangeService}
           />
-          <input
+          {/* <input
             type="text"
-            name="comment"
-            placeholder="Commentaire"
-            value={folderDataService.comment}
-            onChange={handleInputChange2}
-          />
-
+            name="company_id"
+            placeholder="ID de l'entreprise"
+            value={folderDataService.company_id}
+            onChange={handleInputChangeService}
+          /> */}
           <div className="buttons">
-            <button className="btn-delete" onClick={clearForm2}>
+            <button className="btn-delete" onClick={clearFormService}>
               Effacer
             </button>
-            <button className="btn-save" onClick={handleSubmit2}>
-              {editMode2 ? 'Mettre à jour' : 'Ajouter'}
+            <button className="btn-save" onClick={handleSubmitService}>
+              {editModeService ? 'Mettre à jour' : 'Ajouter'}
             </button>
           </div>
         </div>
 
+        {/* Liste des services */}
         <div className="folder-list">
           <h3>Liste des services</h3>
           {services.length === 0 ? (
             <p>Aucun service</p>
           ) : (
-            services.map((service, index) => (
-              <div key={index} className="folder-item">
-                <div className="paragraphe">{service.service}</div>
-                <div className="paragraphe">{service.comment}</div>
+            services.map(service => (
+              <div key={service.id} className="folder-item">
+                <div className="paragraphe">{service.name}</div>
+                <div className="paragraphe sm">{formatDate(service.created_at)}</div>
+                <div className="paragraphe sm">{formatDate(service.updated_at)}</div>
                 <div className="folder-actions">
-                  <button className="btn-edit" onClick={() => handleEdit2(index)}>✏️</button>
-                  <button className="btn-delete" onClick={() => handleDelete2(index)}>🗑️</button>
+                  <button className="btn-edit" onClick={() => handleEditService(service)}>✏️</button>
+                  <button className="btn-delete" onClick={() => handleDeleteService(service.id)}>🗑️</button>
                 </div>
               </div>
             ))

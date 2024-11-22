@@ -3,9 +3,9 @@ import './DragAndDrop.css';
 import { saveAs } from 'file-saver';
 import { useNavigate } from 'react-router-dom';
 
-const DragAndDrop = ({ setFiles, files }) => {
+const DragAndDrop = ({ preview, setPreview }) => {
   const [file, setFile] = useState(null);
-  const [preview, setPreview] = useState(null);
+  // const [preview, setPreview] = useState(null);
   const [error, setError] = useState('');
   const navigation = useNavigate()
   // const [newFileName, setNewFileName] = useState(''); // Pour stocker le nouveau nom
@@ -17,6 +17,7 @@ const DragAndDrop = ({ setFiles, files }) => {
   }
   const handleDragOver = (event) => {
     event.preventDefault();
+
   };
 
   const handleDrop = (event) => {
@@ -33,16 +34,19 @@ const DragAndDrop = ({ setFiles, files }) => {
 
   const processFile = (file) => {
     if (file && acceptedFileTypes.includes(file.type)) {
+      setPreview(file)
       setFile(file);
 
       if (file.type.startsWith('image/')) {
         const reader = new FileReader();
         reader.onload = (e) => {
-          setPreview(e.target.result);
+          // setPreview(e.target.result);
         };
         reader.readAsDataURL(file);
       } else if (file.type === 'application/pdf') {
-        setPreview(URL.createObjectURL(file));
+        // setPreview(file);
+        // console.log(URL.createObjectURL());
+        
       }
     } else {
       setError('Type de fichier non pris en charge. Veuillez déposer une image ou un PDF.');

@@ -36,6 +36,18 @@ function MyPDFViewer({  }) {
       { scale: 1, opacity: 1, duration: 0.8, ease: "power1.out", delay: 0.3 }
     );
   }, []);
+  useEffect(() => {
+    const preloadPDF = async () => {
+      await fetch(item.path, {
+        method: 'GET',
+        headers: {
+          'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIyI…MPC00CT0Jc9Y6FpK6FqR8oNdqPNjz6N_mXVZ-guzFg1gwy71o', // Ajoutez votre jeton ici si nécessaire
+        },
+      });
+    };
+    preloadPDF();
+  }, [item.path]);
+  
 
   useEffect(() => {
     if (showAllComments) {
@@ -174,13 +186,14 @@ function MyPDFViewer({  }) {
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseup', handleMouseUp);
   };
+  console.log('pdf',item);
   
   return (
     <div className="contenaire-pdf-comment">
        <div className="topbar topbar-pdf">
    
           <>
-            <div className="documentDetail">Document de {item.name} pour {item.object}</div>
+            <div className="documentDetail">Document {item.name} pour {item.object}</div>
             <div className="blockAction">
               <button className="btn-send" >Commanter</button>
               <button className="btn-send" onClick={() => setShowOverlay(o => !o)}>{showOverlay ? "Retirer le cachet" : "Ajouter le cachet"}</button>
@@ -223,7 +236,7 @@ function MyPDFViewer({  }) {
           <p>
             Page {pageNumber} sur {numPages}
           </p>
-        <Document file={item.pdf} onLoadSuccess={onDocumentLoadSuccess}>
+        <Document file={{url:item.path}} onLoadSuccess={onDocumentLoadSuccess}>
           {Array.apply(null, Array(numPages))
             .map((x, i) => i + 1)
             .map((page) => {

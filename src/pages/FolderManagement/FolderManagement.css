@@ -70,6 +70,12 @@
   .folder-item .paragraphe {
     margin: 0;
     padding: 0;
+    font-size: 0.8em;
+  }
+  .folder-item .sm {
+    margin: 0;
+    padding: 0;
+    font-size: 0.6em;
   }
   .folder-actions button {
     background-color: white;

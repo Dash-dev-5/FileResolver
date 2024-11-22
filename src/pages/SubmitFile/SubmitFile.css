@@ -107,3 +107,7 @@ select {
 /* .chekbox{
    padding: 12px; 
 } */
+.barCompleted {
+  background-color:  #0ba9f3;
+  
+}

@@ -77,6 +77,10 @@
   margin: 0;
   font-size: 0.8em;
 }
+.profile p,h3{
+  margin: 0;
+  font-size: 0.8em;
+}
 .NavLink img{
   margin-right: 10PX;
 }

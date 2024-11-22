@@ -3,42 +3,46 @@ import imgLogin from '../../assets/login.png';
 import imgLogo from '../../assets/logo.svg';
 import "./Login.css";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from 'react-redux'; // Pour dispatcher les actions
-import { actionLoginUser } from '../../../redux/actions/actionLoginUser'; // Assurez-vous que l'importation pointe vers le bon fichier
+import { useDispatch } from 'react-redux'; 
+import { actionLoginUser } from '../../../redux/actions/actionLoginUser';
 
 const Login = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch(); // Initialisation du dispatch pour Redux
+  const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  
+  const [error, setError] = useState(null);
+
   const handleLogin = (e) => {
     e.preventDefault();
+    setError(null); // Reset error state
 
-    // Appelle l'action pour se connecter via l'API
+    if (!email || !password) {
+      setError('Veuillez remplir tous les champs.');
+      return;
+    }
+
     dispatch(actionLoginUser(email, password, (status, role, data) => {
       if (status === '200') {
-        // Stocke les détails de l'utilisateur connecté dans le localStorage
-        localStorage.setItem('loggedInUser', JSON.stringify({ ...data, role }));
-        
-        // Redirection basée sur le rôle
         switch (role) {
+          case 'admin':
+            navigate('/home');
           case 'Secretaire':
             navigate('/home');
             break;
           case 'Directeur':
             navigate('/home/Dashboard');
             break;
-          case 'Service':
+          case 'agent':
             navigate('/home/OrderHome');
             break;
           default:
             navigate('/home');
         }
       } else if (status === '400') {
-        alert('Invalid email or password!');
+        setError('Email ou mot de passe invalide.');
       } else if (status === '300') {
-        alert('Network error, please try again later.');
+        setError('Erreur réseau, veuillez réessayer plus tard.');
       }
     }));
   };
@@ -47,34 +51,27 @@ const Login = () => {
     <div className="login-container">
       <div className="login-left">
         <div className="login-illustration">
-          <img
-            src={imgLogin}
-            alt="Illustration"
-            className="login-image"
-          />
+          <img src={imgLogin} alt="Illustration" className="login-image" />
         </div>
       </div>
       <div className="login-right">
         <div className="login-box">
-          <img
-            src={imgLogo}
-            alt="Illustration"
-            className="logo-image"
-          />
-          <h2>Bienvenu sur FileResolver</h2>
+          <img src={imgLogo} alt="Logo" className="logo-image" />
+          <h2>Bienvenue sur FileResolver</h2>
           <p>S'il vous plaît entrez vos informations</p>
           <form onSubmit={handleLogin}>
+            {error && <div className="error-message" aria-live="polite">{error}</div>}
             <div className="input-group">
               <label>Email</label>
               <input
                 type="email"
-                placeholder="eg. kollectifnumrique@gmail.com"
+                placeholder="ex. kollectifnumerique@gmail.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div className="input-group">
-              <label>Password</label>
+              <label>Mot de passe</label>
               <input
                 type="password"
                 placeholder="********"
@@ -83,8 +80,8 @@ const Login = () => {
               />
             </div>
             <div className="remember-me">
-              <input type="checkbox" />
-              <label>Se souvenir de moi</label>
+              <input type="checkbox" id="remember-me" />
+              <label htmlFor="remember-me">Se souvenir de moi</label>
             </div>
             <button type="submit" className="btn">Se connecter</button>
           </form>

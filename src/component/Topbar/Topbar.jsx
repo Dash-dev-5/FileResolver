@@ -2,16 +2,22 @@ import React, { useEffect, useState } from 'react';
 import './Topbar.css';
 import { useLocation } from 'react-router-dom';
 import Switch from '../Switch/Switch';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { actionChangeType } from '../../../redux/actions/actionChangeTheme';
+import { fetchBinderService } from '../../../request/fetchBinderService';
+import { actionGetServiceSelected } from '../../../redux/actions/actionServiceSelected';
 
 const Topbar = ({showPopUp,documentDetail}) => {
+  const services = useSelector(state => state.services)
   const [isPDFView, setIsPDFView] = useState(false)
   const location = useLocation().pathname
   const [formData, setFormData] = useState({});
   const [service, setService] = useState([]);
   const [selectedService, setSelectedService] = useState('');
+  const userProfil = useSelector(state=>state.profile)
 
+
+  
   const dispash = useDispatch()
 
   const handeleChangeType = (type) =>{
@@ -19,18 +25,14 @@ const Topbar = ({showPopUp,documentDetail}) => {
     
     dispash(actionChangeType(type))
   }
-   useEffect(() => {
-    const storedFolders = localStorage.getItem('service');
-    if (storedFolders) {
-      setService(JSON.parse(storedFolders));
-    }
-  }, []);
+
   useEffect(() => {
-    const storedData = JSON.parse(localStorage.getItem('loggedInUser'));
-    if (storedData) {
-      setFormData(storedData);
+    const callback = (data) => {
+      console.log("ici",  data);
+      dispash(actionGetServiceSelected(selectedService,data))
     }
-  }, []);
+    fetchBinderService(selectedService,callback)  
+  }, [selectedService]);
   useEffect(()=>{
     if (location === '/home/MyPDFViewer'){
       setIsPDFView(true)
@@ -56,17 +58,17 @@ const Topbar = ({showPopUp,documentDetail}) => {
         ):
         location === '/home/OrderHome' ?
         
-          formData?.role === 'Admin' &&
+          userProfil?.data?.roles[0]?.name === 'admin' &&
         <select
           name="service"
           value={selectedService}
-          onChange={(e) => setSelectedFolder(e.target.value)}
+          onChange={(e) => setSelectedService(e.target.value)}
           className='selectOderServicve'
           >
             <option value="">Sélectionnez un classeur</option>
-            {service.map((folder, index) => (
-              <option key={index} value={folder.service}>
-                {folder.service} - {folder.comment}
+            {services.map((item, index) => (
+              <option key={index} value={item.id}>
+                {item.name}
               </option>
             ))}
         </select>

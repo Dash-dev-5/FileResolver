@@ -2,13 +2,19 @@ import React, { useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import { useNavigate } from 'react-router-dom';
 import imgLogo from '../../assets/logo.svg';
+import { useDispatch } from 'react-redux';
+import { actionGetService } from '../../../redux/actions/actionGetService';
+import { actionLoadUser } from '../../../redux/actions/actionLoadUser';
+import { actionGetBinder } from '../../../redux/actions/actionGetBinder';
+import { ationGetBinderCategory } from '../../../redux/actions/ationGetBinderCategory';
 
 const SplashScreen = () => {
   const containerRef = useRef(null);
   const logoRef = useRef(null);
   const nameRef = useRef(null);
   const navigate = useNavigate();
-
+  const dispatch = useDispatch()
+  
   useEffect(() => {
     const tl = gsap.timeline();
     
@@ -32,11 +38,16 @@ const SplashScreen = () => {
       opacity: 0,
       duration: 1,
       onComplete: () => {
-        const storedUsers = JSON.parse(localStorage.getItem('loggedInUser')) || null
+        const storedUsers = JSON.parse(localStorage.getItem('userDetails')) || null
         if (storedUsers === null ){
           navigate('/login'); // Redirige vers la page d'accueil après 2 secondes
         }else{
           navigate('/home');
+          dispatch(actionLoadUser(storedUsers))
+          dispatch(actionGetService())
+          dispatch(actionGetBinder())
+          dispatch(ationGetBinderCategory())
+
         }
       }
     }, "+=1.5"); // Délai avant de commencer cette animation
