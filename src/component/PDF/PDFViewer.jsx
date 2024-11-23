@@ -51,20 +51,20 @@ function MyPDFViewer({  }) {
       { scale: 1, opacity: 1, duration: 0.8, ease: "power1.out", delay: 0.3 }
     );
   }, []);
-  useEffect(() => {
-    const preloadPDF = async () => {
-      await fetch(item.path, {
-        mode: 'no-cors',
-        method: 'GET',
-        headers: {
-          "Accept": "application/octet-stream",
-          'Authorization': `Bearer ${token}` , // Ajoutez votre jeton ici si nécessaire
-          'X-Requested-With': 'XMLHttpRequest',
-        },
-      });
-    };
-    preloadPDF();
-  }, [item.path]);
+  // useEffect(() => {
+  //   const preloadPDF = async () => {
+  //     await fetch(item.path, {
+  //       mode: 'no-cors',
+  //       method: 'GET',
+  //       headers: {
+  //         "Accept": "application/octet-stream",
+  //         'Authorization': `Bearer ${token}` , // Ajoutez votre jeton ici si nécessaire
+  //         'X-Requested-With': 'XMLHttpRequest',
+  //       },
+  //     });
+  //   };
+  //   preloadPDF();
+  // }, [item.path]);
   
 
   useEffect(() => {
@@ -254,7 +254,7 @@ function MyPDFViewer({  }) {
           <p>
             Page {pageNumber} sur {numPages}
           </p>
-        <Document file={{url:item.path}} onLoadSuccess={onDocumentLoadSuccess}>
+        <Document file={{url:'https://file-resolver-api.kollectifnumerique.tech/storage/cadeco/AK%20sarl/EDUeSnvjFFL6M2CXt5ptPC974bQnBV6ieBL2dHHe.pdf'}} onLoadSuccess={onDocumentLoadSuccess}>
           {Array.apply(null, Array(numPages))
             .map((x, i) => i + 1)
             .map((page) => {
