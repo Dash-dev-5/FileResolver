@@ -58,7 +58,7 @@ export const uploadFile = async ({
     xhr.onload = async () => {
       if (xhr.status === 201) {
         const responseData = JSON.parse(xhr.responseText);
-        console.log('Réponse de l\'API:', responseData);
+        // console.log('Réponse de l\'API:', responseData);
         return responseData;
       } else {
         throw new Error(`Erreur : ${xhr.status} - ${xhr.responseText}`);

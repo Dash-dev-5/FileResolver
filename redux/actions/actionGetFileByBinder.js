@@ -31,7 +31,7 @@ export const actionGetFileByBinder = () => {
       const response = await axios(config);
 
       // Affichage des données pour débogage
-      console.log('Réponse de l\'API:', response.data);
+      // console.log('Réponse de l\'API:', response.data);
 
       // Dispatch vers Redux pour mettre à jour le store
       dispatch({

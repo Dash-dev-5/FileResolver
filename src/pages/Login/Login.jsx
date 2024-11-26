@@ -5,6 +5,8 @@ import "./Login.css";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from 'react-redux'; 
 import { actionLoginUser } from '../../../redux/actions/actionLoginUser';
+import { fetchBinderService } from "../../../request/fetchBinderService";
+import { actionGetServiceSelected } from "../../../redux/actions/actionServiceSelected";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -16,13 +18,19 @@ const Login = () => {
   const handleLogin = (e) => {
     e.preventDefault();
     setError(null); // Reset error state
-
+    
     if (!email || !password) {
       setError('Veuillez remplir tous les champs.');
       return;
     }
 
     dispatch(actionLoginUser(email, password, (status, role, data) => {
+      console.log('LOGINIIII',data?.service?.id);
+      fetchBinderService(data?.service?.id, (data) => {
+        console.log('........',data);
+      dispatch(actionGetServiceSelected(data?.service?.id,data))
+      }) 
+      // serviceSelect(data?.service?.id)
       if (status === '200') {
         switch (role) {
           case 'admin':
@@ -34,6 +42,7 @@ const Login = () => {
             navigate('/home/Dashboard');
             break;
           case 'agent':
+
             navigate('/home/OrderHome');
             break;
           default:
@@ -46,6 +55,13 @@ const Login = () => {
       }
     }));
   };
+  
+  // const serviceSelect = async (selectedService) => {
+  //   await fetchBinderService(selectedService,callback)  
+  //   const callback = (data) => {
+  //     console.log("connexion",  data);
+  //   } 
+  // }
 
   return (
     <div className="login-container">

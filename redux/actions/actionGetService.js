@@ -27,7 +27,7 @@ export const actionGetService =  () => {
         };
 
         const response = await axios(config);
-        console.log(JSON.stringify(response.data));
+        // console.log(JSON.stringify(response.data));
         
         dispatch({
             type: LOAD_SERVICE,

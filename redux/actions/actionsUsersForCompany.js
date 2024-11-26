@@ -34,7 +34,7 @@ export const addUser = (dataSent) => {
           type: 'ADD_USERS',
           payload: response.data.data, // Ajustez ce qui va dans le payload en fonction de la réponse de l'API
         });
-        console.log('Réponse de l\'API: service', response.data);
+        // console.log('Réponse de l\'API: service', response.data);
       })
       .catch(function (error) {
         console.log('Erreur lors de la requête API:', error);
@@ -75,7 +75,7 @@ export const updateService = (service) => {
           type: 'UPDATE_SERVICE',
           payload: response.data, // Ajustez ce qui va dans le payload
         });
-        console.log('Réponse de l\'API:', response.data);
+        // console.log('Réponse de l\'API:', response.data);
       })
       .catch(function (error) {
         console.log('Erreur lors de la requête API:', error);
@@ -106,7 +106,7 @@ export const deleteService = (id) => {
           type: 'DELETE_SERVICE',
           payload: id, // Passer simplement l'ID du service à supprimer
         });
-        console.log('Réponse de l\'API:', response.data);
+        // console.log('Réponse de l\'API:', response.data);
       })
       .catch(function (error) {
         console.log('Erreur lors de la requête API:', error);

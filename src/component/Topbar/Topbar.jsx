@@ -6,29 +6,40 @@ import { useDispatch, useSelector } from 'react-redux';
 import { actionChangeType } from '../../../redux/actions/actionChangeTheme';
 import { fetchBinderService } from '../../../request/fetchBinderService';
 import { actionGetServiceSelected } from '../../../redux/actions/actionServiceSelected';
+import { actionLoadUser } from '../../../redux/actions/actionLoadUser';
 
 const Topbar = ({showPopUp,documentDetail}) => {
   const services = useSelector(state => state.services)
+  const userProfil = useSelector(state=>state.profile)
   const [isPDFView, setIsPDFView] = useState(false)
   const location = useLocation().pathname
   const [formData, setFormData] = useState({});
   const [service, setService] = useState([]);
-  const [selectedService, setSelectedService] = useState('');
-  const userProfil = useSelector(state=>state.profile)
+  const [selectedService, setSelectedService] = useState(userProfil?.data?.service?.id);
+// console.log('user',userProfil);
 
 
   
   const dispash = useDispatch()
 
   const handeleChangeType = (type) =>{
-    console.log(type);
+    // console.log(type);
     
     dispash(actionChangeType(type))
   }
+  useEffect(() => {
+    const storedUsers = JSON.parse(localStorage.getItem('userDetails')) || null
+    if (storedUsers === null ){
+      navigate('/login'); // Redirige vers la page d'accueil après 2 secondes
+    }else{
+      dispash(actionLoadUser(storedUsers))
+      
 
+    }
+  }, []);
   useEffect(() => {
     const callback = (data) => {
-      console.log("ici",  data);
+      // console.log("ici",  data);
       dispash(actionGetServiceSelected(selectedService,data))
     }
     fetchBinderService(selectedService,callback)  
@@ -40,7 +51,7 @@ const Topbar = ({showPopUp,documentDetail}) => {
       setIsPDFView(false)
     }
   },[location])
-  console.log(location);
+  // console.log(location);
   
   return (
     <div className="topbar">

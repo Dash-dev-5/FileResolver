@@ -44,7 +44,7 @@ const SubmitFile = () => {
   };
 
   const handleFileRename = () => {
-    console.log('Type de filePath:',  filePath); // Devrait afficher "object"
+    // console.log('Type de filePath:',  filePath); // Devrait afficher "object"
     if (!validateForm()) return;
   
     // if (!(filePath instanceof File)) {

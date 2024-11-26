@@ -27,7 +27,7 @@ export const actionGetUsers =  () => {
         };
 
         const response = await axios(config);
-        console.log('users yeyo',JSON.stringify(response.data));
+        // console.log('users yeyo',JSON.stringify(response.data));
         
         dispatch({
             type: 'LOAD_USERS',

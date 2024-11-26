@@ -5,7 +5,7 @@ const initialState = []
     switch (action.type) {
         
         case 'LOAD_SERVICE_SELECTED' :
-            console.log('payload :',action.playload);
+            // console.log('payload :',action.playload);
             return action.playload
       default:
         return state;

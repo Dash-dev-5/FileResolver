@@ -7,6 +7,8 @@ import dezoomIcone from '/dezoomer.png';
 import { PDFDocument } from 'pdf-lib';  // Importer pdf-lib pour modifier le PDF
 import { saveAs } from 'file-saver';  // Importer file-saver pour sauvegarder le PDF
 import { gsap } from 'gsap';
+import fetchPdfAsDataURL from "../../../request/fetchPdfLoad";
+import fetchPdfUsingXHR from "../../../request/fetchPdfLoad";
 
 
 function MyPDFViewer({  }) {
@@ -51,21 +53,25 @@ function MyPDFViewer({  }) {
       { scale: 1, opacity: 1, duration: 0.8, ease: "power1.out", delay: 0.3 }
     );
   }, []);
-  // useEffect(() => {
-  //   const preloadPDF = async () => {
-  //     await fetch(item.path, {
-  //       mode: 'no-cors',
-  //       method: 'GET',
-  //       headers: {
-  //         "Accept": "application/octet-stream",
-  //         'Authorization': `Bearer ${token}` , // Ajoutez votre jeton ici si nécessaire
-  //         'X-Requested-With': 'XMLHttpRequest',
-  //       },
-  //     });
-  //   };
-  //   preloadPDF();
-  // }, [item.path]);
-  
+//   useEffect(() => {
+//    // Utilisation
+//  const staticUrl = item.path;
+ 
+//  fetchPdfUsingXHR(staticUrl)
+//     .then((base64data) => {
+//        console.log('Base64 Data:', base64data);
+ 
+//        // Exemple : Charger dans un visualiseur PDF
+//       //  const pdfviewerObject = $('#PdfViewer').data('ejPdfViewer');
+//        pdfviewerObject.load(base64data); // Charge la chaîne base64 dans le visualiseur PDF
+//     })
+//     .catch((error) => {
+//        console.error('Error fetching PDF:', error);
+//     });
+
+//   }, [item]);
+
+
 
   useEffect(() => {
     if (showAllComments) {
@@ -254,7 +260,11 @@ function MyPDFViewer({  }) {
           <p>
             Page {pageNumber} sur {numPages}
           </p>
-        <Document file={{url:'https://file-resolver-api.kollectifnumerique.tech/storage/cadeco/AK%20sarl/EDUeSnvjFFL6M2CXt5ptPC974bQnBV6ieBL2dHHe.pdf'}} onLoadSuccess={onDocumentLoadSuccess}>
+        <Document 
+            file={{url: 'https://cdn.filestackcontent.com/wcrjf9qPTCKXV3hMXDwK'}}
+           onLoadSuccess={onDocumentLoadSuccess}
+          //  onError={(error)=>console.log(error)}
+           >
           {Array.apply(null, Array(numPages))
             .map((x, i) => i + 1)
             .map((page) => {

@@ -27,7 +27,7 @@ export const ationGetBinderCategory =  () => {
         };
 
         const response = await axios(config);
-        console.log('red',JSON.stringify(response.data));
+        // console.log('red',JSON.stringify(response.data));
         
         dispatch({
             type: 'LOAD_BINDER_CATEGORY',

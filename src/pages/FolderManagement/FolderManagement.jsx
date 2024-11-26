@@ -34,7 +34,7 @@ return formattedDate
 const FolderManagement = () => {
   const services = useSelector(state => state.services);
   const folders = useSelector(state => state.classeurs);
-  console.log(services);
+  // console.log(services);
   
   const { ModalView } = useOutletContext();
   const dispatch = useDispatch();
@@ -78,7 +78,7 @@ const FolderManagement = () => {
       setEditModeFolder(false);
     } else {
       dispatch(addFolder(folderData)); // ID unique temporaire
-      console.log('fol',folders);
+      // console.log('fol',folders);
       
     }
     setFolderData({ id: null, name: '', binder_category_id: '' });

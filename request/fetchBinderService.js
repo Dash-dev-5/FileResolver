@@ -23,12 +23,14 @@ export const fetchBinderService = async (serviceId, callback) => {
     if (!companyId) {
       throw new Error('ID de l\'entreprise non trouvé.');
     }
+    console.log('service id',serviceId);
+    const serviceiDset = serviceId || userDetailsObj.data?.service?.id
 
     // Configuration de la requête API
     const config = {
       method: 'get',
       maxBodyLength: Infinity,
-      url: `${LINK_API}/api/binders/service/${serviceId}`,
+      url: `${LINK_API}/api/binders/service/${serviceiDset}`,
       headers: {
         Accept: 'application/json',
         Authorization: `Bearer ${token}`,

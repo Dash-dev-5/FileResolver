@@ -15,7 +15,7 @@ const UserManagement = () => {
    dispatch(actionGetService())
    dispatch(actionGetUsers())
  },[])
- console.log('view',usersForCompany);
+//  console.log('view',usersForCompany);
  
   // Initial state for the users list
   const [users, setUsers] = useState(() => {
@@ -65,12 +65,12 @@ const UserManagement = () => {
       setEditMode(false);
     } else {
       // Add a new user
-      console.log(formData);
+      // console.log(formData);
       
       dispatch(addUser(formData))
       // setUsers([...users, {...formData,service : selectedService }]);
     }
-    console.log(users);
+    // console.log(users);
     
     // Reset the form
     setSelectedService('')
@@ -97,7 +97,7 @@ const UserManagement = () => {
     setFormData(users[index]);
     setSelectedUserIndex(index);
     setEditMode(true);
-    console.log(formData);
+    // console.log(formData);
     
   };
   const [service, setService] = useState([]);

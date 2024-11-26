@@ -1,9 +1,10 @@
 import axios from 'axios';
 import { LINK_API } from '../../confiApp';
 
-export const actionGetServiceSelected = (id, data) => {
+export const actionGetServiceSelected = (idSource, data) => {
   return async (dispatch) => {
     try {
+      
       // Récupération des détails utilisateur depuis localStorage
       const userDetailsStr = localStorage.getItem('userDetails');
       const userDetailsObj = JSON.parse(userDetailsStr);
@@ -15,11 +16,13 @@ export const actionGetServiceSelected = (id, data) => {
 
       const token = userDetailsObj.access_token;
       const companyId = userDetailsObj.data?.company?.[0]?.id;
-
+      const id = idSource || userDetailsObj.data?.service?.id
       if (!companyId) {
         console.error('ID de l\'entreprise introuvable.');
         return;
       }
+      console.log('id comp',companyId);
+      
 
       // Configuration de la requête API
       const config = {
@@ -38,12 +41,12 @@ export const actionGetServiceSelected = (id, data) => {
 
       // Vérification que les données sont bien reçues
       const services = response.data;
-      console.log('Services reçus :', services);
+      // console.log('Services reçus :', services);
 
       // Recherche du service correspondant à l'ID
       const service = services.data.find((item) => item.id == id);
 
-      console.log('Service correspondant :', service);
+      // console.log('Service correspondant :', service);
 
       // Dispatch avec le payload si le service est trouvé
       if (service) {

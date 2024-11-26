@@ -4,7 +4,7 @@ const initialState = []
     switch (action.type) {
       
       case 'LOAD_CLASSEUR':
-          console.log(action.payload );
+          // console.log(action.payload );
             return action.payload
       case 'ADD_FOLDER':
         return  [...state, action.payload] 

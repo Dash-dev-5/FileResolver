@@ -44,7 +44,7 @@ const Sidebar = () => {
   // }, []);
 
   const handleMouseEnter = () => {
-    gsap.to(sidebarRef.current, { width: '250px', duration: 0.5, ease: 'power3.out' });
+    gsap.to(sidebarRef.current, { width: '230px', duration: 0.5, ease: 'power3.out' });
     gsap.to('.profile', { opacity: 1, delay: 0.2, duration: 0.4, ease: 'power3.out' });
     setViewText(true);
   };
