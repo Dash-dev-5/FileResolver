@@ -67,7 +67,7 @@ const SubmitFile = () => {
         setPercent(percent)
       },
     })
-      .then(() => alert('Fichier téléchargé avec succès !'))
+      .then()
       .catch((err) => {
         setErrorMessage('Échec du téléchargement, veuillez réessayer.');
         console.error('Erreur lors de l\'upload :', err);

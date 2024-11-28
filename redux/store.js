@@ -8,6 +8,7 @@ import reducerBinderCategory from './reducers/reducerBinderCategory';
 import reducerUsersForCompagnie from './reducers/reducerUsersForCompagnie';
 import { reducerFileForBnder } from './reducers/reducerFileForBnder';
 import reducerServiceSelect from './reducers/reducerServiceSelected';
+import { reducerFileForService } from './reducers/reducerFileForService';
 
 
 const rootReducer = combineReducers({
@@ -18,7 +19,8 @@ const rootReducer = combineReducers({
     classeursCategories : reducerBinderCategory,
     usersForCompany : reducerUsersForCompagnie,
     fileForBinder : reducerFileForBnder,
-    serviceSelected : reducerServiceSelect
+    serviceSelected : reducerServiceSelect,
+    fileForService : reducerFileForService
 
 
 })

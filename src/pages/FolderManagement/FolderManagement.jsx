@@ -86,7 +86,9 @@ const FolderManagement = () => {
 
   const handleSubmitService = () => {
     if (editModeService) {
-      dispatch(updateService(folderDataService));
+      dispatch(updateService(folderDataService,()=>{
+        dispatch(actionGetService())
+      }));
       setEditModeService(false);
     } else {
       dispatch(addService(folderDataService)); // ID unique temporaire
@@ -106,7 +108,9 @@ const FolderManagement = () => {
 
   const handleDeleteService = async (id) => {
     const response = await ModalView("Voulez-vous vraiment supprimer ce service ?", async () => {
-      const finalResponse = await ModalView("Cette action est irréversible. Confirmez-vous ?");
+      const finalResponse = await ModalView("Cette action est irréversible. Confirmez-vous ?",);
+      console.log(finalResponse);
+      
       if (finalResponse === 'OK') {
         dispatch(deleteService(id));
       }
@@ -190,7 +194,7 @@ const FolderManagement = () => {
         </div>
 
         {/* Liste des classeurs */}
-        <div className="folder-list">
+        <div className="folder-list first">
           <h3>Liste des classeurs</h3>
           {folders.length === 0 ? (
             <p>Aucun classeur</p>

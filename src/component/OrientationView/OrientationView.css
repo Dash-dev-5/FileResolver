@@ -64,13 +64,13 @@
   
   /* Style des groupes de formulaire */
   .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 0px;
   }
   
   .form-group label {
     display: block;
     font-weight: bold;
-    margin-bottom: 5px;
+    margin-bottom: 2px;
   }
   
   .form-control {

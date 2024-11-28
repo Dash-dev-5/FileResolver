@@ -48,7 +48,15 @@ function MyPDFViewer({  }) {
 
  
   useEffect(() => {
-    
+    const tabsComment = [{id : `${item.id}`+`${item.binder_id}`, owner : 'Secretaire',comment :item.note,date : item.created_at }]
+    item?.transfers?.map((com)=>{
+      tabsComment.push({
+        id : `${com.id}`, 
+        owner : com?.from_binder_id ===null ? 'Secretaire': com?.from_binder_id ,
+        comment :com.remarks,
+        date : com.created_at })
+    })
+    setCommentsTab(tabsComment)
   }, []);
   useEffect(() => {
     gsap.fromTo(windowPDFRef.current, 
@@ -215,7 +223,7 @@ function MyPDFViewer({  }) {
           <div ref={commentRef} style={{ overflow: "hidden" }}>
             {
               showAllComments ? (
-                comments.map((item) => (
+                commentsTab.map((item) => (
                   <div className="contenaire-viewComment" key={item.id}>
                     <div className="contenaire-author">
                       {item.owner} - {item.date}

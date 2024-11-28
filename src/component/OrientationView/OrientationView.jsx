@@ -2,14 +2,28 @@ import React, { useState,useRef,useEffect } from 'react';
 import './OrientationView.css'; // Styles du composant
 import { Document, Page } from "react-pdf"; 
 import { gsap } from 'gsap';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { transferFile } from '../../../request/transfertFile';
+import { fetchBinderService } from '../../../request/fetchBinderService';
+import { actionGetFileByService } from '../../../redux/actions/actionGetFileByService';
 
 const OrientationView = ({ onClose,data }) => {
     const [numPages, setNumPages] = useState();
     const [pageNumber, setPageNumber] = useState(1);
+    const [idBinderDest, setIdBinderDest] = useState();
+    const [idBinder, setIdBinder] = useState();
+    const [binder,setBinder] = useState();
+    const [comment, setComment] = useState();
     const windowRef = useRef(null);
     const services = useSelector(state => state.services)
-    console.log(services);
+    const dispatch = useDispatch()
+    // console.log(services);
+    
+    useEffect(() => {
+      fetchBinderService(idBinderDest,(data) => {
+        setBinder(data)
+      })
+    }, [idBinderDest]);
     
     useEffect(() => {
       // Animation GSAP pour l'effet d'ouverture de fenêtre
@@ -22,6 +36,35 @@ const OrientationView = ({ onClose,data }) => {
     function onDocumentLoadSuccess({ numPages }) {
         setNumPages(numPages);
       }
+    function handleInputChange(e) {
+      const { name, value } = e.target;
+      setIdBinderDest(value)
+      }
+    function handleInputChangeBind(e) {
+      const { name, value } = e.target;
+      setIdBinder(value)
+      }
+    function handeletransfert() {
+      const transferData = {
+        file_id: data.id,
+        from_binder_id: data.binder_id,
+        to_binder_id: idBinder,
+        status_id: 1,
+        remarks:comment ,
+      };
+      console.log('DATA ;',transferData);
+      
+      transferFile(transferData)
+        .then((data) => {
+          dispatch(
+            actionGetFileByService(undefined)
+          )
+          console.log('Transfert réussi :', data);
+        })
+        .catch((error) => {
+          console.error('Erreur lors du transfert :', error);
+        });
+      }
   return (
     <div className="overlay" ref={windowRef} >
       <div className="document-container">
@@ -31,7 +74,7 @@ const OrientationView = ({ onClose,data }) => {
              
           <div className="document-preview">
           {/* <div className="pdf-div"> */}
-            <Document file={data.pdf} onLoadSuccess={onDocumentLoadSuccess}>
+            <Document file={data.path} onLoadSuccess={onDocumentLoadSuccess}>
               {Array.apply(null, Array(numPages))
                 .map((x, i) => i + 1)
                 .map((page) => {
@@ -55,20 +98,37 @@ const OrientationView = ({ onClose,data }) => {
         <div className="document-details">
           <h2>Détails du document</h2>
           <div className="form-group">
+          <div className="form-group">
+            <label>Nom : {data.name}</label>
+          </div>
             <label>Objet : {data.object}</label>
           </div>
           <div className="form-group">
-            <label>N° ref : {data.ref} </label>
-          </div>
-          <div className="form-group">
-            <label>Classeur : {data.name}</label>
+            <label>N° ref : {data.num_ref} </label>
           </div>
           <div className="form-group">
             <label>Sélectionner un service à orienter</label>
-            <select className="form-control">
+            <select className="form-control"
+              value={idBinderDest}
+              onChange={handleInputChange}
+            >
               <option value="">Sélectionner un service</option>
               {services.map((item, index) => (
-                <option key={index} value={item.name}>
+                <option key={index} value={item.id}>
+                  {item.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="form-group">
+            <label>Sélectionner le classeur </label>
+            <select className="form-control"
+              value={idBinder}
+              onChange={handleInputChangeBind}
+            >
+              <option value="">Sélectionner un service</option>
+              {binder?.map((item, index) => (
+                <option key={index} value={item.id}>
                   {item.name}
                 </option>
               ))}
@@ -76,13 +136,19 @@ const OrientationView = ({ onClose,data }) => {
           </div>
           <div className="form-group">
             <label>Commentaire</label>
-            <textarea className="form-control" placeholder="Ajouter un commentaire"></textarea>
+            <textarea className="form-control" placeholder="Ajouter un commentaire" 
+              value={comment}
+              onChange={(event) => {
+                setComment(event.target.value); // Met à jour le state avec la valeur actuelle
+              }}
+              
+            ></textarea>
           </div>
 
           {/* Boutons */}
           <div className="popup-buttons">
             <button className="btn btn-cancel" onClick={onClose}>Annuler</button>
-            <button className="btn btn-confirm">Confirmer</button>
+            <button className="btn btn-confirm" onClick={handeletransfert}>Confirmer</button>
           </div>
         </div>
       </div>

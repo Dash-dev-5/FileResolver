@@ -41,7 +41,7 @@ const companyId = userDetailsObj.data.company[0].id
           type: 'ADD_FOLDER',
           payload: response.data.data, // Vous pouvez ajuster ce qui est dans payload
         });
-        console.log('Réponse de l\'API:', response.data);
+        // console.log('Réponse de l\'API:', response.data);
       })
       .catch(function (error) {
         // En cas d'erreur, vous pouvez aussi dispatcher une autre action ou un log

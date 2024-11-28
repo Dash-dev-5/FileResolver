@@ -1,11 +1,13 @@
-import React from 'react';
+import React,{useState,useEffect} from 'react';
 import './OrderHome.css';
 import { useNavigate } from 'react-router-dom';
 import { fetchBinderService } from '../../../request/fetchBinderService';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { actionGetFileByService } from '../../../redux/actions/actionGetFileByService';
 // import '../../assets/'
 
 const formatDate = (isoDateString) => {
+
   const date = new Date(isoDateString);
   const options = {
     year: "numeric",
@@ -17,10 +19,30 @@ const formatDate = (isoDateString) => {
 
 const OrderHome = () => {
   const serviceSelected = useSelector(state => state.serviceSelected)
-
-  fetchBinderService(1)
+  const filesService = useSelector(state => state.fileForService)
+  const [dataOriented, setDataOriented] = useState()
+  const [dataOnTrait, setDataOnTrait] = useState()
+  const dispatch = useDispatch()
+  console.log('log  :',filesService);
+  useEffect(() => {
+    dispatch(actionGetFileByService(undefined))
+  }, []);
+  useEffect(() => {
+    const TabDataOrient = []
+    const TabDataOnTrait = []
+    filesService?.map((file) => {
+      if(file?.status?.name === "pending"){
+        TabDataOrient.unshift(file)
+      }else{
+        TabDataOnTrait.unshift(file)
+      }
+    })
+    setDataOriented(TabDataOrient)
+    setDataOnTrait(TabDataOnTrait)
+  }, [filesService]);
+  // fetchBinderService(1)
   // Example data for the dashboard lists
-  const dataOriented = [
+  const dataOrienteds = [
     { name: 'Regideso', pdf: '/1.pdf', object: 'Facturation eau', ref: '0152526/GJ61537', status: 'OK', color: 'green' },
     { name: 'Regideso', pdf: '/5.pdf', object: 'Facturation eau', ref: '0152526/GJ61537', status: 'OK', color: 'green' },
     { name: 'Regideso', pdf: '/8.pdf', object: 'Facturation eau', ref: '0152526/GJ61537', status: 'OK', color: 'green' },
@@ -37,8 +59,9 @@ const OrderHome = () => {
 ];
 const navigation = useNavigate()
   const handeleView = (item)=>{
+   console.log(item);
    
-      navigation('/home/MyPDFViewer',{ state: { item } })
+      // navigation('/home/MyPDFViewer',{ state: { item } })
   }
   return (
     <div className="dashboard">
@@ -92,7 +115,7 @@ const navigation = useNavigate()
         <div className="list">
           <h3>Liste de courriels et document reçus</h3>
           <div className="list-content">
-            {dataReceived.map((item, index) => (
+            {dataOriented?.map((item, index) => (
               <div className="list-item" key={index}>
                 <p>{item.name}</p>
                 <p>{item.object}</p>

@@ -1,13 +1,34 @@
-import React, {useRef,useEffect} from 'react';
+import React, {useRef,useEffect, useState} from 'react';
 import './Dashboard.css';
 import { gsap } from 'gsap';
 import { useNavigate, useOutletContext } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { actionGetFileByService } from '../../../redux/actions/actionGetFileByService';
 // import '../../assets/'
 const Dashboard = () => {
   const { orientView } = useOutletContext();
-  
+  const dispatch = useDispatch()
+  const filesService = useSelector(state => state.fileForService)
+  const [dataOriented, setDataOriented] = useState()
+  const [dataOnTrait, setDataOnTrait] = useState()
+console.log(filesService);
+
+  useEffect(() => {
+    const TabDataOrient = []
+    const TabDataOnTrait = []
+    filesService?.map((file) => {
+      if(file?.status?.name === "pending"){
+        TabDataOrient.unshift(file)
+      }else{
+        TabDataOnTrait.unshift(file)
+      }
+    })
+    setDataOriented(TabDataOrient)
+    setDataOnTrait(TabDataOnTrait)
+  }, [filesService]);
+
   // Example data for the dashboard lists
-  const dataOriented = [
+  const dataOrienteds = [
     { name: 'Regideso', pdf: '/1.pdf', object: 'Facturation eau', ref: '0152526/GJ61537', status: 'OK', color: 'green' },
     { name: 'Regideso', pdf: '/2.pdf', object: 'Facturation eau', ref: '0152526/GJ61537', status: '.....', color: 'yellow' },
     { name: 'Regideso', pdf: '/3.pdf', object: 'Facturation eau', ref: '0152526/GJ61537', status: '.....', color: 'yellow' },
@@ -45,7 +66,7 @@ const handeleOrient = (item)=>{
   orientView(item)
 }
   const summaryRef = useRef(null);
-  const listRef = useRef(null);
+
   const listRef1 = useRef(null);
 
   useEffect(() => {
@@ -64,14 +85,9 @@ const handeleOrient = (item)=>{
       stagger: 0.1,
       ease: 'power3.out',
     });
-
-    gsap.to(listRef.current.children, {
-      duration: 1,
-      opacity: 1,
-      x: 30,
-      stagger: 0.1,
-      ease: 'power3.out',
-    });
+  }, []);
+  useEffect(() => {
+    dispatch(actionGetFileByService(undefined))
   }, []);
 
   return (
@@ -102,7 +118,7 @@ const handeleOrient = (item)=>{
         <div className="list" >
           <h3>Liste de courriels et document déjà orientés</h3>
           <div className="list-content"style={{marginRight:"30px"}} ref={listRef1}>
-            {dataOriented.map((item, index) => (
+            {dataReceived.map((item, index) => (
               <div className="list-item" key={index} style={{marginLeft:"-30px"}}>
                 <p>{item.name}</p>
                 <p>{item.object}</p>
@@ -119,14 +135,15 @@ const handeleOrient = (item)=>{
         {/* Received Documents */}
         <div className="list" >
           <h3>Liste de courriels et document reçus</h3>
-          <div className="list-content" style={{marginRight:"30px"}} ref={listRef}>
-            {dataReceived.map((item, index) => (
-              <div className="list-item" key={index} style={{marginLeft:"-30px"}}>
+          <div className="list-content" >
+            {dataOriented?.map((item, index) => (
+              <div className="list-item" key={index} >
                 <p>{item.name}</p>
                 <p>{item.object}</p>
-                <p>{item.ref}</p>
+                <p>{item.num_ref}</p>
                 <div className="conetntButton">
-                    <div style={{ backgroundColor: item.color }} onClick={()=>handeleOrient(item)} className=' blue-color'>{item.status}</div>
+                    <div style={{ backgroundColor: item.status.name === "pending" ? 'lightgrey': 'red'  }} onClick={()=>handeleOrient(item)} className=' blue-color'>{''}</div>
+                    <div style={{ backgroundColor: 'white' }} onClick={()=>handeleOrient(item)} className=' blue-color'>Orienter</div>
                     <div className="view-btn" onClick={()=>handeleView(item)}>Voir</div>
                 </div>
               </div>

@@ -69,8 +69,7 @@ function Layourt() {
   };
 
   const handleFinalConfirmation = () => {
-
-   
+    
     toggleModalFinal(); // Close the final modal after confirming
     toggleModal(); // Reset for future operations
   };

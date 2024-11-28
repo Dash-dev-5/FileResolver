@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { LINK_API } from '../../confiApp';
+import { actionGetService } from './actionGetService';
 
 const API_URL = LINK_API+'/api/services'; // URL de l'API
 
@@ -46,7 +47,7 @@ export const addService = (service) => {
   };
 };
 
-export const updateService = (service) => {
+export const updateService = (service,callBack) => {
   return (dispatch) => {
     const userDetailsStr = localStorage.getItem('userDetails');
     const userDetailsObj = JSON.parse(userDetailsStr);
@@ -57,12 +58,11 @@ export const updateService = (service) => {
     // Créer la structure de données pour la requête
     const data = `{
       "name": "${service.name}",
-      "company_id": ${companyId},
-      "user_id": null
+      "user_id": "${userDetailsObj.data.id}"
     }`;
 
     const config = {
-      method: 'put',
+      method: 'post',
       maxBodyLength: Infinity,
       url: `${API_URL}/${service.id}`, // Utiliser l'ID du service à mettre à jour
       headers: {
@@ -75,11 +75,9 @@ export const updateService = (service) => {
 
     axios(config)
       .then(function (response) {
-        dispatch({
-          type: 'UPDATE_SERVICE',
-          payload: response.data, // Ajustez ce qui va dans le payload
-        });
-        // console.log('Réponse de l\'API:', response.data);
+        callBack()
+       
+        console.log('Réponse de l\'API:', response.data);
       })
       .catch(function (error) {
         console.log('Erreur lors de la requête API:', error);
