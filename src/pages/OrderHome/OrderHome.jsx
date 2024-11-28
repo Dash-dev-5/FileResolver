@@ -40,28 +40,14 @@ const OrderHome = () => {
     setDataOriented(TabDataOrient)
     setDataOnTrait(TabDataOnTrait)
   }, [filesService]);
-  // fetchBinderService(1)
+  fetchBinderService(1)
   // Example data for the dashboard lists
-  const dataOrienteds = [
-    { name: 'Regideso', pdf: '/1.pdf', object: 'Facturation eau', ref: '0152526/GJ61537', status: 'OK', color: 'green' },
-    { name: 'Regideso', pdf: '/5.pdf', object: 'Facturation eau', ref: '0152526/GJ61537', status: 'OK', color: 'green' },
-    { name: 'Regideso', pdf: '/8.pdf', object: 'Facturation eau', ref: '0152526/GJ61537', status: 'OK', color: 'green' },
-    { name: 'Regideso', pdf: '/11.pdf', object: 'Facturation eau', ref: '0152526/GJ61537', status: 'OK', color: 'green' },
-    { name: 'Regideso', pdf: '/14.pdf', object: 'Facturation eau', ref: '0152526/GJ61537', status: 'OK', color: 'green' },
-];
 
-
-
-  const dataReceived = [
-    { name: 'Regideso', pdf: '/16.pdf', object: 'Facturation eau', ref: '0152526/GJ61537', status: 'Orienter', color: 'white' },
-    { name: 'Regideso', pdf: '/17.pdf', object: 'Facturation eau', ref: '0152526/GJ61537', status: 'Orienter', color: 'white' },
-    { name: 'Regideso', pdf: '/23.pdf', object: 'Facturation eau', ref: '0152526/GJ61537', status: 'Orienter', color: 'white' },
-];
 const navigation = useNavigate()
   const handeleView = (item)=>{
-   console.log(item);
+  //  console.log(item);
    
-      // navigation('/home/MyPDFViewer',{ state: { item } })
+      navigation('/home/MyPDFViewer',{ state: { item } })
   }
   return (
     <div className="dashboard">
@@ -94,7 +80,7 @@ const navigation = useNavigate()
                 {/* <p>{item.ref}</p> */}
                 <div className="conetntButton">
                     <div style={{  backgroundColor: item.color   }} className='divState'>{item.status}</div>
-                    <div className="view-btn" onClick={()=>handeleView(item)}>Voir</div>
+                    <div className="view-btn" onClick={()=>console.log(item)}>Voir</div>
                 </div>
               </div>
             )))

@@ -4,6 +4,7 @@ import { actionGetService } from '../../../redux/actions/actionGetService';
 import { useDispatch, useSelector } from 'react-redux';
 import { actionGetUsers } from '../../../redux/actions/actionGetUsers';
 import { addUser } from '../../../redux/actions/actionsUsersForCompany';
+import { fetchRoles } from '../../../request/fetchRoles';
 
 const UserManagement = () => {
   const services = useSelector(state=>state.services)
@@ -14,6 +15,9 @@ const UserManagement = () => {
  useEffect(()=>{
    dispatch(actionGetService())
    dispatch(actionGetUsers())
+   fetchRoles((data) => {
+    setRoles(data)
+   })
  },[])
 //  console.log('view',usersForCompany);
  
@@ -42,6 +46,7 @@ const UserManagement = () => {
 
   // State to track if we are editing or adding
   const [editMode, setEditMode] = useState(false);
+  const [roles, setRoles] = useState();
   const [selectedUserIndex, setSelectedUserIndex] = useState(null);
 
   // Effect to store users in local storage whenever they change
@@ -201,11 +206,11 @@ const UserManagement = () => {
           onChange={handleInputChange}
           className="role-select"
         >
-          <option value="">Selectioner pouvoir</option>
-          <option value={4}>Directeur</option>
-          <option value={2}>Administrateur</option>
-          <option value={3}>Service</option>
-          <option value={6}>Secrétaire</option>
+          {roles?.map((item, index) => (
+            <option key={index} value={item.id}>
+              {item.name}
+            </option>
+          ))}
         </select>
         <input
           type="password"

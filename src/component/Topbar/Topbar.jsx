@@ -7,6 +7,7 @@ import { actionChangeType } from '../../../redux/actions/actionChangeTheme';
 import { fetchBinderService } from '../../../request/fetchBinderService';
 import { actionGetServiceSelected } from '../../../redux/actions/actionServiceSelected';
 import { actionLoadUser } from '../../../redux/actions/actionLoadUser';
+import { actionGetFileByService } from '../../../redux/actions/actionGetFileByService';
 
 const Topbar = ({showPopUp,documentDetail}) => {
   const services = useSelector(state => state.services)
@@ -43,6 +44,7 @@ const Topbar = ({showPopUp,documentDetail}) => {
       dispash(actionGetServiceSelected(selectedService,data))
     }
     fetchBinderService(selectedService,callback)  
+    dispash(actionGetFileByService(selectedService))
   }, [selectedService]);
   useEffect(()=>{
     if (location === '/home/MyPDFViewer'){
