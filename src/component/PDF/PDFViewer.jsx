@@ -102,12 +102,13 @@ function MyPDFViewer({  }) {
   const savePDFWithCachet = async () => {
     try {
         // Charger le PDF original
-        const existingPdfBytes = await fetch(item.pdf).then(res => res.arrayBuffer());
-
+        const existingPdfBytes = await fetch(item.path).then(res => res.arrayBuffer());
+        let cachetImageBytes 
+        let cachetImageBytes2
+        cachetImageBytes2 = await fetch('/signature.png').then(res => res.arrayBuffer());
+        cachetImageBytes = await fetch('/cachet.png').then(res => res.arrayBuffer());
         // Charger l'image du cachet
-        const cachetImageBytes = await fetch('/cachet.png').then(res => res.arrayBuffer());
-        const cachetImageBytes2 = await fetch('/signature.png').then(res => res.arrayBuffer());
-
+        
         // Charger le document PDF
         const pdfDoc = await PDFDocument.load(existingPdfBytes);
 
@@ -130,26 +131,32 @@ function MyPDFViewer({  }) {
 
         const firstPage = pages[0];
         const lastPage = pages[pages.length - 1];
-
+        
+        if (showOverlay){
+          
+          lastPage.drawImage(cachetImage, {
+              x: cachetX,
+              y: lastPage.getHeight() - cachetY - cachetHeight, // Ajuster pour que le Y soit en bas
+              width: cachetWidth,
+              height: cachetHeight,
+          });
+        }
+        if (showOverlay2){
+          lastPage.drawImage(cachetImage2, {
+              x: cachetX2,
+              y: lastPage.getHeight() - cachetY2 - cachetHeight2, // Ajuster pour que le Y soit en bas
+              width: cachetWidth2,
+              height: cachetHeight2,
+          });
+        
+        }
  
-        lastPage.drawImage(cachetImage, {
-            x: cachetX,
-            y: lastPage.getHeight() - cachetY - cachetHeight, // Ajuster pour que le Y soit en bas
-            width: cachetWidth,
-            height: cachetHeight,
-        });
-        lastPage.drawImage(cachetImage2, {
-            x: cachetX2,
-            y: lastPage.getHeight() - cachetY2 - cachetHeight2, // Ajuster pour que le Y soit en bas
-            width: cachetWidth2,
-            height: cachetHeight2,
-        });
 
         // Sauvegarder le nouveau PDF avec le cachet
         const pdfBytes = await pdfDoc.save();
         const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-        saveAs(blob, 'document_avec_cachet.pdf');
-    } catch (error) {
+        saveAs(blob, item.name+'_'+item.object+'_'+item.num_ref+'.pdf');
+      } catch (error) {
         console.error("Erreur lors de la sauvegarde du PDF :", error.message);
     }
 };
@@ -184,14 +191,14 @@ function MyPDFViewer({  }) {
     // Calculer l'offset par rapport à la position du cachet
     const offsetX = e.clientX - (cachetPosition2.x + pdfContainerRect.left);
     const offsetY = e.clientY - (cachetPosition2.y + pdfContainerRect.top);
-  
+    
     const handleMouseMove = (e) => {
       setCachetPosition2({
         x: e.clientX - pdfContainerRect.left - offsetX,
         y: e.clientY - pdfContainerRect.top - offsetY,
       });
     };
-  
+    
     const handleMouseUp = () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
