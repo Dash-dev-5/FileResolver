@@ -53,23 +53,7 @@ function MyPDFViewer({  }) {
       { scale: 1, opacity: 1, duration: 0.8, ease: "power1.out", delay: 0.3 }
     );
   }, []);
-//   useEffect(() => {
-//    // Utilisation
-//  const staticUrl = item.path;
- 
-//  fetchPdfUsingXHR(staticUrl)
-//     .then((base64data) => {
-//        console.log('Base64 Data:', base64data);
- 
-//        // Exemple : Charger dans un visualiseur PDF
-//       //  const pdfviewerObject = $('#PdfViewer').data('ejPdfViewer');
-//        pdfviewerObject.load(base64data); // Charge la chaîne base64 dans le visualiseur PDF
-//     })
-//     .catch((error) => {
-//        console.error('Error fetching PDF:', error);
-//     });
 
-//   }, [item]);
 
 
 
@@ -260,8 +244,9 @@ function MyPDFViewer({  }) {
           <p>
             Page {pageNumber} sur {numPages}
           </p>
+          {/* 'https://cdn.filestackcontent.com/wcrjf9qPTCKXV3hMXDwK' */}
         <Document 
-            file={{url: 'https://cdn.filestackcontent.com/wcrjf9qPTCKXV3hMXDwK'}}
+            file={{url: item.path }}
            onLoadSuccess={onDocumentLoadSuccess}
           //  onError={(error)=>console.log(error)}
            >
