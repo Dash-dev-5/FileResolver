@@ -9,6 +9,7 @@ import { actionLoadUser } from '../../../redux/actions/actionLoadUser';
 import { actionGetService } from '../../../redux/actions/actionGetService';
 import { actionGetBinder } from '../../../redux/actions/actionGetBinder';
 import { ationGetBinderCategory } from '../../../redux/actions/ationGetBinderCategory';
+import { actionGetFileByBinder } from '../../../redux/actions/actionGetFileByBinder';
 
 const Sidebar = () => {
   const [userDetails, setUserDetails] = useState(null);
@@ -30,6 +31,7 @@ const Sidebar = () => {
       dispatch(actionLoadUser(storedUsers))
       dispatch(actionGetService())
       dispatch(actionGetBinder())
+      dispatch(actionGetFileByBinder())
       dispatch(ationGetBinderCategory())
 
     }

@@ -62,6 +62,7 @@
   
   .user-list {
     flex: 1;
+    font-size: 0.8em;
   }
   
   .user-list h3 {

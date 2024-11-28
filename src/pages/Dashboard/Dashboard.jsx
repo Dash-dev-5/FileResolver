@@ -9,9 +9,13 @@ const Dashboard = () => {
   const { orientView } = useOutletContext();
   const dispatch = useDispatch()
   const filesService = useSelector(state => state.fileForService)
+  const files = useSelector((state) => state.fileForBinder) || [];
+  const userProfil = useSelector(state=>state.profile)
+  const services = useSelector(state => state.services)
   const [dataOriented, setDataOriented] = useState()
   const [dataOnTrait, setDataOnTrait] = useState()
-console.log(filesService);
+  const [fileOder, setFileOder] = useState()
+console.log(userProfil);
 
   useEffect(() => {
     const TabDataOrient = []
@@ -26,27 +30,22 @@ console.log(filesService);
     setDataOriented(TabDataOrient)
     setDataOnTrait(TabDataOnTrait)
   }, [filesService]);
-
-  // Example data for the dashboard lists
-  const dataOrienteds = [
-    { name: 'Regideso', pdf: '/1.pdf', object: 'Facturation eau', ref: '0152526/GJ61537', status: 'OK', color: 'green' },
-    { name: 'Regideso', pdf: '/2.pdf', object: 'Facturation eau', ref: '0152526/GJ61537', status: '.....', color: 'yellow' },
-    { name: 'Regideso', pdf: '/3.pdf', object: 'Facturation eau', ref: '0152526/GJ61537', status: '.....', color: 'yellow' },
-    { name: 'Regideso', pdf: '/4.pdf', object: 'Facturation eau', ref: '0152526/GJ61537', status: '.....', color: 'yellow' },
-    { name: 'Regideso', pdf: '/5.pdf', object: 'Facturation eau', ref: '0152526/GJ61537', status: 'OK', color: 'green' },
-    { name: 'Regideso', pdf: '/6.pdf', object: 'Facturation eau', ref: '0152526/GJ61537', status: '.....', color: 'yellow' },
-    { name: 'Regideso', pdf: '/7.pdf', object: 'Facturation eau', ref: '0152526/GJ61537', status: '.....', color: 'yellow' },
-    { name: 'Regideso', pdf: '/8.pdf', object: 'Facturation eau', ref: '0152526/GJ61537', status: 'OK', color: 'green' },
-    { name: 'Regideso', pdf: '/9.pdf', object: 'Facturation eau', ref: '0152526/GJ61537', status: '.....', color: 'yellow' },
-    { name: 'Regideso', pdf: '/10.pdf', object: 'Facturation eau', ref: '0152526/GJ61537', status: '.....', color: 'yellow' },
-    { name: 'Regideso', pdf: '/11.pdf', object: 'Facturation eau', ref: '0152526/GJ61537', status: 'OK', color: 'green' },
-    { name: 'Regideso', pdf: '/12.pdf', object: 'Facturation eau', ref: '0152526/GJ61537', status: '.....', color: 'yellow' },
-    { name: 'Regideso', pdf: '/13.pdf', object: 'Facturation eau', ref: '0152526/GJ61537', status: '.....', color: 'yellow' },
-    { name: 'Regideso', pdf: '/14.pdf', object: 'Facturation eau', ref: '0152526/GJ61537', status: 'OK', color: 'green' },
-    { name: 'Regideso', pdf: '/15.pdf', object: 'Facturation eau', ref: '0152526/GJ61537', status: '.....', color: 'yellow' },
-];
-
-
+  
+  useEffect(() => {
+    const TabDataOrient = []
+    const TabDataOnTrait = []
+    files?.map((file) => {
+      if(file?.status?.name !== "completed"){
+        TabDataOrient.unshift(file)
+      }else{
+        TabDataOnTrait.unshift(file)
+      }
+    })
+    setFileOder(TabDataOrient)
+    // set(TabDataOnTrait)
+    
+  }, [filesService]);
+  console.log('sdfddddd',fileOder);
 
   const dataReceived = [
     { name: 'Regideso', pdf: '/16.pdf', object: 'Facturation eau', ref: '0152526/GJ61537', status: 'Orienter', color: 'white' },
@@ -67,7 +66,6 @@ const handeleOrient = (item)=>{
 }
   const summaryRef = useRef(null);
 
-  const listRef1 = useRef(null);
 
   useEffect(() => {
     gsap.to(summaryRef.current.children, {
@@ -78,13 +76,6 @@ const handeleOrient = (item)=>{
       ease: 'power3.out',
     });
 
-    gsap.to(listRef1.current.children, {
-      duration: 0.2,
-      opacity: 1,
-      x: 30,
-      stagger: 0.1,
-      ease: 'power3.out',
-    });
   }, []);
   useEffect(() => {
     dispatch(actionGetFileByService(undefined))
@@ -116,15 +107,15 @@ const handeleOrient = (item)=>{
       <div className="lists-container">
         {/* Oriented Documents */}
         <div className="list" >
-          <h3>Liste de courriels et document déjà orientés</h3>
-          <div className="list-content"style={{marginRight:"30px"}} ref={listRef1}>
-            {dataReceived.map((item, index) => (
-              <div className="list-item" key={index} style={{marginLeft:"-30px"}}>
+          <h3>Liste de courriels et document en cours d'autres services</h3>
+          <div className="list-content" >
+            {fileOder?.map((item, index) => (
+              <div className="list-item" key={index} >
                 <p>{item.name}</p>
                 <p>{item.object}</p>
-                <p>{item.ref}</p>
+                <p>{item.num_ref}</p>
                 <div className="conetntButton">
-                    <div style={{ backgroundColor: item.color }} className='divState'>{item.status}</div>
+                    <div style={{ backgroundColor: item.color }} className='divState'>{item.status.label_fr}</div>
                     <div className="view-btn" onClick={()=>handeleView(item)}>Voir</div>
                 </div>
               </div>
