@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import { Document, Page } from "react-pdf";
 import { useLocation } from "react-router-dom";
 import './MyPDFViewer.css';
@@ -7,8 +7,7 @@ import dezoomIcone from '/dezoomer.png';
 import { PDFDocument } from 'pdf-lib';  // Importer pdf-lib pour modifier le PDF
 import { saveAs } from 'file-saver';  // Importer file-saver pour sauvegarder le PDF
 import { gsap } from 'gsap';
-import fetchPdfAsDataURL from "../../../request/fetchPdfLoad";
-import fetchPdfUsingXHR from "../../../request/fetchPdfLoad";
+
 
 
 function MyPDFViewer({  }) {
@@ -35,6 +34,7 @@ function MyPDFViewer({  }) {
   const [showOverlay2, setShowOverlay2] = useState(false); // État pour le cachet
   const [cachetPosition, setCachetPosition] = useState({ x: 0, y: 0 }); // Position du cachet
   const [cachetPosition2, setCachetPosition2] = useState({ x: 0, y: 0 }); // Position du cachet
+  const [commentsTab, setCommentsTab] = useState([]); // Position du cachet
   const location = useLocation();
   const { item } = location.state || {};  // Access the state
   const windowPDFRef = useRef(null);
@@ -48,13 +48,18 @@ function MyPDFViewer({  }) {
 
  
   useEffect(() => {
+    
+  }, []);
+  useEffect(() => {
     gsap.fromTo(windowPDFRef.current, 
       { scale: 0.5, opacity: 0 },
       { scale: 1, opacity: 1, duration: 0.8, ease: "power1.out", delay: 0.3 }
     );
   }, []);
 
-
+  const memoizedFile = useMemo(() => {
+    return { url: item.path };
+  }, [item.path]);
 
 
   useEffect(() => {
@@ -115,17 +120,10 @@ function MyPDFViewer({  }) {
         const cachetX2 = cachetPosition2.x / scalPage; // Ajuster pour l'échelle
         const cachetY2 = cachetPosition2.y / scalPage; // Ajuster pour l'échelle
 
-        // Ajouter le cachet sur la première et dernière page
         const firstPage = pages[0];
         const lastPage = pages[pages.length - 1];
 
-        // firstPage.drawImage(cachetImage, {
-        //     x: cachetX,
-        //     y: firstPage.getHeight() - cachetY - cachetHeight, // Ajuster pour que le Y soit en bas
-        //     width: cachetWidth,
-        //     height: cachetHeight,
-        // });
-
+ 
         lastPage.drawImage(cachetImage, {
             x: cachetX,
             y: lastPage.getHeight() - cachetY - cachetHeight, // Ajuster pour que le Y soit en bas
@@ -201,7 +199,7 @@ function MyPDFViewer({  }) {
        <div className="topbar topbar-pdf">
    
           <>
-            <div className="documentDetail">Document {item.name} pour {item.object}</div>
+            <div className="documentDetail">Document {item.name}</div>
             <div className="blockAction">
               <button className="btn-send" >Commanter</button>
               <button className="btn-send" onClick={() => setShowOverlay(o => !o)}>{showOverlay ? "Retirer le cachet" : "Ajouter le cachet"}</button>
@@ -246,7 +244,7 @@ function MyPDFViewer({  }) {
           </p>
           {/* 'https://cdn.filestackcontent.com/wcrjf9qPTCKXV3hMXDwK' */}
         <Document 
-            file={{url: item.path }}
+            file={memoizedFile}
            onLoadSuccess={onDocumentLoadSuccess}
           //  onError={(error)=>console.log(error)}
            >
