@@ -9,27 +9,15 @@ import { actionGetBinder } from '../../../redux/actions/actionGetBinder';
 import { actionGetService } from '../../../redux/actions/actionGetService';
 
 const formatDate = (isoDateString) => {
- 
-
-// Créer un objet Date à partir de la chaîne ISO
-const date = new Date(isoDateString);
-
-// Options pour formater la date
-const options = {
-  weekday: 'long', // Jour de la semaine
-  year: 'numeric', // Année
-  month: 'long', // Mois en texte
-  day: 'numeric', // Jour du mois
-  hour: '2-digit', // Heure sur 2 chiffres
-  minute: '2-digit', // Minute sur 2 chiffres
-  second: '2-digit', // Seconde sur 2 chiffres
-  timeZoneName: 'short', // Nom du fuseau horaire (ex : UTC, GMT)
+  const date = new Date(isoDateString);
+  const options = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
+  return date.toLocaleDateString("fr-FR", options);
 };
 
-// Formater la date selon les options
-const formattedDate = date.toLocaleString('fr-FR', options);
-return formattedDate
-}
 
 const FolderManagement = () => {
   const services = useSelector(state => state.services);
@@ -98,23 +86,11 @@ const FolderManagement = () => {
 
   // Gestion des suppressions
   const handleDeleteFolder = async (id) => {
-    const response = await ModalView("Voulez-vous vraiment supprimer ce classeur ?", async () => {
-      const finalResponse = await ModalView("Cette action est irréversible. Confirmez-vous ?");
-      if (finalResponse === 'OK') {
-        dispatch(deleteFolder(id));
-      }
-    });
+    ModalView("Voulez-vous vraiment supprimer ce dossier ?",{action:'delete folder',data:id});
   };
 
-  const handleDeleteService = async (id) => {
-    const response = await ModalView("Voulez-vous vraiment supprimer ce service ?", async () => {
-      const finalResponse = await ModalView("Cette action est irréversible. Confirmez-vous ?",);
-      console.log(finalResponse);
-      
-      if (finalResponse === 'OK') {
-        dispatch(deleteService(id));
-      }
-    });
+  const handleDeleteService =  (id) => {
+    ModalView("Voulez-vous vraiment supprimer ce service ?",{action:'delete service',data:id});
   };
 
   // Gestion des éditions
@@ -201,9 +177,9 @@ const FolderManagement = () => {
           ) : (
             folders.map(folder => (
               <div key={folder.id} className="folder-item">
-                <div className="paragraphe ">{folder.name}</div>
-                <div className="paragraphe sm">{formatDate(folder.created_at)}</div>
-                <div className="paragraphe sm">{formatDate(folder.updated_at)}</div>
+                <div className="paragraphe " style={{width:'30%',textAlign : 'left'}}>{folder.name}</div>
+                <div className="paragraphe sm" style={{width:'20%',textAlign : 'left'}}>{formatDate(folder.created_at)}</div>
+                <div className="paragraphe sm" style={{width:'20%',textAlign : 'left'}}>{formatDate(folder.updated_at)}</div>
                 <div className="folder-actions">
                   <button className="btn-edit" onClick={() => handleEditFolder(folder)}>✏️</button>
                   <button className="btn-delete" onClick={() => handleDeleteFolder(folder.id)}>🗑️</button>
@@ -250,9 +226,9 @@ const FolderManagement = () => {
           ) : (
             services.map(service => (
               <div key={service.id} className="folder-item">
-                <div className="paragraphe">{service.name}</div>
-                <div className="paragraphe sm">{formatDate(service.created_at)}</div>
-                <div className="paragraphe sm">{formatDate(service.updated_at)}</div>
+                <div className="paragraphe" style={{width:'30%',textAlign : 'left'}}>{service.name}</div>
+                <div className="paragraphe sm" style={{width:'20%',textAlign : 'left'}}>{formatDate(service.created_at)}</div>
+                <div className="paragraphe sm" style={{width:'20%',textAlign : 'left'}}>{formatDate(service.updated_at)}</div>
                 <div className="folder-actions">
                   <button className="btn-edit" onClick={() => handleEditService(service)}>✏️</button>
                   <button className="btn-delete" onClick={() => handleDeleteService(service.id)}>🗑️</button>

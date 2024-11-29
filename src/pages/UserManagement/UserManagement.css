@@ -62,7 +62,9 @@
   
   .user-list {
     flex: 1;
-    font-size: 0.8em;
+    font-size: 0.7em;
+    max-height: 82vh;
+    overflow-y: scroll;
   }
   
   .user-list h3 {
@@ -86,8 +88,8 @@ padding: 0;
   }
 
   .paragraphe{
-   max-width: 20%;
-   overflow:hidden;
+   /* max-width: 20%; */
+   /* overflow:hidden; */
       }
   .user-actions button {
     background-color: white;

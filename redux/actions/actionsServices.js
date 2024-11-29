@@ -95,7 +95,7 @@ export const deleteService = (id) => {
     const config = {
       method: 'delete',
       maxBodyLength: Infinity,
-      url: `${API_URL}/${id}`, // Utiliser l'ID du service à supprimer
+      url: `${API_URL}/${id}/delete`, // Utiliser l'ID du service à supprimer
       headers: {
         'Accept': 'application/json',
         'Authorization': 'Bearer ' + token,
@@ -108,7 +108,7 @@ export const deleteService = (id) => {
           type: 'DELETE_SERVICE',
           payload: id, // Passer simplement l'ID du service à supprimer
         });
-        // console.log('Réponse de l\'API:', response.data);
+        console.log('delete success:', response.data);
       })
       .catch(function (error) {
         console.log('Erreur lors de la requête API:', error);

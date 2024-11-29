@@ -1,261 +1,229 @@
 import React, { useState, useEffect } from 'react';
 import './UserManagement.css';
-import { actionGetService } from '../../../redux/actions/actionGetService';
 import { useDispatch, useSelector } from 'react-redux';
+import { actionGetService } from '../../../redux/actions/actionGetService';
 import { actionGetUsers } from '../../../redux/actions/actionGetUsers';
-import { addUser } from '../../../redux/actions/actionsUsersForCompany';
+import { addUser, updateUser } from '../../../redux/actions/actionsUsersForCompany';
 import { fetchRoles } from '../../../request/fetchRoles';
+import { useOutletContext } from 'react-router-dom';
 
 const UserManagement = () => {
-  const services = useSelector(state=>state.services)
-  const usersForCompany = useSelector(state=>state.usersForCompany) || null
+  // État global et dispatch
+  const dispatch = useDispatch();
+  const services = useSelector((state) => state.services);
+  const usersForCompany = useSelector((state) => state.usersForCompany) || [];
+  const { ModalView } = useOutletContext();
 
-  const userProfil = useSelector(state=>state.profile)
-  const dispatch = useDispatch()
- useEffect(()=>{
-   dispatch(actionGetService())
-   dispatch(actionGetUsers())
-   fetchRoles((data) => {
-    setRoles(data)
-   })
- },[])
-//  console.log('view',usersForCompany);
- 
-  // Initial state for the users list
-  const [users, setUsers] = useState(() => {
-    // const storedUsers = localStorage.getItem('users');
-    return usersForCompany ? usersForCompany : [
-      { name: 'Aristote Makuala', email: 'aristote@gmail.com', service: 'Technique', jobFunction: 'Chef de service', password: '', confirmPass: '', role: "" },
-      { name: 'John Doe', email: 'johndoe@gmail.com', service: 'Commercial', jobFunction: 'Secretaire', password: '', confirmPass: '', role: "" }
-    ];
-  });
-
-  // State for the form data (used for both adding and editing)
-  const [formData, setFormData] = useState(
-    {
-      "email": "",
-      "first_name": "",
-      "last_name": "",
-      "middle_name": "",
-      "service_id": 1, //exemple service informatique
-      "role_id": 6, //exemple chef-service,
-      "password": "",
-      "password_confirmation": ""
-  }
-  );
-
-  // State to track if we are editing or adding
+  // État local
+  const [users, setUsers] = useState(usersForCompany);
+  const [roles, setRoles] = useState([]);
+  const [formData, setFormData] = useState(initialFormData());
   const [editMode, setEditMode] = useState(false);
-  const [roles, setRoles] = useState();
-  const [selectedUserIndex, setSelectedUserIndex] = useState(null);
+  const [selectedUserId, setSelectedUserId] = useState(null);
 
-  // Effect to store users in local storage whenever they change
+  // Initialisation
   useEffect(() => {
-    localStorage.setItem('users', JSON.stringify(users));
-  }, [users]);
+    dispatch(actionGetService());
+    dispatch(actionGetUsers());
+    fetchRoles(setRoles);
+  }, [dispatch]);
 
-  // Function to handle form input changes
+  useEffect(() => {
+    setUsers(usersForCompany);
+  }, [usersForCompany]);
+
+  // Gestion des événements
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  // Function to add or update a user
   const handleSubmit = () => {
     if (editMode) {
-      // Update existing user
-      const updatedUsers = [...users];
-      updatedUsers[selectedUserIndex] = formData;
+      const updatedUsers = users.map((user) =>
+        user.id === selectedUserId ? { ...user, ...formData } : user
+      );
       setUsers(updatedUsers);
-      setEditMode(false);
+      dispatch(updateUser(formData));
     } else {
-      // Add a new user
-      // console.log(formData);
-      
-      dispatch(addUser(formData))
-      // setUsers([...users, {...formData,service : selectedService }]);
+      dispatch(addUser(formData));
     }
-    // console.log(users);
-    
-    // Reset the form
-    setSelectedService('')
-    setFormData({
-      "email": "",
-      "first_name": "",
-      "last_name": "",
-      "middle_name": "",
-      "service_id": 1, //exemple service informatique
-      "role_id": 6, //exemple chef-service,
-      "password": "",
-      "password_confirmation": ""
-    });
+    resetForm();
   };
 
-  // Function to delete a user
-  const handleDelete = (index) => {
-    const updatedUsers = users.filter((_, i) => i !== index);
+  const handleDelete = (userId) => {
+    ModalView(`Voulez-vous vraiment supprimer ${userId.first_name} ${userId.last_name} ?`,{action:'delete user',data:userId.id});
+    
+    const updatedUsers = users.filter((user) => user.id !== userId);
     setUsers(updatedUsers);
+    // Envoyer une action Redux pour supprimer côté backend si nécessaire
   };
 
-  // Function to start editing a user
-  const handleEdit = (index) => {
-    setFormData(users[index]);
-    setSelectedUserIndex(index);
-    setEditMode(true);
-    // console.log(formData);
-    
-  };
-  const [service, setService] = useState([]);
-  const [selectedService, setSelectedService] = useState('');
-   // Récupérer les classeurs dans le local storage
-   useEffect(() => {
-    const storedFolders = localStorage.getItem('service');
-    if (storedFolders) {
-      setService(JSON.parse(storedFolders));
+  const handleEdit = (userId) => {
+    const userToEdit = users.find((user) => user.id === userId);
+    if (userToEdit) {
+      setFormData(userToEdit);
+      setEditMode(true);
+      setSelectedUserId(userId);
     }
-  }, []);
-
-  // Function to clear the form (for adding new user)
-  const clearForm = () => {
-    setFormData({
-      name: '',
-      email: '',
-      service: '',
-      jobFunction: '',  // Changed from function to jobFunction
-      password: '',
-      confirmPass: '',
-      role: ""
-    });
-    setEditMode(false);
   };
-//   {
-//     "email": "Shany16@hotmail.com",
-//     "first_name": "Bernie_Dietrich93",
-//     "last_name": "Karelle",
-//     "middle_name": "Jacobs",
-//     "service_id": 1, //exemple service informatique
-//     "role_id": 6, //exemple chef-service,
-//     "password": "12345678",
-//     "password_confirmation": "12345678"
-// }
+
+  const resetForm = () => {
+    setFormData(initialFormData());
+    setEditMode(false);
+    setSelectedUserId(null);
+  };
 
   return (
     <div className="user-management-container">
+      {/* Formulaire utilisateur */}
       <div className="user-form">
         <h3>{editMode ? 'Modifier Utilisateur' : 'Ajouter Utilisateur'}</h3>
-        <div className="contentName">
-          <input
-            type="text"
-            name="first_name"
-            placeholder="first_name"
-            value={formData.first_name}
-            onChange={handleInputChange}
-          />
-          <input
-            type="text"
-            name="last_name"
-            placeholder="last_name"
-            value={formData.last_name}
-            onChange={handleInputChange}
-          />
-          <input
-            type="text"
-            name="middle_name"
-            placeholder="middle_name"
-            value={formData.middle_name}
-            onChange={handleInputChange}
-          />
-          
-        </div>
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={handleInputChange}
+        <UserForm
+          formData={formData}
+          services={services}
+          roles={roles}
+          editMode={editMode}
+          onInputChange={handleInputChange}
+          onReset={resetForm}
+          onSubmit={handleSubmit}
         />
-         <select
-          name="service_id"
-          value={formData.service_id}
-          onChange={handleInputChange}
-        >
-          <option value="">Sélectionnez un service</option>
-          {services.map((item, index) => (
-            <option key={index} value={item.id}>
-              {item.name}
-            </option>
-          ))}
-        </select>
-        {/* <input
-          type="text"
-          name="service"
-          placeholder="Service"
-          value={formData.service}
-          onChange={handleInputChange}
-        /> */}
-        {/* <input
-          type="text"
-          name="jobFunction"  // Changed from function to jobFunction
-          placeholder="Fonction"
-          value={formData.jobFunction}
-          onChange={handleInputChange}
-        /> */}
-        <select
-          name="role_id"
-          value={formData.role_id}
-          onChange={handleInputChange}
-          className="role-select"
-        >
-          {roles?.map((item, index) => (
-            <option key={index} value={item.id}>
-              {item.name}
-            </option>
-          ))}
-        </select>
-        <input
-          type="password"
-          name="password"
-          placeholder="Mot de passe"
-          value={formData.password}
-          onChange={handleInputChange}
-        />
-        <input
-          type="password"
-          name="password_confirmation"
-          placeholder="Confirmer le mot de passe"
-          value={formData.password_confirmation}
-          onChange={handleInputChange}
-        />
-
-        <div className="buttons">
-          <button className="btn-delete" onClick={clearForm}>Effacer</button>
-          <button className="btn-save" onClick={handleSubmit}>
-            {editMode ? 'Mettre à jour' : 'Ajouter'}
-          </button>
-        </div>
       </div>
 
+      {/* Liste des utilisateurs */}
       <div className="user-list">
         <h3>Les utilisateurs</h3>
-        {usersForCompany !== null && usersForCompany.length === 0 ? (
+        {users.length === 0 ? (
           <p>Aucun utilisateur</p>
         ) : (
-          usersForCompany.map((user, index) => (
-            <div key={user.id} className="user-item">
-              <div className="paragraphe">{user.first_name} {user.last_name} {user.middle_name}</div>
-              <div className="paragraphe">{user.email}</div>
-              <div className="paragraphe">{user.roles[0].name}</div>
-              {/* <div className="paragraphe">{user.jobFunction}</div> Updated here */}
-              <div className="user-actions">
-                <button className="btn-edit" onClick={() => handleEdit(index)}>✏️</button>
-                <button className="btn-delete" onClick={() => handleDelete(index)}>🗑️</button>
-              </div>
-            </div>
+          users.map((user) => (
+            <UserItem
+              key={user.id}
+              user={user}
+              onEdit={() => handleEdit(user.id)}
+              onDelete={() => handleDelete(user)}
+            />
           ))
         )}
       </div>
     </div>
   );
 };
+
+const UserForm = ({ formData, services, roles, editMode, onInputChange, onReset, onSubmit }) => (
+  <>
+    <div className="contentName">
+      <input
+        type="text"
+        name="first_name"
+        placeholder="Prénom"
+        value={formData.first_name}
+        onChange={onInputChange}
+      />
+      <input
+        type="text"
+        name="last_name"
+        placeholder="Nom"
+        value={formData.last_name}
+        onChange={onInputChange}
+      />
+      <input
+        type="text"
+        name="middle_name"
+        placeholder="Post-nom"
+        value={formData.middle_name}
+        onChange={onInputChange}
+      />
+    </div>
+    <input
+      type="email"
+      name="email"
+      placeholder="Email"
+      value={formData.email}
+      onChange={onInputChange}
+    />
+    <select
+      name="service_id"
+      value={formData.service_id}
+      onChange={onInputChange}
+    >
+      <option value="">Sélectionnez un service</option>
+      {services.map((item) => (
+        <option key={item.id} value={item.id}>
+          {item.name}
+        </option>
+      ))}
+    </select>
+    <select
+      name="role_id"
+      value={formData.role_id}
+      onChange={onInputChange}
+    >
+      <option value="">Sélectionnez un rôle</option>
+      {roles.map((role) => (
+        <option key={role.id} value={role.id}>
+          {role.name}
+        </option>
+      ))}
+    </select>
+    {!editMode && (
+      <>
+        <input
+          type="password"
+          name="password"
+          placeholder="Mot de passe"
+          value={formData.password}
+          onChange={onInputChange}
+        />
+        <input
+          type="password"
+          name="password_confirmation"
+          placeholder="Confirmez le mot de passe"
+          value={formData.password_confirmation}
+          onChange={onInputChange}
+        />
+      </>
+    )}
+    <div className="buttons">
+      <button className="btn-delete" onClick={onReset}>
+        Effacer
+      </button>
+      <button className="btn-save" onClick={onSubmit}>
+        {editMode ? 'Mettre à jour' : 'Ajouter'}
+      </button>
+    </div>
+  </>
+);
+
+const UserItem = ({ user, onEdit, onDelete }) => (
+  <div className="user-item">
+    <div style={{ width: '30%', textAlign: 'left' }}>
+      {user.first_name} {user.last_name} {user.middle_name}
+    </div>
+    <div style={{ width: '30%', textAlign: 'left' }}>{user.email}</div>
+    <div style={{ width: '15%', textAlign: 'left' }}>
+      {user.roles?.[0]?.name || 'N/A'}
+    </div>
+    <div className="user-actions">
+      <button className="btn-edit" onClick={onEdit}>
+        ✏️
+      </button>
+      <button className="btn-delete" onClick={onDelete}>
+        🗑️
+      </button>
+    </div>
+  </div>
+);
+
+const initialFormData = () => ({
+  email: "",
+  first_name: "",
+  last_name: "",
+  middle_name: "",
+  service_id: 1,
+  role_id: 6,
+  password: "",
+  password_confirmation: ""
+});
 
 export default UserManagement;

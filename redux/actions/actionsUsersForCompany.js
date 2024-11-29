@@ -27,14 +27,12 @@ export const addUser = (dataSent) => {
       data: data,
     };
 
-    // Faire la requête API avec axios
     axios(config)
       .then(function (response) {
         dispatch({
           type: 'ADD_USERS',
           payload: response.data.data, // Ajustez ce qui va dans le payload en fonction de la réponse de l'API
         });
-        // console.log('Réponse de l\'API: service', response.data);
       })
       .catch(function (error) {
         console.log('Erreur lors de la requête API:', error);
@@ -42,7 +40,7 @@ export const addUser = (dataSent) => {
   };
 };
 
-export const updateService = (service) => {
+export const updateUser = (user) => {
   return (dispatch) => {
     const userDetailsStr = localStorage.getItem('userDetails');
     const userDetailsObj = JSON.parse(userDetailsStr);
@@ -52,15 +50,20 @@ export const updateService = (service) => {
 
     // Créer la structure de données pour la requête
     const data = `{
-      "name": "${service.name}",
-      "company_id": ${companyId},
-      "user_id": null
-    }`;
+    "first_name": "${user.first_name}",
+    "last_name": "${user.last_name}",
+    "middle_name": "${user.middle_name}",
+    "email":"${user.email}",
+    "service_id": ${user.service.id},
+    "role_id": ${user.roles[0].id}
+}`;
+
+console.log('dash :',data);
 
     const config = {
-      method: 'put',
+      method: 'post',
       maxBodyLength: Infinity,
-      url: `${API_URL}/${service.id}`, // Utiliser l'ID du service à mettre à jour
+      url: `${LINK_API}/api/users/${user.id}/edit`, // Utiliser l'ID du service à mettre à jour
       headers: {
         'Accept': 'application/json',
         'Authorization': 'Bearer ' + token,
@@ -73,9 +76,9 @@ export const updateService = (service) => {
       .then(function (response) {
         dispatch({
           type: 'UPDATE_SERVICE',
-          payload: response.data, // Ajustez ce qui va dans le payload
+          payload: response.data.data, // Ajustez ce qui va dans le payload
         });
-        // console.log('Réponse de l\'API:', response.data);
+        console.log('Réponse de l\'API:', response.data);
       })
       .catch(function (error) {
         console.log('Erreur lors de la requête API:', error);
@@ -83,7 +86,7 @@ export const updateService = (service) => {
   };
 };
 
-export const deleteService = (id) => {
+export const deleteuSER = (id) => {
   return (dispatch) => {
     const userDetailsStr = localStorage.getItem('userDetails');
     const userDetailsObj = JSON.parse(userDetailsStr);
@@ -93,7 +96,7 @@ export const deleteService = (id) => {
     const config = {
       method: 'delete',
       maxBodyLength: Infinity,
-      url: `${API_URL}/${id}`, // Utiliser l'ID du service à supprimer
+      url: `${API_URL}/${id}/delete`, // Utiliser l'ID du service à supprimer
       headers: {
         'Accept': 'application/json',
         'Authorization': 'Bearer ' + token,
@@ -106,7 +109,7 @@ export const deleteService = (id) => {
           type: 'DELETE_SERVICE',
           payload: id, // Passer simplement l'ID du service à supprimer
         });
-        // console.log('Réponse de l\'API:', response.data);
+        console.log('Réponse delete user :', response.data);
       })
       .catch(function (error) {
         console.log('Erreur lors de la requête API:', error);

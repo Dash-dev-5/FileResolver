@@ -9,9 +9,17 @@ import Modal from '../component/Modal/Modal.jsx';
 import GoBackButton from '../component/GoBackButton/GoBackButton.jsx';
 import OrientationView from '../component/OrientationView/OrientationView.jsx';
 import { gsap } from 'gsap';
+import { useDispatch } from 'react-redux';
+import { deleteService } from '../../redux/actions/actionsServices.js';
+import { actionGetService } from '../../redux/actions/actionGetService.js';
+import { actionGetBinder } from '../../redux/actions/actionGetBinder.js';
+import { deleteFolder } from '../../redux/actions/actionsBinder.js';
+import { deleteuSER } from '../../redux/actions/actionsUsersForCompany.js';
+import { actionLoadUser } from '../../redux/actions/actionLoadUser.js';
 
 function Layourt() {
   const location = useLocation().pathname
+  const dispatch = useDispatch()
   const [showPopUp, setShowPopUp] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showModalFinal, setShowModalFinal] = useState(false);
@@ -19,8 +27,8 @@ function Layourt() {
   const [itemOrient, setItemOrient] = useState({});
   const [isOrient, setIsOrient] = useState(false);
   const [affirmOp, setAffirmOp] = useState(null);
-  const [isSecondStep, setIsSecondStep] = useState(false);
-  const [onConfirmCallback, setOnConfirmCallback] = useState(null);
+  const [paramsOperation, setParamsOperation] = useState(null);
+  // const [onConfirmCallback, setOnConfirmCallback] = useState(null);
   const windowRef = useRef(null);
 
   useEffect(() => {
@@ -51,15 +59,15 @@ function Layourt() {
   };
 
 
-  const ModalView = (message, callback) => {
-    return new Promise((resolve) => {
-      toggleModal(message); // Show the first modal
-      setOnConfirmCallback(() => () => {
-        setIsSecondStep(true); // When user confirms the first step, show the second modal
-        toggleModalFinal();
-        resolve();
-      });
-    });
+  const ModalView = (message, params) => {
+      toggleModal(message); 
+      console.log(params);
+      setParamsOperation(params)
+    };
+
+    const onConfirmCallback = () => {
+    toggleModalFinal();
+  
   };
 
   const orientView = (item) => {
@@ -69,7 +77,29 @@ function Layourt() {
   };
 
   const handleFinalConfirmation = () => {
+    console.log("Dash",paramsOperation);
     
+    switch (paramsOperation.action) {
+      case "delete service":
+          // console.log('delete');
+          dispatch(deleteService(paramsOperation.data))
+          dispatch(actionGetService())
+        break;
+      case "delete folder":
+          // console.log('delete');
+          dispatch(deleteFolder(paramsOperation.data))
+          dispatch(actionGetBinder())
+        break;
+    
+      case "delete user":
+          // console.log('delete');
+          dispatch(deleteuSER(paramsOperation.data))
+          dispatch(actionLoadUser())
+        break;
+    
+      default:
+        break;
+    }    
     toggleModalFinal(); // Close the final modal after confirming
     toggleModal(); // Reset for future operations
   };
@@ -95,7 +125,7 @@ function Layourt() {
           )}
           {showModalFinal && (
             <Modal onClose={toggleModalFinal} onAcc={handleFinalConfirmation}>
-              {'Cette opération est dangereuse. Confirmez-vous ?'}
+              {'Cette opération est dangereuse et irrevercible. Confirmez-vous ?'}
             </Modal>
           )}
           <GoBackButton />

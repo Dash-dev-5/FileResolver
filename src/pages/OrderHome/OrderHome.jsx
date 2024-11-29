@@ -75,8 +75,8 @@ const navigation = useNavigate()
           <div className="list-content">
             {serviceSelected ? (serviceSelected?.data?.length !== 0 ?  (serviceSelected?.data?.map((item, index) => (
               <div className="list-item" key={item.id}>
-                <p>{item.name}</p>
-                <p>{formatDate(item.created_at) }</p>
+                <p style={{width:'40%',textAlign : 'left'}}>{item.name}</p>
+                <p style={{width:'40%',textAlign : 'left'}}>{formatDate(item.created_at) }</p>
                 {/* <p>{item.ref}</p> */}
                 <div className="conetntButton">
                     <div style={{  backgroundColor: item.color   }} className='divState'>{item.status}</div>
@@ -103,9 +103,9 @@ const navigation = useNavigate()
           <div className="list-content">
             {dataOriented?.map((item, index) => (
               <div className="list-item" key={index}>
-                <p>{item.name}</p>
-                <p>{item.object}</p>
-                <p>{item.ref}</p>
+                <p style={{width:'30%',textAlign : 'left'}}>{item.name}</p>
+                <p style={{width:'30%',textAlign : 'left'}}>{item.object}</p>
+                <p style={{width:'30%',textAlign : 'left'}}>{item.num_ref}</p>
                 <div className="conetntButton">
                     <div className="view-btn" onClick={()=>handeleView(item)}>Voir</div>
                 </div>
