@@ -17,6 +17,7 @@ import OrderHome from './pages/OrderHome/OrderHome'
 import FolderManagement from './pages/FolderManagement/FolderManagement'
 import SplashScreen from './pages/SplashScreen/SplashScreen'
 import NotFound from './pages/NoFound/NoFound'
+import ViewSicleOfDocument from './pages/ViewSicleOfDocument/ViewSicleOfDocument'
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.mjs',
   import.meta.url,
@@ -39,6 +40,7 @@ function App() {
         <Route path="ProfileEdit" element={<ProfileEdit/>} />
         <Route path="OrderHome" element={<OrderHome/>} />
         <Route path="FolderManagement" element={<FolderManagement />} />
+        <Route path="ViewSicleOfDocument" element={<ViewSicleOfDocument />} />
       </Route>
       
     </Routes>

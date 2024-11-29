@@ -33,7 +33,7 @@ const Dashboard = () => {
 
     // Filtrer les fichiers des autres services
     const otherFiles = files.filter(
-      (file) => file.service.id !== userServiceId
+      (file) => file?.service?.id !== userServiceId
     );
 
     setOtherServiceFiles(otherFiles);
@@ -92,7 +92,7 @@ const Dashboard = () => {
           <h3>Liste de courriels et documents en cours d'autres services</h3>
           <div className="list-content">
             {otherServiceFiles.map((item, index) => {
-              const service = services.find((s) => s.id === item.service.id);
+              const service = services?.find((s) => s.id === item?.service?.id);
               return (
                 <div className="list-item" key={index}>
                   <p style={{width:'30%',textAlign : 'left'}}>{item.name}</p>
