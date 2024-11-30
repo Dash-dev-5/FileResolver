@@ -26,6 +26,7 @@ function Layourt() {
   const [showModalFinal, setShowModalFinal] = useState(false);
   const [confirmMessage, setConfirmMessage] = useState('');
   const [itemOrient, setItemOrient] = useState({});
+  const [itemTrait, setItemTrait] = useState({});
   const [isOrient, setIsOrient] = useState(false);
   const [affirmOp, setAffirmOp] = useState(null);
   const [paramsOperation, setParamsOperation] = useState(null);
@@ -44,7 +45,12 @@ function Layourt() {
   const togglePopUp = () => {
     setShowPopUp(!showPopUp);
   };
-
+ 
+  const haneleTrait = (item) => {
+    setItemTrait(item)
+    setShowPopUp(!showPopUp);
+  };
+ 
 
   const toggleModal = (message = '') => {
     setConfirmMessage(message);
@@ -116,8 +122,8 @@ function Layourt() {
           <Topbar showPopUp={togglePopUp} documentDetail={confirmMessage}  />
         </div>}
         <div className="page" ref={windowRef}>
-          <Outlet context={{ ModalView , orientView }} />
-          {showPopUp && <PopUp onClose={togglePopUp} />}
+          <Outlet context={{ ModalView , orientView,haneleTrait }} />
+          {showPopUp && <PopUp onClose={togglePopUp} data={itemTrait}/>}
           {isOrient && <OrientationView onClose={()=>toggleOrienteSubmit()} data={itemOrient}/>}
           {showModal && (
             <Modal onClose={toggleModal} onAcc={onConfirmCallback}>

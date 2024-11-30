@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, useMemo } from "react";
 import { Document, Page } from "react-pdf";
-import { useLocation } from "react-router-dom";
+import { useLocation, useOutletContext } from "react-router-dom";
 import './MyPDFViewer.css';
 import zoomIcone from '/zoom.png';
 import dezoomIcone from '/dezoomer.png';
@@ -12,7 +12,7 @@ import { useSelector } from "react-redux";
 
 
 function MyPDFViewer({  }) {
-
+  const {haneleTrait }= useOutletContext()
   const userDetailsStr = localStorage.getItem('userDetails');
   const userDetailsObj = JSON.parse(userDetailsStr);
   const services = useSelector(state => state.services)
@@ -42,11 +42,6 @@ function MyPDFViewer({  }) {
   const windowPDFRef = useRef(null);
   const commentRef = useRef(null); 
 
-  const comments = [
-    { id: 3, owner: 'nzita@gmail.com', comment: "Vérifie bien le document, c'est très sensible", date: "12/10/2024 18:10:30" },
-    { id: 2, owner: 'makuala@gmail.com', comment: "Vérifie bien le document, c'est très sensible", date: "12/10/2024 12:10:30" },
-    { id: 1, owner: 'makuala@gmail.com', comment: "Vérifie bien le document, c'est très sensible", date: "12/10/2024 10:10:30" },
-  ];
 
  
   useEffect(() => {
@@ -218,7 +213,7 @@ function MyPDFViewer({  }) {
           <>
             <div className="documentDetail">Document {item.name}</div>
             <div className="blockAction">
-              <button className="btn-send" >Commanter</button>
+              <button className="btn-send"  onClick={haneleTrait(item)}>Commanter</button>
               <button className="btn-send" onClick={() => setShowOverlay(o => !o)}>{showOverlay ? "Retirer le cachet" : "Ajouter le cachet"}</button>
               <button className="btn-send" onClick={() => setShowOverlay2(o => !o)}>{showOverlay2 ? "Retirer la signature" : "Ajouter la signature"}</button>
               <button className="btn-send" >Eregistrer</button>

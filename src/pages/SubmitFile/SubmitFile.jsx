@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { actionGetBinder } from '../../../redux/actions/actionGetBinder';
 import { uploadFile } from '../../../request/uploadFile';
 import ProgressBar from "@ramonak/react-progress-bar";
+import { alertParam } from '../../../request/alertParam';
 
 const SubmitFile = () => {
   const typeSubmit = useSelector((state) => state.typeOfSubmit);
@@ -26,6 +27,13 @@ const SubmitFile = () => {
   useEffect(() => {
     dispatch(actionGetBinder());
   }, [dispatch]);
+  useEffect(() => {
+    if (percenta == 100){
+      setTimeout(() => {
+        setPercent(0)
+      }, 2000);
+    }
+  }, [percenta]);
 
   // Charger les services
   useEffect(() => {
@@ -67,7 +75,11 @@ const SubmitFile = () => {
         setPercent(percent)
       },
     })
-      .then()
+      .then(() => {
+        // alertParam('Fichier envoyé !','success',5000)
+        
+      }
+      )
       .catch((err) => {
         setErrorMessage('Échec du téléchargement, veuillez réessayer.');
         console.error('Erreur lors de l\'upload :', err);
@@ -98,7 +110,7 @@ const SubmitFile = () => {
           </div>
         )}
         <div className="upload-area">
-          <ProgressBar completed={percenta} bgColor='#0ba9f3' labelSize='8px' margin='4px' height='12px'/>
+          {percenta > 1 && <ProgressBar completed={percenta} bgColor='#0ba9f3' labelSize='8px' margin='4px' height='12px'/>}
           <DragAndDrop setPreview={setFilePath} preview={filePath} />
         </div>
       </div>

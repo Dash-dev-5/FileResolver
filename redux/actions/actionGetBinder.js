@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { LINK_API } from '../../confiApp';
 import {LOAD_CLASSEUR } from '../constantes';
+import { alertParam } from '../../request/alertParam';
 
 
 export const actionGetBinder =  () => {
@@ -36,7 +37,7 @@ export const actionGetBinder =  () => {
         // Appel du callback avec les données de la réponse
         // callBack(response.data);
     } catch (error) {
-
+        alertParam("Oups ! Erreur de connexion. Si ca persiste contacter le service technique",'failed',5000)
         console.log(error);
     }
 }

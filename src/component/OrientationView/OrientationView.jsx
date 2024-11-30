@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { transferFile } from '../../../request/transfertFile';
 import { fetchBinderService } from '../../../request/fetchBinderService';
 import { actionGetFileByService } from '../../../redux/actions/actionGetFileByService';
+import { alertParam } from '../../../request/alertParam';
 
 const OrientationView = ({ onClose,data }) => {
     const [numPages, setNumPages] = useState();
@@ -59,10 +60,13 @@ const OrientationView = ({ onClose,data }) => {
           dispatch(
             actionGetFileByService(undefined)
           )
-          console.log('Transfert réussi :', data);
+          // console.log('Transfert réussi :', data);
+          // alertParam('Transfert réussi ','success',5000)
+          onClose()
         })
         .catch((error) => {
-          console.error('Erreur lors du transfert :', error);
+          // alertParam('Erreur lors de l\'orientation ','success',5000)
+          // console.error('Erreur lors du transfert :', error);
         });
       }
   return (

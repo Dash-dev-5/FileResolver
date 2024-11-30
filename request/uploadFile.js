@@ -1,4 +1,5 @@
 import { LINK_API } from '../confiApp';
+import { alertParam } from './alertParam';
 
 export const uploadFile = async ({
   name,
@@ -58,21 +59,26 @@ export const uploadFile = async ({
     xhr.onload = async () => {
       if (xhr.status === 201) {
         const responseData = JSON.parse(xhr.responseText);
-        // console.log('Réponse de l\'API:', responseData);
+
+        console.log('Réponse de l\'API:', responseData);
+        alertParam("Le fichier "+responseData.data.name+' ajouté avec succes','success',5000)
         return responseData;
       } else {
+        alertParam("Oups ! une erreur survenue lors de l'envoi du fichier. Si ca persiste contacter le service technique",'failed',5000)
         throw new Error(`Erreur : ${xhr.status} - ${xhr.responseText}`);
       }
     };
-
+    
     // Gérer les erreurs
     xhr.onerror = () => {
+      alertParam("Oups ! Erreur de connexion. Si ca persiste contacter le service technique",'failed',5000)
       throw new Error('Erreur de connexion');
     };
-
+    
     // Envoi de la requête
     xhr.send(formData);
   } catch (error) {
+    alertParam("Oups ! Erreur lors de l\'upload du fichier. Si ca persiste contacter le service technique",'failed',5000)
     console.error('Erreur lors de l\'upload du fichier:', error);
     throw error;
   }

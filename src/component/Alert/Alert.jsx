@@ -32,7 +32,7 @@ const Alert = () => {
         padding: '10px 20px',
         borderRadius: '5px',
         boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
-        zIndex: 1000,
+        zIndex: 100000000,
       }}
     >
       {message}

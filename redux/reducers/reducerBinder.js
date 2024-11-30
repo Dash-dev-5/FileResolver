@@ -10,6 +10,8 @@ const initialState = []
         return  [...state, action.payload] 
 
       case 'UPDATE_FOLDER':
+        console.log(action.payload);
+        
         return state.map(folder =>
             folder.id === action.payload.id ? action.payload : folder
           )

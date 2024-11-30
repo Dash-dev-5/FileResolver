@@ -64,6 +64,7 @@ const FolderManagement = () => {
     if (editModeFolder) {
       dispatch(updateFolder(folderData));
       setEditModeFolder(false);
+      dispatch(actionGetBinder())
     } else {
       dispatch(addFolder(folderData)); // ID unique temporaire
       // console.log('fol',folders);

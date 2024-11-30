@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { LINK_API } from '../../confiApp';
 import { actionGetService } from './actionGetService';
+import { alertParam } from '../../request/alertParam';
 
 const API_URL = LINK_API+'/api/services'; // URL de l'API
 
@@ -34,15 +35,17 @@ export const addService = (service) => {
 
     // Faire la requête API avec axios
     axios(config)
-      .then(function (response) {
-        dispatch({
-          type: 'ADD_SERVICE',
+    .then(function (response) {
+      dispatch({
+        type: 'ADD_SERVICE',
           payload: response.data.data, // Ajustez ce qui va dans le payload en fonction de la réponse de l'API
         });
         // console.log('Réponse de l\'API: service', response.data);
+        alertParam('Service ' +response.data.data.name+ ' ajouté avec succes !','success',4000)
       })
       .catch(function (error) {
-        console.log('Erreur lors de la requête API:', error);
+        alertParam('Oups ! Erreur lors de l\'ajout du service','failed',4000)
+        // console.log('Erreur lors de la requête API:', error);
       });
   };
 };
@@ -76,11 +79,12 @@ export const updateService = (service,callBack) => {
     axios(config)
       .then(function (response) {
         callBack()
-       
-        console.log('Réponse de l\'API:', response.data);
+        alertParam('Service modifié avec succes !','success',4000)
+        // console.log('Réponse de l\'API:', response.data);
       })
       .catch(function (error) {
-        console.log('Erreur lors de la requête API:', error);
+        alertParam('Oups ! Erreur lors de la mise a jour','failed',4000)
+        // console.log('Erreur lors de la requête API:', error);
       });
   };
 };
@@ -108,10 +112,12 @@ export const deleteService = (id) => {
           type: 'DELETE_SERVICE',
           payload: id, // Passer simplement l'ID du service à supprimer
         });
-        console.log('delete success:', response.data);
+        alertParam('Service supprimer !','warning',4000)
+        // console.log('delete success:', response.data);
       })
       .catch(function (error) {
-        console.log('Erreur lors de la requête API:', error);
+        alertParam('Erreur lors de suppression !','success',4000)
+        // console.log('Erreur lors de la requête API:', error);
       });
-  };
+    };
 };

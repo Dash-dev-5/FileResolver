@@ -1,83 +1,120 @@
-/* Background overlay with blur effect */
-.profile-page-container{
+/* Overlay semi-transparent */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  padding-top: 20px;
-  /* display: flex; */
+  background: rgba(0, 0, 0, 0.4); 
+  backdrop-filter: blur(10px); 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
 }
-.overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.4); /* Semi-transparent overlay */
-    backdrop-filter: blur(10px); /* Blurring the background */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-direction: column;
-    z-index: 1000;
-    padding: 12px 0;
-  }
-  
-  /* Popup container */
-  .popup {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    width: 400px;
-    text-align: center;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    width: 30%;
-  }
-  
-  /* Textarea for input */
-  .note-input {
-    width: 100%;
-    height: 200px;
-    padding: 10px;
-    margin-top: 10px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    font-size: 14px;
-  }
-  
-  /* Button styles */
-  .popup-buttons {
-    margin-top: 20px;
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  .btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    cursor: pointer;
-    width: 30%;
-  }
-  
-  .btn-cancel {
-    background-color: #f0ad4e;
-    color: white;
-    margin-right: 10px;
-  }
-  
-  .btn-confirm {
-    background-color: #5cb85c;
-    color: white;
-  }
-  
-  .btn-cancel:hover {
-    background-color: #ec971f;
-  }
-  
-  .btn-confirm:hover {
-    background-color: #4cae4c;
-  }
-  
-  .flexing-bottom{
-    width: 50%;
-  }
+
+/* Container principal pour les deux parties (document et détails) */
+.document-container {
+  display: flex;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  width: 80%;
+  max-width: 1000px;
+  height: auto;
+}
+
+/* Partie gauche : Aperçu du document */
+.document-view {
+  /* flex: 1; */
+  padding: 20px;
+  border-right: 1px solid #ddd;
+  text-align: center;
+  margin: 12px;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ box-shadow: 0 1px 8px rgba(0, 0, 0, 0.2);
+ border-radius: 10px;
+}
+
+.document-view h2 {
+  margin-bottom: 20px;
+}
+
+.document-preview {
+  background-color: #f5f5f5;
+  height: 400px;
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
+  border-radius: 4px;
+  overflow-y: scroll;
+}
+
+/* Partie droite : Formulaire des détails */
+.document-details {
+  flex: 1;
+  padding: 20px;
+}
+
+.document-details h2 {
+  margin-bottom: 20px;
+}
+
+/* Style des groupes de formulaire */
+.form-group {
+  margin-bottom: 0px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 2px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+textarea.form-control {
+  height: 100px;
+}
+
+/* Boutons du formulaire */
+.popup-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 30%;
+}
+
+.btn-cancel {
+  background-color: #f0ad4e;
+  color: white;
+}
+
+.btn-confirm {
+  background-color: #5cb85c;
+  color: white;
+}
+
+.btn-cancel:hover {
+  background-color: #ec971f;
+}
+
+.btn-confirm:hover {
+  background-color: #4cae4c;
+}

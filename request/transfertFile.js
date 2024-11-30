@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { LINK_API } from '../confiApp';
+import { alertParam } from './alertParam';
 
 /**
  * Transfère un fichier d'un classeur à un autre via l'API.
@@ -41,9 +42,12 @@ export const transferFile = async (transferData) => {
     const response = await axios(config);
 
     console.log('Réponse API:', response.data);
+    alertParam("Document orienté avec succes",'success',5000)
     return response.data; // Retourne les données de l'API
   } catch (error) {
     console.error('Erreur lors du transfert de fichier :', error.message);
+    alertParam("Oups ! Erreur lors de l'orientation du document. Si ca persiste contacter le service technique",'failed',5000)
+    
     throw error; // Relance l'erreur pour une gestion éventuelle en amont
   }
 };
