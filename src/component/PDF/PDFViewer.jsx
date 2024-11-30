@@ -7,6 +7,7 @@ import dezoomIcone from '/dezoomer.png';
 import { PDFDocument } from 'pdf-lib';  // Importer pdf-lib pour modifier le PDF
 import { saveAs } from 'file-saver';  // Importer file-saver pour sauvegarder le PDF
 import { gsap } from 'gsap';
+import { useSelector } from "react-redux";
 
 
 
@@ -14,7 +15,8 @@ function MyPDFViewer({  }) {
 
   const userDetailsStr = localStorage.getItem('userDetails');
   const userDetailsObj = JSON.parse(userDetailsStr);
-
+  const services = useSelector(state => state.services)
+  
   if (!userDetailsObj?.access_token) {
     throw new Error('Token d\'authentification non trouvé.');
   }
@@ -52,7 +54,7 @@ function MyPDFViewer({  }) {
     item?.transfers?.map((com)=>{
       tabsComment.push({
         id : `${com.id}`, 
-        owner : com?.from_binder_id ===null ? 'Secretaire': com?.from_binder_id ,
+        owner : com?.from_binder_id ===null ? 'N/S': services.filter(i => i.id == com?.from_binder_id)?.name  ,
         comment :com.remarks,
         date : com.created_at })
     })

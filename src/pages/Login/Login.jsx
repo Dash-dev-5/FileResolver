@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import { actionLoginUser } from '../../../redux/actions/actionLoginUser';
 import { fetchBinderService } from "../../../request/fetchBinderService";
 import { actionGetServiceSelected } from "../../../redux/actions/actionServiceSelected";
+import { alertParam } from "../../../request/alertParam";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -25,32 +26,35 @@ const Login = () => {
     }
 
     dispatch(actionLoginUser(email, password, (status, role, data) => {
-      console.log('LOGINIIII',data?.service?.id);
+      // console.log('LOGINIIII',data?.service?.id);
+      console.log('........',data);
       fetchBinderService(data?.service?.id, (data) => {
-        console.log('........',data);
       dispatch(actionGetServiceSelected(data?.service?.id,data))
       }) 
       // serviceSelect(data?.service?.id)
       if (status === '200') {
-        switch (role) {
-          case 'admin':
-            navigate('/home');
-          case 'secretaire':
-            navigate('/home');
+          alertParam(`Bienvenu(e) ${data?.first_name}`,'success', 5000);
+          switch (role) {
+            case 'admin':
+              navigate('/home');
+              case 'secretaire':
+                navigate('/home');
             break;
           case 'chef-service':
             navigate('/home/Dashboard');
             break;
-          case 'agent':
-
-            navigate('/home/OrderHome');
-            break;
-          default:
-            navigate('/home');
-        }
-      } else if (status === '400') {
-        setError('Email ou mot de passe invalide.');
-      } else if (status === '300') {
+            case 'agent':
+              
+              navigate('/home/OrderHome');
+              break;
+              default:
+                navigate('/home');
+              }
+            } else if (status === '400') {
+              setError('Email ou mot de passe invalide.');
+              alertParam(`Oups ! Email ou mot de passe invalide.`,'failed', 5000);
+            } else if (status === '300') {
+        alertParam(` Oups ! Erreur réseau, veuillez réessayer plus tard.`,'failed', 5000);
         setError('Erreur réseau, veuillez réessayer plus tard.');
       }
     }));

@@ -9,6 +9,7 @@ import reducerUsersForCompagnie from './reducers/reducerUsersForCompagnie';
 import { reducerFileForBnder } from './reducers/reducerFileForBnder';
 import reducerServiceSelect from './reducers/reducerServiceSelected';
 import { reducerFileForService } from './reducers/reducerFileForService';
+import alertReducer from './reducers/alertReducer';
 
 
 const rootReducer = combineReducers({
@@ -20,8 +21,8 @@ const rootReducer = combineReducers({
     usersForCompany : reducerUsersForCompagnie,
     fileForBinder : reducerFileForBnder,
     serviceSelected : reducerServiceSelect,
-    fileForService : reducerFileForService
-
+    fileForService : reducerFileForService,
+    alert: alertReducer,
 
 })
 const store = configureStore({

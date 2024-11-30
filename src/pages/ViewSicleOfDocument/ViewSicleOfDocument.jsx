@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import {
   ReactFlow,
   useNodesState,
@@ -7,66 +7,9 @@ import {
   Handle,
   Position,
 } from '@xyflow/react';
-
 import '@xyflow/react/dist/style.css';
-
-// Données dynamiques
-const dynamicData = [
-  {
-    id: 15,
-    file_id: 13,
-    from_binder_id: 1,
-    to_binder_id: 2,
-    status_id: 2,
-    remarks: "voluptate maxime impedit",
-    transferred_at: "03:57:05",
-    created_at: "03:57:05",
-    binder_name: 'Facture',
-    service: {
-      id: 3,
-      name: "Infomatique",
-      company_id: 1,
-      created_at: "2024-11-20T14:21:20.000000Z",
-      updated_at: "2024-11-28T13:22:28.000000Z",
-      deleted_at: null,
-    },
-    status: {
-      id: 1,
-      name: "pending",
-      label_fr: "En attente",
-      label_en: "pending",
-      created_at: "2024-11-20T02:25:30.000000Z",
-      updated_at: "2024-11-20T02:25:30.000000Z",
-    },
-  },
-  {
-    id: 13,
-    file_id: 13,
-    from_binder_id: null,
-    to_binder_id: 1,
-    status_id: 1,
-    remarks: "Fichier créé",
-    transferred_at: "03:43:47",
-    binder_name: 'Desvis',
-    created_at: "03:43:47",
-    status: {
-      id: 2,
-      name: "approved",
-      label_fr: "Validé",
-      label_en: "approved",
-      created_at: "2024-11-20T02:25:30.000000Z",
-      updated_at: "2024-11-20T02:25:30.000000Z",
-    },
-    service: {
-      id: 3,
-      name: "Infomatique",
-      company_id: 1,
-      created_at: "2024-11-20T14:21:20.000000Z",
-      updated_at: "2024-11-28T13:22:28.000000Z",
-      deleted_at: null,
-    },
-  },
-];
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 // Espacement constant entre les nœuds
 const NODE_SPACING = 300; // Distance horizontale entre chaque nœud
@@ -92,13 +35,6 @@ const generateEdges = (data) =>
 
 // Composant pour un nœud personnalisé
 const CustomNode = ({ data }) => {
-  const statusColors = {
-    pending: '#lightgrey',
-    'in Progress': '#f7c948',
-    completed: '#34c759',
-    rejected: '#ff3b30',
-  };
-
   return (
     <div
       style={{
@@ -106,26 +42,15 @@ const CustomNode = ({ data }) => {
         backgroundColor: '#0ba9f3',
         boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
         minWidth: '120px',
+        maxWidth :'200px',
         overflow: 'hidden',
       }}
     >
-      <div
-        style={{
-          width: '100%',
-          backgroundColor: '#fff',
-          textAlign: 'center',
-        }}
-      >
-        {data.service.name}
+      <div style={{ backgroundColor: '#fff', textAlign: 'center',fontSize: '0.8em' }}>
+        {data.service?.name || 'Inconnu'}
       </div>
-      <div
-        style={{
-          margin: '3px 8px',
-          color: '#fff',
-          fontSize: '0.7em',
-        }}
-      >
-        {data.binder_name}
+      <div style={{ margin: '3px 8px', color: '#fff', fontSize: '0.7em' }}>
+        {data.binder_name || 'Aucun'}
       </div>
       <div
         style={{
@@ -136,68 +61,108 @@ const CustomNode = ({ data }) => {
           justifyContent: 'space-between',
         }}
       >
-        <p
-          style={{
-            margin: 0,
-            color: '#fff',
-            fontSize: '0.7em',
-            flex: 1,
-          }}
-        >
-          {data.status.label_fr}
+        <p style={{ margin: 0, color: '#fff', fontSize: '0.7em', flex: 1 }}>
+          {data.status?.label_fr || 'En attente'}
         </p>
         <div
           style={{
             width: '20px',
             background:
-              data.status.name === 'pending'
+              data.status?.name === 'pending'
                 ? 'lightgrey'
-                : data.status.name === 'rejected'
+                : data.status?.name === 'rejected'
                 ? 'red'
-                : data.status.name === 'in Progress'
-                ? 'f7c948'
+                : data.status?.name === 'in Progress'
+                ? '#f7c948'
                 : '#34c759',
             borderRadius: 8,
           }}
-        >
-          {' '}
-        </div>
+        ></div>
       </div>
-      <p
-        style={{
-          margin: '3px 8px',
-          color: '#fff',
-          fontSize: '0.7em',
-        }}
-      >
-        {data.remarks}
-      </p>
-      <div
-        style={{
-          margin: '3px 8px',
-          color: '#fff',
-          fontSize: '0.7em',
-        }}
-      >
-        {data.transferred_at}
+      <div style={{ padding: '3px 8px',margin: '2px', color: '#0ba9f3', fontSize: '0.7em',
+        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+        backgroundColor: 'white',
+        borderRadius:4
+        
+       }}>
+        {data.remarks || ''}
       </div>
-      <Handle
-        type="source"
-        position={Position.Right}
-        style={{ background: '#555' }}
-      />
-      <Handle
-        type="target"
-        position={Position.Left}
-        style={{ background: '#555' }}
-      />
+      <div style={{ margin: '3px 8px', color: '#fff', fontSize: '0.7em' }}>
+        {data.transferred_at || ''}
+      </div>
+      <Handle type="source" position={Position.Right} style={{ background: '#555' }} />
+      <Handle type="target" position={Position.Left} style={{ background: '#555' }} />
     </div>
   );
 };
 
 export default function DynamicFlow() {
-  const [nodes, setNodes, onNodesChange] = useNodesState(generateNodes(dynamicData));
-  const [edges, setEdges, onEdgesChange] = useEdgesState(generateEdges(dynamicData));
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const [tabs, setTabs] = useState([]); // État pour stocker les transferts
+  const classeurs = useSelector((state) => state.classeurs) || [];
+  const services = useSelector((state) => state.services) || [];
+  const location = useLocation();
+  const { item } = location.state || {}; // Accès aux données via React Router
+  const navigation = useNavigate()
+  useLayoutEffect(() => {
+      if (!item) {
+        navigation(-1)
+    }
+  }
+    ,[])
+
+  useEffect(() => {
+    if (!item || !item.transfers) return;
+
+    const tab = item.transfers.map((transfer) => {
+      let relatedClasseur = null;
+      let relatedService = null;
+
+      if (!transfer.from_binder_id) {
+        return {
+          ...transfer,
+          binder_name: 'Upload',
+          classeur: { name: 'upload' },
+          service: { id: null, name: 'Secretariat' },
+        };
+      }
+
+      relatedClasseur = classeurs.find(
+        (classeur) => classeur.id === transfer.from_binder_id
+      );
+      if (relatedClasseur) {
+        relatedService = services.find(
+          (service) => service.id === relatedClasseur.service_id
+        );
+      }
+
+      return {
+        ...transfer,
+        binder_name: relatedClasseur?.name || null,
+        classeur: relatedClasseur || {},
+        service: relatedService || {},
+      };
+    });
+   const relatedClasseurEnd = classeurs.find(
+        (classeur) => classeur.id === item.binder_id
+      );
+    tab.push( {
+       ...item,
+       remarks:'En cours de traitement',
+       transferred_at : "Aujourd'hui...",
+       classeur: relatedClasseurEnd,
+       binder_name: relatedClasseurEnd.name
+      },)
+    setTabs(tab);
+  }, [item, classeurs, services]);
+
+  useEffect(() => {
+    if (tabs.length) {
+      setNodes(generateNodes(tabs));
+      setEdges(generateEdges(tabs));
+    }
+  }, [tabs]);
 
   const onConnect = useCallback(
     (params) => setEdges((eds) => addEdge(params, eds)),
@@ -212,7 +177,7 @@ export default function DynamicFlow() {
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
-        nodeTypes={{ customNode: CustomNode }} // Enregistre le composant comme type de nœud
+        nodeTypes={{ customNode: CustomNode }}
       />
     </div>
   );

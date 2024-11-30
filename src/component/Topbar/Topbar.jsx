@@ -8,6 +8,7 @@ import { fetchBinderService } from '../../../request/fetchBinderService';
 import { actionGetServiceSelected } from '../../../redux/actions/actionServiceSelected';
 import { actionLoadUser } from '../../../redux/actions/actionLoadUser';
 import { actionGetFileByService } from '../../../redux/actions/actionGetFileByService';
+import { alertParam } from '../../../request/alertParam';
 
 const Topbar = ({showPopUp,documentDetail}) => {
   const services = useSelector(state => state.services)
@@ -19,7 +20,17 @@ const Topbar = ({showPopUp,documentDetail}) => {
   const [selectedService, setSelectedService] = useState(userProfil?.data?.service?.id);
 // console.log('user',userProfil);
 
+const  handeleSearch = ()  => {
+    // Succès
+    
+// alertParam('Opération réussie !', 'success', 3000);
 
+// Échec
+alertParam('Échec de l\'opération.', 'failed', 5000);
+
+// Avertissement
+// alertParam('Attention, veuillez vérifier vos informations.', 'warning', 4000);
+  }
   
   const dispash = useDispatch()
 
@@ -92,7 +103,7 @@ const Topbar = ({showPopUp,documentDetail}) => {
             <input type="text" className="search-bar-top-bar" placeholder="Recherche ..." />
             <button className="btn-filter-inside">Filtrer</button>
           </div>
-          <button className="btn-send">Envoyer</button>
+          <button className="btn-send" onClick={handeleSearch}>Envoyer</button>
       </div>
       
       }

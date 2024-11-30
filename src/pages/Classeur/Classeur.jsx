@@ -46,6 +46,9 @@ console.log(files);
   const handleView = (item) => {
     navigation("/home/MyPDFViewer", { state: { item } });
   };
+  const handleViewSicle = (item) => {
+    navigation("/home/ViewSicleOfDocument", { state: { item } });
+  };
 
   if (classeurs.length === 0) {
     return <p className="no-documents">Aucun classeur trouvé</p>;
@@ -92,8 +95,13 @@ console.log(files);
                         <div className="doc-ref">
                           Date : {formatDate(file.created_at)}
                         </div>
-                        <div className="viewBtn" onClick={() => handleView(file)}>
-                          Voir
+                        <div className="action-btn" style={{display:'flex'}}>
+                          <div className="viewBtn" style={{backgroundColor:'#fff'}} onClick={() => handleViewSicle(file)}>
+                            <img src="/routage.png" width={20} height={20} style={{}} alt="" />
+                          </div>
+                          <div className="viewBtn" onClick={() => handleView(file)}>
+                            Voir
+                          </div>
                         </div>
                       </li>
                     ))}

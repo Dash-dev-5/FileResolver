@@ -16,6 +16,7 @@ import { actionGetBinder } from '../../redux/actions/actionGetBinder.js';
 import { deleteFolder } from '../../redux/actions/actionsBinder.js';
 import { deleteuSER } from '../../redux/actions/actionsUsersForCompany.js';
 import { actionLoadUser } from '../../redux/actions/actionLoadUser.js';
+import Alert from '../component/Alert/Alert.jsx';
 
 function Layourt() {
   const location = useLocation().pathname
@@ -108,6 +109,7 @@ function Layourt() {
 
   return (
     <div className="app" >
+      <Alert />
       <Sidebar />
       <div className="main-section">
         {location !== '/home/MyPDFViewer' && <div className="top">

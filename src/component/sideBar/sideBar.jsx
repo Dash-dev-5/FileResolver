@@ -170,16 +170,6 @@ const Sidebar = () => {
               </NavLink>
               <NavLink
                 className={({ isActive }) => (isActive ? "selectNav" : "NavLink")}
-                to="/home/ViewSicleOfDocument"
-              >
-                <img src="/group.png" width={20} alt="" />
-                <p>
-
-                {viewText && 'Document cicle'}
-                </p>
-              </NavLink>
-              <NavLink
-                className={({ isActive }) => (isActive ? "selectNav" : "NavLink")}
                 to="/home/FolderManagement"
               >
                 <img src="/classeur.png" width={20} alt="" />

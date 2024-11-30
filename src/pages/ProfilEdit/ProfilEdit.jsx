@@ -1,22 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import './ProfileEdit.css';
+import updatePassword from '../../../request/updatePassword';
+
 
 const ProfileEdit = () => {
   const [formData, setFormData] = useState({
     password: '',
     confirmPassword: '',
-    avatar: '/default-avatar.svg', // default avatar path
-    name: '',
-    jobFunction: ''
+    currentPass : ""
   });
 
   // Load user data from local storage on component mount
-  useEffect(() => {
-    const storedData = JSON.parse(localStorage.getItem('loggedInUser'));
-    if (storedData) {
-      setFormData(storedData);
-    }
-  }, []);
+
 
   // Handle input changes
   const handleInputChange = (e) => {
@@ -46,28 +41,19 @@ const ProfileEdit = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (formData.password === formData.confirmPassword) {
-      // Met à jour les informations de l'utilisateur dans 'loggedInUser'
-      localStorage.setItem('loggedInUser', JSON.stringify(formData));
-  
-      // Récupère la liste d'utilisateurs existante
-      const users = JSON.parse(localStorage.getItem('users')) || [];
-      
-      // Vérifie si l'utilisateur existe déjà dans 'users'
-      const userExists = users.some(user => user.email === formData.email);
-      
-      if (userExists) {
-        // Met à jour l'utilisateur existant
-        const updatedUsers = users.map(user =>
-          user.email === formData.email ? formData : user
-        );
-        localStorage.setItem('users', JSON.stringify(updatedUsers));
-      } else {
-        alert('User does not exist in the user list!');
-      }
-  
-      alert('Profile updated successfully!');
-    } else {
-      alert('Passwords do not match!');
+      updatePassword(formData.currentPass, formData.password, formData.confirmPassword)
+        .then((data) => {
+          console.log('Mot de passe mis à jour avec succès :', data);
+          setFormData({
+            password: '',
+            confirmPassword: '',
+            currentPass : ""
+          })
+        })
+        .catch((error) => {
+          console.error('Erreur lors de la mise à jour du mot de passe :', error.message);
+        });
+
     }
   };
   
@@ -91,11 +77,15 @@ const ProfileEdit = () => {
             />
             <label htmlFor="avatarUpload" className="avatar-upload-btn">📷</label>
           </div>
-          <h2>{formData.name}</h2>
-          <p>{formData.jobFunction}</p>
         </div>
-
         <form onSubmit={handleSubmit} className="profile-form">
+          <input
+            type="password"
+            name="currentPass"
+            value={formData.currentPass}
+            onChange={handleInputChange}
+            placeholder="Mot de passe actuel"
+          />
           <input
             type="password"
             name="password"
@@ -110,9 +100,10 @@ const ProfileEdit = () => {
             onChange={handleInputChange}
             placeholder="Confirmer le mot de passe"
           />
-          <button type="submit" className="btn-submit">Valider</button>
+          <button type="submit" className="btn-submit">Modier</button>
         </form>
       </div>
+
     </div>
   );
 };
