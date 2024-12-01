@@ -71,43 +71,13 @@ const PopUp = ({ onClose,data }) => {
       }
   return (
     <div className="overlay" ref={windowRef} >
-      <div className="document-container">
+      <div className="document-container" style={{width:'40%'}}>
         {/* Partie gauche : Aperçu du document */}
-        <div className="document-view">
-          {/* <h2>Document</h2> */}
-             
-          <div className="document-preview">
-          {/* <div className="pdf-div"> */}
-            <Document file={data.path} onLoadSuccess={onDocumentLoadSuccess}>
-              {Array.apply(null, Array(numPages))
-                .map((x, i) => i + 1)
-                .map((page) => {
-                  return (
-                    <Page
-                    key={page}
-                    pageNumber={page}
-                    renderTextLayer={false}
-                    renderAnnotationLayer={false}
-                    scale={0.5}
-                    />
-                  );
-                })}
-            </Document>
-                {/* </div> */}
-        
-          </div>
-        </div>
-
-        {/* Partie droite : Détails du document */}
         <div className="document-details">
-          <h2>Détails du document</h2>
-          <div className="form-group">
-          <div className="form-group">
+          <h2>Traitement du document</h2>
+          <div className="form-group" style={{display:'flex',justifyContent:'space-between'}}>
             <label>Nom : {data.name}</label>
-          </div>
             <label>Objet : {data.object}</label>
-          </div>
-          <div className="form-group">
             <label>N° ref : {data.num_ref} </label>
           </div>
           <div className="form-group">
@@ -131,6 +101,20 @@ const PopUp = ({ onClose,data }) => {
               onChange={handleInputChangeBind}
             >
               <option value="">Sélectionner un service</option>
+              {binder?.map((item, index) => (
+                <option key={index} value={item.id}>
+                  {item.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="form-group">
+            <label>Sélectionner le status </label>
+            <select className="form-control"
+              value={idBinder}
+              onChange={handleInputChangeBind}
+            >
+              <option value="">Sélectionner le status</option>
               {binder?.map((item, index) => (
                 <option key={index} value={item.id}>
                   {item.name}
