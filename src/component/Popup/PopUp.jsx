@@ -7,6 +7,7 @@ import { transferFile } from '../../../request/transfertFile';
 import { fetchBinderService } from '../../../request/fetchBinderService';
 import { actionGetFileByService } from '../../../redux/actions/actionGetFileByService';
 import { alertParam } from '../../../request/alertParam';
+import { fetchStatus } from '../../../request/fetchStatus';
 
 const PopUp = ({ onClose,data }) => {
     const [numPages, setNumPages] = useState();
@@ -21,6 +22,7 @@ const PopUp = ({ onClose,data }) => {
     // console.log(services);
     
     useEffect(() => {
+      fetchStatus()
       fetchBinderService(idBinderDest,(data) => {
         setBinder(data)
       })
