@@ -142,7 +142,7 @@ const Sidebar = () => {
               <img src="/classeurs.png" width={20} alt="" />
               <p>
 
-              {viewText && 'Classeur'}
+              {viewText && 'Classeurs'}
               </p>
             </NavLink>
           )}
@@ -168,7 +168,7 @@ const Sidebar = () => {
                 {viewText && 'Les utilisateurs'}
                 </p>
               </NavLink>
-              <NavLink
+              {/* <NavLink
                 className={({ isActive }) => (isActive ? "selectNav" : "NavLink")}
                 to="/home/FolderManagement"
               >
@@ -177,7 +177,7 @@ const Sidebar = () => {
 
                 {viewText && 'Gerer classeur'}
                 </p>
-              </NavLink>
+              </NavLink> */}
             </>
           )}
         </nav>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './Topbar.css';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Switch from '../Switch/Switch';
 import { useDispatch, useSelector } from 'react-redux';
 import { actionChangeType } from '../../../redux/actions/actionChangeTheme';
@@ -33,7 +33,13 @@ alertParam('Échec de l\'opération.', 'failed', 5000);
   }
   
   const dispash = useDispatch()
-
+  const navigate = useNavigate()
+  const handeleAddClasseur = () =>{
+    navigate('/home/FolderManagement'); // Redirige vers la page d'accueil après 2 secondes
+  }
+  const handeleAddService = () =>{
+    navigate('/home/ServiceManagement'); // Redirige vers la page d'accueil après 2 secondes
+  }
   const handeleChangeType = (type) =>{
     // console.log(type);
     
@@ -49,6 +55,7 @@ alertParam('Échec de l\'opération.', 'failed', 5000);
 
     }
   }, []);
+
   useEffect(() => {
     const callback = (data) => {
       // console.log("ici",  data);
@@ -106,10 +113,18 @@ alertParam('Échec de l\'opération.', 'failed', 5000);
           <button className="btn-send" onClick={handeleSearch}>Envoyer</button>
       </div>
       
-      }
+    }
       {
         location === '/home' &&
         <Switch onActionChange={handeleChangeType}/>
+      }
+      {
+        location ===  '/home/Classeur' &&
+        <button className="btn-send" onClick={handeleAddClasseur}>Ajouter un classeur</button>
+      }
+      {
+        location ===  '/home/OrderHome' &&
+        <button className="btn-send" onClick={handeleAddService}>Ajouter un service</button>
       }
     </div>
   );

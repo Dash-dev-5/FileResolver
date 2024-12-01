@@ -116,7 +116,7 @@ export const deleteService = (id) => {
         // console.log('delete success:', response.data);
       })
       .catch(function (error) {
-        alertParam('Erreur lors de suppression !','success',4000)
+        alertParam('Erreur lors de suppression !','failed',4000)
         // console.log('Erreur lors de la requête API:', error);
       });
     };

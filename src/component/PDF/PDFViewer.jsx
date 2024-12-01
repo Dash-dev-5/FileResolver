@@ -213,7 +213,7 @@ function MyPDFViewer({  }) {
           <>
             <div className="documentDetail">Document {item.name}</div>
             <div className="blockAction">
-              <button className="btn-send"  onClick={haneleTrait(item)}>Commanter</button>
+              <button className="btn-send"  onClick={() => haneleTrait(item)}>Traiter</button>
               <button className="btn-send" onClick={() => setShowOverlay(o => !o)}>{showOverlay ? "Retirer le cachet" : "Ajouter le cachet"}</button>
               <button className="btn-send" onClick={() => setShowOverlay2(o => !o)}>{showOverlay2 ? "Retirer la signature" : "Ajouter la signature"}</button>
               <button className="btn-send" >Eregistrer</button>
