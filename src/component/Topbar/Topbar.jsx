@@ -96,7 +96,7 @@ alertParam('Échec de l\'opération.', 'failed', 5000);
           onChange={(e) => setSelectedService(e.target.value)}
           className='selectOderServicve'
           >
-            <option value="">Sélectionnez un classeur</option>
+            <option value="">Sélectionnez le service</option>
             {services.map((item, index) => (
               <option key={index} value={item.id}>
                 {item.name}
@@ -105,12 +105,12 @@ alertParam('Échec de l\'opération.', 'failed', 5000);
         </select>
         :
         <div className="searchBlock">
-          <div className="currentPage">Acceuil</div>
+          {/* <div className="currentPage">Acceuil</div>
           <div className="search-input-container">
             <input type="text" className="search-bar-top-bar" placeholder="Recherche ..." />
             <button className="btn-filter-inside">Filtrer</button>
           </div>
-          <button className="btn-send" onClick={handeleSearch}>Envoyer</button>
+          <button className="btn-send" onClick={handeleSearch}>Envoyer</button> */}
       </div>
       
     }
@@ -119,12 +119,12 @@ alertParam('Échec de l\'opération.', 'failed', 5000);
         <Switch onActionChange={handeleChangeType}/>
       }
       {
-        location ===  '/home/Classeur' &&
-        <button className="btn-send" onClick={handeleAddClasseur}>Ajouter un classeur</button>
+         userProfil?.data?.roles[0]?.name === 'admin'  && (location ===  '/home/Classeur' &&
+        <button className="btn-send" onClick={handeleAddClasseur}>Ajouter un classeur</button>)
       }
       {
-        location ===  '/home/OrderHome' &&
-        <button className="btn-send" onClick={handeleAddService}>Ajouter un service</button>
+        userProfil?.data?.roles[0]?.name === 'admin' && ( location ===  '/home/OrderHome' &&
+        <button className="btn-send" onClick={handeleAddService}>Ajouter un service</button>)
       }
     </div>
   );

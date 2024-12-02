@@ -209,7 +209,7 @@ function MyPDFViewer({  }) {
   return (
     <div className="contenaire-pdf-comment">
        <div className="topbar topbar-pdf">
-   
+   {userDetailsObj.data?.roles[0].name === 'chef-service' || userDetailsObj.data?.roles[0].name === 'Directeur' || userDetailsObj.data?.roles[0].name === 'admin' &&
           <>
             <div className="documentDetail">Document {item.name}</div>
             <div className="blockAction">
@@ -220,7 +220,7 @@ function MyPDFViewer({  }) {
               <button className="btn-send" onClick={savePDFWithCachet}>Telecharger</button>
             </div>
           </>
-     
+   }  
     </div>
       <div className="contenaire-comment">
         <div className="contenaire-button">

@@ -14,7 +14,9 @@ const PopUp = ({ onClose,data }) => {
     const [pageNumber, setPageNumber] = useState(1);
     const [idBinderDest, setIdBinderDest] = useState();
     const [idBinder, setIdBinder] = useState();
+    const [idState, setIdState] = useState();
     const [binder,setBinder] = useState();
+    const [statusDoc,setStatusDoc] = useState();
     const [comment, setComment] = useState();
     const windowRef = useRef(null);
     const services = useSelector(state => state.services)
@@ -22,7 +24,10 @@ const PopUp = ({ onClose,data }) => {
     // console.log(services);
     
     useEffect(() => {
-      fetchStatus()
+      fetchStatus((data)=>{
+        console.log('statut', data);
+        setStatusDoc(data)
+      })
       fetchBinderService(idBinderDest,(data) => {
         setBinder(data)
       })
@@ -47,12 +52,16 @@ const PopUp = ({ onClose,data }) => {
       const { name, value } = e.target;
       setIdBinder(value)
       }
+    function handleInputChangeState(e) {
+      const { name, value } = e.target;
+      setIdState(value)
+      }
     function handeletransfert() {
       const transferData = {
         file_id: data.id,
         from_binder_id: data.binder_id,
         to_binder_id: idBinder,
-        status_id: 1,
+        status_id: idState,
         remarks:comment ,
       };
       console.log('DATA ;',transferData);
@@ -113,11 +122,11 @@ const PopUp = ({ onClose,data }) => {
           <div className="form-group">
             <label>Sélectionner le status </label>
             <select className="form-control"
-              value={idBinder}
-              onChange={handleInputChangeBind}
+              value={idState}
+              onChange={handleInputChangeState}
             >
               <option value="">Sélectionner le status</option>
-              {binder?.map((item, index) => (
+              {statusDoc?.map((item, index) => (
                 <option key={index} value={item.id}>
                   {item.name}
                 </option>
