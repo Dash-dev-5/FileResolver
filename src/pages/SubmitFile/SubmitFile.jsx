@@ -113,20 +113,22 @@ const SubmitFile = () => {
           <div className="invoice-container">
             <h4 style={{ marginBottom: 10 }}>Fichiers dans les classeurs</h4>
             {/* Exemple de liste */}
+            <div style={{height:'76vh', overflowY:'scroll'}}>
             {files
-  .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)) // Trier du plus récent au plus ancien
-  .map((file) => (
-    <li key={file.id} className="document-detail">
-      <div className="doc-title">{file.name}</div>
-      <div className="doc-ref">N° Ref : {file.num_ref}</div>
-      <div className="doc-ref">Date : {formatDate(file.created_at)}</div>
-      <div className="action-btn" style={{ display: "flex" }}>
-        <div className="viewBtn" onClick={() => handleView(file)}>
-          Voir
-        </div>
-      </div>
-    </li>
-  ))}
+              .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)) // Trier du plus récent au plus ancien
+              .map((file) => (
+                <li key={file.id} className="document-detail">
+                  <div className="doc-title">{file.name}</div>
+                  <div className="doc-ref">N° Ref : {file.num_ref}</div>
+                  <div className="doc-ref">Date : {formatDate(file.created_at)}</div>
+                  <div className="action-btn" style={{ display: "flex" }}>
+                    <div className="viewBtn" onClick={() => handleView(file)}>
+                      Voir
+                    </div>
+                  </div>
+                </li>
+              ))}
+  </div>
 
           </div>
         )}

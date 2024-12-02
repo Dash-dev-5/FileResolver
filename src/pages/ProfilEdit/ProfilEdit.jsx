@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './ProfileEdit.css';
 import updatePassword from '../../../request/updatePassword';
+import { alertParam } from '../../../request/alertParam';
 
 
 const ProfileEdit = () => {
@@ -24,17 +25,18 @@ const ProfileEdit = () => {
 
   // Handle avatar change
   const handleAvatarChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFormData({
-          ...formData,
-          avatar: reader.result // Set the image preview
-        });
-      };
-      reader.readAsDataURL(file); // Read the file as a Data URL
-    }
+    // const file = e.target.files[0];
+    // if (file) {
+    //   const reader = new FileReader();
+    //   reader.onloadend = () => {
+    //     setFormData({
+    //       ...formData,
+    //       avatar: reader.result // Set the image preview
+    //     });
+    //   };
+    //   reader.readAsDataURL(file); // Read the file as a Data URL
+    // }
+    alertParam('Votre entreprise n\'est pas encore permit d\'ajouter des photos. contacter le tchniciens si possible','warning',5000)
   };
 
   // Handle form submission

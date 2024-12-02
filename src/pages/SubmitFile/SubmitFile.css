@@ -152,3 +152,7 @@ select {
       color: #fff;
       margin-right: 5px;
 }
+.scrolling-file{
+  overflow-y: scroll;
+  height: 89vh;
+}

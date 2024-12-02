@@ -124,3 +124,7 @@
       margin-right: 5px;
 
   }
+  .list-content{
+    overflow-y: scroll;
+    max-height: 58vh;
+  }

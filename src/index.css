@@ -81,3 +81,29 @@ canvas.react-pdf__Page__canvas {
   margin-bottom: 20px;
   border-radius: 12px;
 }
+/* Pour WebKit */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 10px; /* Coins arrondis */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #0ba9f3;
+  border-radius: 10px;
+  border: 3px solid #f0f0f0; /* Bordure pour simuler les coins arrondis */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #007bb5;
+}
+
+/* Pour Firefox */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #0ba9f3 #f0f0f0;
+}
+
