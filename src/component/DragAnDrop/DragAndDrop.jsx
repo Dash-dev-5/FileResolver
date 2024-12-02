@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './DragAndDrop.css';
 import { saveAs } from 'file-saver';
 import { useNavigate } from 'react-router-dom';
+import { alertParam } from '../../../request/alertParam';
 
 const DragAndDrop = ({ preview, setPreview }) => {
   const [file, setFile] = useState(null);
@@ -49,7 +50,8 @@ const DragAndDrop = ({ preview, setPreview }) => {
         
       }
     } else {
-      setError('Type de fichier non pris en charge. Veuillez déposer une image ou un PDF.');
+      setError('Type de fichier non pris en charge. Veuillez déposer un PDF.');
+      alertParam("Type de fichier non pris en charge. Veuillez déposer un PDF.",'warning',5000)
       setFile(null);
       setPreview(null);
     }
