@@ -10,7 +10,7 @@ const DragAndDrop = ({ preview, setPreview }) => {
   const navigation = useNavigate()
   // const [newFileName, setNewFileName] = useState(''); // Pour stocker le nouveau nom
 
-  const acceptedFileTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+  const acceptedFileTypes = [ 'application/pdf'];
 
   const handeleView = (item)=>{
     navigation('/home/MyPDFViewer',{ state: { item } })
