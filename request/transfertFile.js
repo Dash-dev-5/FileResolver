@@ -42,7 +42,7 @@ export const transferFile = async (transferData) => {
     const response = await axios(config);
 
     console.log('Réponse API:', response.data);
-    alertParam("Document orienté avec succes",'success',5000)
+    alertParam( "Operation du document fait avec succes",'success',5000)
     return response.data; // Retourne les données de l'API
   } catch (error) {
     console.error('Erreur lors du transfert de fichier :', error.message);

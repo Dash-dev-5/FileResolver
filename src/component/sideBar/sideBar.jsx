@@ -105,7 +105,7 @@ const Sidebar = () => {
               <img src="/dashboard.png" width={20} alt="" />
               <p>
 
-              {viewText && (roleName  === 'admin' ? 'Tableau de bord DP' : 'Accueil')}
+              {viewText && (roleName  === 'admin' ? 'Directeur' : 'Accueil')}
               </p>
             </NavLink>
           )}

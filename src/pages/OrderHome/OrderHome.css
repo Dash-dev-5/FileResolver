@@ -19,6 +19,7 @@
     padding: 20px;
     text-align: center;
     flex: 1;
+    font-size: 0.8em;
   }
   
   .card h3 {
