@@ -54,7 +54,7 @@ export const updateUser = (user) => {
     "last_name": "${user.last_name}",
     "middle_name": "${user.middle_name}",
     "email":"${user.email}",
-    "service_id": ${user.service.id},
+    "service_id": ${user.service_id},
     "role_id": ${user.roles[0].id}
 }`;
 

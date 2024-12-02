@@ -58,6 +58,7 @@ const Sidebar = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('userDetails');
+    localStorage.clear()
     navigate("/", { replace: true });
   };
 
@@ -96,7 +97,7 @@ const Sidebar = () => {
           )}
         </div>
         <nav className="sidebar-nav">
-          {(roleName  === 'chef-service' || roleName  === 'admin') && (
+          {(roleName  === 'Directeur' || roleName  === 'admin') && (
             <NavLink
               className={({ isActive }) => (isActive ? "selectNav" : "NavLink")}
               to="/home/Dashboard"
@@ -108,7 +109,7 @@ const Sidebar = () => {
               </p>
             </NavLink>
           )}
-          {(roleName  === 'agent' || roleName  === 'admin') && (
+          {(roleName  === 'agent' || roleName  === 'chef-service' || roleName  === 'admin') && (
             <NavLink
               className={({ isActive }) => (isActive ? "selectNav" : "NavLink")}
               to="/home/OrderHome"
@@ -134,7 +135,7 @@ const Sidebar = () => {
           )}
           {(roleName === 'secretaire' ||
             roleName === 'admin' ||
-            roleName === 'chef-service') && (
+            roleName === 'Directeur') && (
             <NavLink
               className={({ isActive }) => (isActive ? "selectNav" : "NavLink")}
               to="/home/Classeur"

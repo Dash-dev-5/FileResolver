@@ -41,6 +41,9 @@ const Login = () => {
                 navigate('/home');
             break;
           case 'chef-service':
+            navigate('/home/OrderHome');
+            break;
+          case 'Directeur':
             navigate('/home/Dashboard');
             break;
             case 'agent':

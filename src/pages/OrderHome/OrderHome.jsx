@@ -40,7 +40,7 @@ const OrderHome = () => {
     setDataOriented(TabDataOrient)
     setDataOnTrait(TabDataOnTrait)
   }, [filesService]);
-  fetchBinderService(1)
+  // fetchBinderService(1)
   // Example data for the dashboard lists
 
 const navigation = useNavigate()

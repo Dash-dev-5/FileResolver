@@ -14,7 +14,8 @@ export const actionGetFileByService = (serviceId) => {
   // console.log(token);
   const serviceiDset = serviceId || userDetailsObj.data?.service?.id
   const companyId = userDetailsObj.data.company[0].id
-
+    console.log('demo ',userDetailsObj);
+    
       const config = {
         method: 'get',
         maxBodyLength: Infinity,
