@@ -9,7 +9,7 @@ export const uploadFile = async ({
   note,
   filePath,
   onProgress,
-}) => {
+},callBack) => {
   try {
     // Préparation des données du formulaire
     const formData = new FormData();
@@ -62,6 +62,7 @@ export const uploadFile = async ({
 
         console.log('Réponse de l\'API:', responseData);
         alertParam("Le fichier "+responseData.data.name+' ajouté avec succes','success',5000)
+        callBack()
         return responseData;
       } else {
         alertParam("Oups ! une erreur survenue lors de l'envoi du fichier. Si ca persiste contacter le service technique",'failed',5000)

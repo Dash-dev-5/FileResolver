@@ -97,10 +97,10 @@ const DragAndDrop = ({ preview, setPreview }) => {
       {file && (
         <div className="file-preview">
           <h4>Fichier chargé: {file.name}</h4>
-          <button className="upload-button" onClick={() => handeleView({name: file.name, pdf: preview ,})
+          {/* <button className="upload-button" onClick={() => handeleView({name: file.name, path: `${preview}` ,})
           }>
             Voir
-          </button>
+          </button> */}
         </div>
       )}
     </div>

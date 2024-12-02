@@ -3,6 +3,7 @@
     justify-content: space-between;
     padding: 8px;
     width: 100%;
+    max-height: 92vh;
   }
   
 
@@ -13,6 +14,7 @@
     background-color: white;
     padding: 12px;
     border-radius: 12px;
+    /* max-width: 80vh; */
     
   }
   
@@ -30,7 +32,7 @@
   
   .upload-area {
     text-align: center;
-    margin-top: 8px;
+    margin-bottom: 8px;
   }
   
   .btn-upload {
@@ -84,6 +86,7 @@
   .firtBlock{
     width: 60%;
     margin-right: 8px;
+    font-size: 0.8em;
 
   }
   .btn-padding{
@@ -110,4 +113,42 @@ select {
 .barCompleted {
   background-color:  #0ba9f3;
   
+}
+
+.document-detail {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  background-color: #f0f4f8;
+  margin-bottom: 5px;
+  border-radius: 5px;
+}
+
+.document-detail .doc-title {
+  font-weight: bold;
+  color: #333;
+  width: 23%;
+  font-size: 0.9em;
+  /* padding: 0; */
+}
+.doc-ref {
+  width: 20%;
+  text-align: left;
+  /* margin: 0; */
+  font-size: 0.9em;
+}
+
+.no-documents {
+  color: #666;
+  font-size: 14px;
+  text-align: center;
+}
+.viewBtn{
+  cursor: pointer;
+    background-color: #0ba9f3;
+    padding: 5px 10px;
+    align-self: flex-end;
+    border-radius: 6px;
+      color: #fff;
+      margin-right: 5px;
 }

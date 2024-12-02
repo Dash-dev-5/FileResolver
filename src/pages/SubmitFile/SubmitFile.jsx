@@ -6,11 +6,26 @@ import { actionGetBinder } from '../../../redux/actions/actionGetBinder';
 import { uploadFile } from '../../../request/uploadFile';
 import ProgressBar from "@ramonak/react-progress-bar";
 import { alertParam } from '../../../request/alertParam';
+import { actionGetFileByBinder } from '../../../redux/actions/actionGetFileByBinder';
+import { useNavigate } from 'react-router-dom';
+
+
+// Formater une date en français
+const formatDate = (isoDateString) => {
+  const date = new Date(isoDateString);
+  return date.toLocaleDateString('fr-FR', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+};
 
 const SubmitFile = () => {
   const typeSubmit = useSelector((state) => state.typeOfSubmit);
   const classeurs = useSelector((state) => state.classeurs);
   const dispatch = useDispatch();
+  const files = useSelector((state) => state.fileForBinder) || [];
+  const navigation =useNavigate()
 
   const [percenta, setPercent] = useState(0);
   const [name, setName] = useState('');
@@ -50,7 +65,9 @@ const SubmitFile = () => {
     }
     return true;
   };
-
+  const handleView = (item) => {
+    navigation("/home/MyPDFViewer", { state: { item } });
+  };
   const handleFileRename = () => {
     // console.log('Type de filePath:',  filePath); // Devrait afficher "object"
     if (!validateForm()) return;
@@ -74,6 +91,8 @@ const SubmitFile = () => {
       onProgress: (percent) => {
         setPercent(percent)
       },
+    },()=>{
+      dispatch(actionGetFileByBinder())
     })
       .then(() => {
         // alertParam('Fichier envoyé !','success',5000)
@@ -93,26 +112,24 @@ const SubmitFile = () => {
         {typeSubmit === 'receive' && (
           <div className="invoice-container">
             <h4 style={{ marginBottom: 10 }}>Fichiers dans les classeurs</h4>
-            <div className="invoice-header">
-              <span>Nom</span>
-              <span>Objet</span>
-              <span>N° de référence</span>
-            </div>
             {/* Exemple de liste */}
-            {/* {classeurs.map((invoice, index) => (
-              <div key={index} className="invoice-row">
-                <input type="checkbox" className="chekbox" />
-                <span>{invoice.nom}</span>
-                <span>{invoice.objet}</span>
-                <span>{invoice.reference}</span>
-              </div>
-              ))} */}
+            {files
+  .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)) // Trier du plus récent au plus ancien
+  .map((file) => (
+    <li key={file.id} className="document-detail">
+      <div className="doc-title">{file.name}</div>
+      <div className="doc-ref">N° Ref : {file.num_ref}</div>
+      <div className="doc-ref">Date : {formatDate(file.created_at)}</div>
+      <div className="action-btn" style={{ display: "flex" }}>
+        <div className="viewBtn" onClick={() => handleView(file)}>
+          Voir
+        </div>
+      </div>
+    </li>
+  ))}
+
           </div>
         )}
-        <div className="upload-area">
-          {percenta > 1 && <ProgressBar completed={percenta} bgColor='#0ba9f3' labelSize='8px' margin='4px' height='12px'/>}
-          <DragAndDrop setPreview={setFilePath} preview={filePath} />
-        </div>
       </div>
 
       <div className="form-area">
@@ -168,6 +185,10 @@ const SubmitFile = () => {
           value={note}
           onChange={(e) => setNote(e.target.value)}
         ></textarea>
+        <div className="upload-area">
+          {percenta > 1 && <ProgressBar completed={percenta} bgColor='#0ba9f3' labelSize='8px' margin='4px' height='12px'/>}
+          <DragAndDrop setPreview={setFilePath} preview={filePath} />
+        </div>
       </div>
     </div>
   );
