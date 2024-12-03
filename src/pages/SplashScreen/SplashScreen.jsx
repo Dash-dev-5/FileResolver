@@ -59,7 +59,7 @@ const SplashScreen = () => {
 
         <img src={imgLogo} alt="Logo" style={{ width: '150px' }} />
       </div>
-      <h1 ref={nameRef} className="app-name" style={styles.appName}>FileResolver</h1>
+      <h1 ref={nameRef} className="app-name" style={styles.appName}>Digit File</h1>
     </div>
   );
 };

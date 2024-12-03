@@ -80,7 +80,7 @@ const Login = () => {
       <div className="login-right">
         <div className="login-box">
           <img src={imgLogo} alt="Logo" className="logo-image" />
-          <h2>Bienvenue sur FileResolver</h2>
+          <h2>Bienvenue sur Digit File</h2>
           <p>S'il vous plaît entrez vos informations</p>
           <form onSubmit={handleLogin}>
             {error && <div className="error-message" aria-live="polite">{error}</div>}

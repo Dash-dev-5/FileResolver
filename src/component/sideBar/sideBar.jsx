@@ -80,7 +80,7 @@ const Sidebar = () => {
         {viewText && (
           <div className="logoContenaire">
             <img src={logo} alt="Logo" className="logo-imageSide" />
-            <div className="textLogo">FileResolver</div>
+            <div className="textLogo">Digit File</div>
             <div className="textLogo buttonBurger" onClick={handleMouseLeave}>✖</div>
 
           </div>
