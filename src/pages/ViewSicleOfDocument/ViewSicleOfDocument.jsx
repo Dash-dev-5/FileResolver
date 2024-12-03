@@ -49,6 +49,9 @@ const CustomNode = ({ data }) => {
       <div style={{ backgroundColor: '#fff', textAlign: 'center',fontSize: '0.8em' }}>
         {data.service?.name || 'Inconnu'}
       </div>
+      <div style={{ backgroundColor: '#fff', textAlign: 'center',fontSize: '0.6em' }}>
+        {data.user?.email || 'Inconnu'}
+      </div>
       <div style={{ margin: '3px 8px', color: '#fff', fontSize: '0.7em' }}>
         {data.binder_name || 'Aucun'}
       </div>
@@ -149,6 +152,9 @@ export default function DynamicFlow() {
       );
     tab.push( {
        ...item,
+       user:{
+        email : '-'
+       },
        remarks:'En cours de traitement',
        transferred_at : "Aujourd'hui...",
        classeur: relatedClasseurEnd,
