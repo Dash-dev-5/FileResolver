@@ -8,6 +8,8 @@ import { PDFDocument } from 'pdf-lib';  // Importer pdf-lib pour modifier le PDF
 import { saveAs } from 'file-saver';  // Importer file-saver pour sauvegarder le PDF
 import { gsap } from 'gsap';
 import { useSelector } from "react-redux";
+import { alertParam } from "../../../request/alertParam";
+import { updateFile } from "../../../request/updateFile";
 
 
 
@@ -41,6 +43,103 @@ function MyPDFViewer({  }) {
   const { item } = location.state || {};  // Access the state
   const windowPDFRef = useRef(null);
   const commentRef = useRef(null); 
+  const [percenta, setPercent] = useState(0);
+  const [idFile, setIdFile] = useState();
+  const [filePath, setFilePath] = useState('');
+  const validateForm = () => {
+    if (!filePath ) {
+      alertParam('Fichier introuvable !','warning');
+      return false;
+    }
+    return true;
+  };
+
+
+  const generatePDFWithCachet = async () => {
+    try {
+        const existingPdfBytes = await fetch(item.path).then(res => res.arrayBuffer());
+        const cachetImageBytes = await fetch('/cachet.png').then(res => res.arrayBuffer());
+        const cachetImageBytes2 = await fetch('/signature.png').then(res => res.arrayBuffer());
+
+        const pdfDoc = await PDFDocument.load(existingPdfBytes);
+
+        const cachetImage = await pdfDoc.embedPng(cachetImageBytes);
+        const cachetImage2 = await pdfDoc.embedPng(cachetImageBytes2);
+        const pages = pdfDoc.getPages();
+
+        const cachetWidth = 100;
+        const cachetHeight = 100;
+        const cachetX = cachetPosition.x / scalPage;
+        const cachetY = cachetPosition.y / scalPage;
+
+        const cachetWidth2 = 100;
+        const cachetHeight2 = 100;
+        const cachetX2 = cachetPosition2.x / scalPage;
+        const cachetY2 = cachetPosition2.y / scalPage;
+
+        const lastPage = pages[pages.length - 1];
+
+        if (showOverlay) {
+            lastPage.drawImage(cachetImage, {
+                x: cachetX,
+                y: lastPage.getHeight() - cachetY - cachetHeight,
+                width: cachetWidth,
+                height: cachetHeight,
+            });
+        }
+
+        if (showOverlay2) {
+            lastPage.drawImage(cachetImage2, {
+                x: cachetX2,
+                y: lastPage.getHeight() - cachetY2 - cachetHeight2,
+                width: cachetWidth2,
+                height: cachetHeight2,
+            });
+        }
+
+        const pdfBytes = await pdfDoc.save();
+        const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+
+        return blob;
+    } catch (error) {
+        console.error("Erreur lors de la génération du PDF :", error);
+        throw error;
+    }
+};
+
+
+
+
+const updatingFile = async () => {
+  try {
+      const newFileBlob = await generatePDFWithCachet();
+      const newFile = new File([newFileBlob], `${item.name}_${item.object}_${item.num_ref}.pdf`, { type: 'application/pdf' });
+
+      // Affecter le nouveau fichier
+      setFilePath(newFile);
+
+      // Vérifier si le fichier est valide avant l'envoi
+      // if (!validateForm()) return;
+
+      updateFile(
+          {
+              idFile,
+              filePath: newFile, // Envoi du nouveau fichier
+              onProgress: (percent) => setPercent(percent),
+          },
+          () => {
+              // Action après la mise à jour réussie
+              alertParam('Fichier enregistré et envoyé !', 'success', 5000);
+          }
+      ).catch((err) => {
+          setErrorMessage('Échec de l\'enregistrement, veuillez réessayer.');
+          console.error('Erreur lors de l\'enregistrement :', err);
+      });
+  } catch (error) {
+      console.error('Erreur lors de la création du fichier :', error);
+      alertParam('Erreur lors de la création du fichier.', 'error');
+  }
+};
 
 
  
@@ -49,13 +148,14 @@ function MyPDFViewer({  }) {
     item?.transfers?.map((com)=>{
       tabsComment.push({
         id : `${com.id}`, 
-        owner : com?.from_binder_id ===null ? 'N/S': services.filter(i => i.id == com?.from_binder_id)?.name  ,
+        owner : com?.user?.email === null ? 'inconnu' : com?.user?.email  ,
         comment :com.remarks,
         date : com.created_at })
     })
     setCommentsTab(tabsComment)
   }, []);
   useEffect(() => {
+    setIdFile(item.id)
     gsap.fromTo(windowPDFRef.current, 
       { scale: 0.5, opacity: 0 },
       { scale: 1, opacity: 1, duration: 0.8, ease: "power1.out", delay: 0.3 }
@@ -153,6 +253,8 @@ function MyPDFViewer({  }) {
         const pdfBytes = await pdfDoc.save();
         const blob = new Blob([pdfBytes], { type: 'application/pdf' });
         saveAs(blob, item.name+'_'+item.object+'_'+item.num_ref+'.pdf');
+        console.log(blob);
+        
       } catch (error) {
         console.error("Erreur lors de la sauvegarde du PDF :", error.message);
     }
@@ -205,7 +307,13 @@ function MyPDFViewer({  }) {
     window.addEventListener('mouseup', handleMouseUp);
   };
   console.log('pdf',item);
-  
+  useEffect(() => {
+    if (percenta == 100){
+      setTimeout(() => {
+        setPercent(0)
+      }, 2000);
+    }
+  }, [percenta]);
   return (
     <div className="contenaire-pdf-comment">
        <div className="topbar topbar-pdf">
@@ -216,7 +324,18 @@ function MyPDFViewer({  }) {
               <button className="btn-send"  onClick={() => haneleTrait(item)}>Traiter</button>
               <button className="btn-send" onClick={() => setShowOverlay(o => !o)}>{showOverlay ? "Retirer le cachet" : "Ajouter le cachet"}</button>
               <button className="btn-send" onClick={() => setShowOverlay2(o => !o)}>{showOverlay2 ? "Retirer la signature" : "Ajouter la signature"}</button>
-              <button className="btn-send" >Eregistrer</button>
+              {/* <button className="btn-send" style={{color : percenta > 0 ? 'black' : 'white',backgroundColor:percenta > 0 ? '#f0f4f8' : '#0ba9f3'}} disabled={percenta > 0} onClick={() => updatingFile()}>{percenta === 0 ? "Eregistrer" : `${percenta} %`}</button> */}
+              <button 
+                  className="btn-send" 
+                  style={{ 
+                      color: percenta > 0 ? 'black' : 'white', 
+                      backgroundColor: percenta > 0 ? '#f0f4f8' : '#0ba9f3' 
+                  }} 
+                  disabled={percenta > 0} 
+                  onClick={() => updatingFile()}
+              >
+                  {percenta === 0 ? "Enregistrer" : `${percenta} %`}
+              </button>
               <button className="btn-send" onClick={savePDFWithCachet}>Telecharger</button>
             </div>
           </>
